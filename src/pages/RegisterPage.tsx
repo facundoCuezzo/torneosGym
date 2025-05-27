@@ -1,16 +1,16 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Container, Image } from "react-bootstrap";
-import loginValidatorSchema from "../validation/loginValidatorSchema";
-import { useForm } from 'react-hook-form';
-import { LoginFormComp } from '../components/FormComp';
+import { useForm } from "react-hook-form";
+import registerValidatorSchema from '../validation/registerValidatorSchema';
+import { RegisterFormComp } from '../components/FormComp';
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: yupResolver(loginValidatorSchema),
+  } = useForm<RegisterFormData>({
+    resolver: yupResolver(registerValidatorSchema),
   });
 
   return (
@@ -20,7 +20,7 @@ const LoginPage = () => {
         <h3>Administración de torneos - Federación Tucumana de Gimnasia</h3>
       </div>
       <div className="w-75">
-        <LoginFormComp
+        <RegisterFormComp 
           register={register}
           errors={errors}
           handleSubmit={handleSubmit}
@@ -30,4 +30,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
