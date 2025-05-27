@@ -9,6 +9,7 @@ import type {
 } from "react-hook-form";
 import { Link } from "react-router-dom";
 
+
 interface Props<T extends LoginFormData | RegisterFormData> {
   register: UseFormRegister<T>;
   errors: FieldErrors<T>;
