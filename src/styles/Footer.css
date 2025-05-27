@@ -1,0 +1,148 @@
+ .footer {
+  background: rgb(166, 163, 163);
+  color: #ffffff;
+  padding: 15px 0; /* Reduce el padding para ocupar menos espacio */
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+.footer-logo {
+  width: 80px;    /* Cambia el tamaño según lo que necesites */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+
+/* Contenido del footer */
+.footer .footer-content {
+  background-color: rgb(74, 72, 72);
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 15px; /* Reduce el padding para ajustar el contenido */
+}
+
+/* Secciones del footer */
+.footer .footer-section {
+  flex: 1;
+  margin: 10px;
+  padding: 10px; /* Reduce el padding para ocupar menos espacio */
+}
+
+/* Texto del logo */
+.footer .logo-text {
+  color: #f4f4f4;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* Íconos de contacto */
+.footer .contact i {
+  margin-right: 10px;
+}
+
+/* Sección de contacto */
+.footer .contact {
+  margin: 10px 0; /* Reduce el margen para ajustar el contenido */
+  line-height: 1.8;
+}
+
+/* Lista de enlaces */
+.footer .links ul {
+  list-style: none;
+  padding: 0; /* Elimina el padding de la lista */
+}
+
+/* Elementos de la lista de enlaces */
+.footer .links ul li {
+  margin: 5px 0; /* Reduce el margen entre los elementos */
+}
+
+/* Enlaces */
+.footer .links ul li a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer .links ul li a:hover {
+  color: #0a72fa; /* Color rojo al pasar el ratón */
+}
+
+/* Enlaces de redes sociales */
+.footer .social-links a {
+  display: inline-block;
+  margin: 0 5px; /* Reduce el margen entre los enlaces */
+  text-decoration: none;
+  color: #ffffff;
+  transition: color 0.3s;
+}
+
+.footer .social-links a:hover {
+  color: #0aa2fa; /* Color rojo al pasar el ratón */
+}
+
+/* Parte inferior del footer */
+.footer-bottom {
+  background: rgb(166, 163, 163);
+  color: #000000;
+  padding: 10px 0; /* Reduce el padding para ocupar menos espacio */
+  text-align: center;
+}
+
+/* Texto dentro del footer */
+.footer p {
+  color: #ffffff;
+  padding: 20px; /* Reduce el padding para ajustar el contenido */
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 992px) {
+  .footer .footer-content {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px; /* Ajusta el padding para pantallas medianas */
+  }
+
+  .footer .footer-section {
+    margin: 10px 0; /* Ajusta el margen para pantallas medianas */
+    padding: 10px; /* Ajusta el padding para pantallas medianas */
+  }
+}
+
+@media (max-width: 768px) {
+  .footer .footer-content {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px; /* Ajusta el padding para pantallas pequeñas */
+  }
+
+  .footer .footer-section {
+    margin: 10px 0; /* Ajusta el margen para pantallas pequeñas */
+    padding: 10px; /* Ajusta el padding para pantallas pequeñas */
+  }
+}
+
+@media (max-width: 576px) {
+  .footer {
+    padding: 10px 0; /* Reduce el padding para pantallas extra pequeñas */
+  }
+
+  .footer .footer-content {
+    padding: 5px; /* Reduce el padding para pantallas extra pequeñas */
+  }
+
+  .footer .footer-section {
+    margin: 5px 0; /* Ajusta el margen para pantallas extra pequeñas */
+    padding: 5px; /* Ajusta el padding para pantallas extra pequeñas */
+  }
+
+  .footer .logo-text {
+    font-size: 1.5rem; /* Ajusta el tamaño del texto del logo para pantallas extra pequeñas */
+  }
+
+  .footer .contact i {
+    font-size: 1.2rem; /* Ajusta el tamaño de los íconos para pantallas extra pequeñas */
+  }
+}
