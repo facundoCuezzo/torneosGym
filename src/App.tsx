@@ -10,12 +10,10 @@ function App() {
     <BrowserRouter>
       <div className="App">
           <ColorSchemesExample />
-        <main>
-        
-         
-          <RoutesView />
-        </main>
-         <Footer />
+             <main>  
+                <RoutesView />
+             </main>
+          <Footer />
       </div>
     </BrowserRouter>
   );

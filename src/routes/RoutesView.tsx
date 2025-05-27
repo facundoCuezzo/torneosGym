@@ -1,11 +1,12 @@
 import { Route, Routes } from "react-router-dom";
-<<<<<<< HEAD
 import LoginPage from '../pages/LoginPage';
 import HomePage from "../pages/HomePage";
-=======
-import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
->>>>>>> 074808f0c6a9aa0b352d361f433fd4b2d7399992
+import InscripcionT from "../pages/InscripcionT";
+import MisTorneos from "../pages/MisTorneos";
+import Alumnos from "../pages/Alumnos";
+import Puntajes from "../pages/Puntajes";
+import MiCuenta from "../pages/MiCuenta";
 
 const RoutesView = () => {
   return (
@@ -13,7 +14,16 @@ const RoutesView = () => {
       <Route path="/" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="*" element={<h1>404</h1>} />
-      <Route path="HomePage" element={<HomePage />} />
+      <Route path="/homePage" element={<HomePage />} />
+
+      <Route path="/mi-cuenta" element={<MiCuenta />} />
+      <Route path="/inscripcion-torneos" element={<InscripcionT />} />
+      <Route path="/misTorneos" element={<MisTorneos />} />
+      <Route path="/alumnos" element={<Alumnos />} />
+      <Route path="/puntajes" element={<Puntajes />} />
+      
+
+
     </Routes>
   );
 };
