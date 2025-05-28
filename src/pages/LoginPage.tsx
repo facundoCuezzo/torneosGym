@@ -16,7 +16,7 @@ const LoginPage = () => {
   return (
     <Container className="my-5 d-flex justify-content-center flex-column align-items-center">
       <div className="d-flex flex-column align-items-center justify-content-center">
-        <Image src="/logo_fetucgym.webp" alt="Logo de torneos" fluid />
+        <Image src="/logo_negro.png" alt="Logo de torneos" width={300}/>
         <h3>Administración de torneos - Federación Tucumana de Gimnasia</h3>
       </div>
       <div className="w-75">
