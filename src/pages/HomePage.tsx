@@ -14,7 +14,7 @@ const Menu = () => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "65vh" }}>
-      <List sx={{ width: "50%", maxWidth: 600, bgcolor: "background.paper" }}>
+      <List sx={{ width: "50%", maxWidth: 800, bgcolor: "background.paper" }}>
         {opciones.map((opcion, index) => (
           <ListItemButton key={index} onClick={() => navigate(opcion.ruta)} sx={{ textAlign: "center" }}>
             <ListItemText primary={opcion.nombre} sx={{ textAlign: "center" }} primaryTypographyProps={{ fontWeight: "bold" }} />

@@ -6,7 +6,7 @@
   font-family: Arial, sans-serif;
 }
 
-.footer .footer-content {
+.footer .footer-content, .navColor {
   background-color: rgb(74, 72, 72);
 }
 
