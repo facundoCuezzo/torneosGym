@@ -1,17 +1,18 @@
-import { Card } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
+
 export default function Alumnos() {
   return (
     <div
       style={{
         display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-start",
+        flexDirection: "column",
+        alignItems: "center", // Centra la card
         minHeight: "60vh",
         paddingTop: "90px"
       }}
     >
       {[
-           'Danger',
+        'Danger',
       ].map((variant) => (
         <Card
           bg={variant.toLowerCase()}
@@ -20,7 +21,7 @@ export default function Alumnos() {
           style={{ width: '35rem' }}
           className="mb-2"
         >
-  <Card.Header className="text-center" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
+          <Card.Header className="text-center" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
             Socio: NIEVA, TOMAS RODRIGO
           </Card.Header>
           <Card.Body className="text-center">
@@ -36,6 +37,10 @@ export default function Alumnos() {
           </Card.Body>
         </Card>
       ))}
+
+      <div style={{ width: "100%", maxWidth: "110rem", display: "flex", justifyContent: "flex-start", padding: "30px" }}>
+        <Button variant="danger">Añadir alumno</Button>
+      </div>
     </div>
   );
 }
