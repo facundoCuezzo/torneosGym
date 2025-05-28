@@ -7,8 +7,8 @@ const Menu = () => {
   const opciones = [
     { nombre: "MI CUENTA", ruta: "/mi-cuenta" },
     { nombre: "INSCRIPCIÓN TORNEOS", ruta: "/inscripcion-torneos" },
-    { nombre: "MIS TORNEOS", ruta: "/mis-concursos" },
-    { nombre: "ALUMNOS", ruta: "/mis-ejemplares" },
+    { nombre: "MIS TORNEOS", ruta: "/misTorneos" },
+    { nombre: "ALUMNOS", ruta: "/alumnos" },
     { nombre: "PUNTAJES", ruta: "/puntajes" },
   ];
 

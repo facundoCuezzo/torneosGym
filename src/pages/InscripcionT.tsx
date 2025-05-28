@@ -1,6 +1,7 @@
 import Dropdown from 'react-bootstrap/Dropdown';
+import Card from 'react-bootstrap/Card';
 
-export default function InscripcionT() {
+export default function Puntajes() {
   return (
     <div
       style={{
@@ -11,30 +12,41 @@ export default function InscripcionT() {
         paddingTop: "90px"
       }}
     >
-      <div className="card text-bg-warning mb-3" style={{ maxWidth: "18rem" }}>
-        <div className="card-header">Socio: NIEVA, TOMAS RODRIGO</div>
-        <div className="card-body">
-          <h5 className="card-title">Numero Socio: 905</h5>
-          <p className="card-text">
-            Categoria: adherente /activo
-          </p>
-          <p className="card-text">
-            Estado:Activo / desactivo
-          </p>
-          <Dropdown>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
-              Seleccione el Torneo
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item href="#">Action</Dropdown.Item>
-              <Dropdown.Item href="#">Another action</Dropdown.Item>
-              <Dropdown.Item href="#">Something else here</Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item href="#">Separated link</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-      </div>
+      <Card
+        bg="warning"
+        text="dark"
+        style={{ width: '35rem' }}
+        className="mb-2"
+      >
+        <Card.Header className="text-center" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
+          Socio: NIEVA, TOMAS RODRIGO
+        </Card.Header>
+        <Card.Body className="text-center">
+          <Card.Title style={{ fontSize: "1.3rem", fontWeight: "bold" }}>
+            Numero Socio: 905
+          </Card.Title>
+          <Card.Text style={{ fontSize: "1.1rem" }}>
+            Categoría: Adherente / Activo
+          </Card.Text>
+          <Card.Text style={{ fontSize: "1.1rem" }}>
+            Estado: Activo / Desactivo
+          </Card.Text>
+          <div className="d-flex justify-content-center mt-4">
+            <Dropdown>
+              <Dropdown.Toggle variant="success" id="dropdown-basic">
+                Seleccione el Torneo
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item href="#">Action</Dropdown.Item>
+                <Dropdown.Item href="#">Another action</Dropdown.Item>
+                <Dropdown.Item href="#">Something else here</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item href="#">Separated link</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+        </Card.Body>
+      </Card>
     </div>
   );
 }

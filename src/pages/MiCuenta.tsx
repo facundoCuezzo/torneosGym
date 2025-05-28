@@ -1,3 +1,4 @@
+import { Card } from "react-bootstrap";
 export default function MiCuenta() {
   return (
     <div
@@ -9,18 +10,32 @@ export default function MiCuenta() {
         paddingTop: "90px"
       }}
     >
-      <div className="card text-bg-primary mb-3" style={{ maxWidth: "18rem" }}>
-        <div className="card-header">Socio: NIEVA, TOMAS RODRIGO</div>
-        <div className="card-body">
-          <h5 className="card-title">Numero Socio: 905</h5>
-          <p className="card-text">
-            Categoria: adherente /activo
-          </p>
-           <p className="card-text">
-            Estado:Activo / desactivo
-          </p>
-        </div>
-      </div>
+      {[
+          'Success',
+      ].map((variant) => (
+        <Card
+          bg={variant.toLowerCase()}
+          key={variant}
+          text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
+          style={{ width: '35rem' }}
+          className="mb-2"
+        >
+  <Card.Header className="text-center" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
+            Socio: NIEVA, TOMAS RODRIGO
+          </Card.Header>
+          <Card.Body className="text-center">
+            <Card.Title style={{ fontSize: "1.3rem", fontWeight: "bold" }}>
+              Numero Socio: 905
+            </Card.Title>
+            <Card.Text style={{ fontSize: "1.1rem" }}>
+              Categoría: Adherente / Activo
+            </Card.Text>
+            <Card.Text style={{ fontSize: "1.1rem" }}>
+              Estado: Activo /Desactivo
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      ))}
     </div>
   );
 }
