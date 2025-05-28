@@ -1,15 +1,15 @@
 import { BrowserRouter } from "react-router-dom";
 import RoutesView from "./routes/RoutesView";
-import "./App.css";
-import ColorSchemesExample from "./components/NavBar";
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import Footer from "./components/Footer";
+import NavbarComp from './components/NavBar';
+import "./styles/App.css"
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
-          <ColorSchemesExample />
+          <NavbarComp />
              <main>  
                 <RoutesView />
              </main>
