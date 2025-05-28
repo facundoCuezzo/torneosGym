@@ -1,6 +1,6 @@
 import { Navbar, Container, Nav } from 'react-bootstrap';
 
-function ColorSchemesExample() {
+function NavbarComp() {
   return (
     <>
       <Navbar bg="primary" data-bs-theme="dark" fixed="top">
@@ -19,4 +19,4 @@ function ColorSchemesExample() {
   );
 }
 
-export default ColorSchemesExample;
+export default NavbarComp;

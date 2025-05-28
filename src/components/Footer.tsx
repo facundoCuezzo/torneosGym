@@ -4,13 +4,9 @@ import "../styles/Footer.css"; // Archivo CSS para los estilos
 const Footer = () => {
   return (
     <footer className="footer">
-
-      
-
-
       <div className="footer-content">
         <div className="footer-section logo">
-      <img src="./public/logo.jpeg" alt="logo torneos" className="footer-logo" />
+      <img src="/logo.jpeg" alt="logo torneos" className="footer-logo" />
     </div>
         <div className="footer-section about">
           <h1 className="logo-text">Federación Tucumana de Gimnasia</h1>
@@ -24,9 +20,6 @@ const Footer = () => {
             contacto: fedetucdegimnasia@gmail.com
           </div>
         </div>
-        
-          
-        
         <div className="footer-section social">
           {" "}
           <h1 className="logo-text">Redes Sociales</h1> <br />

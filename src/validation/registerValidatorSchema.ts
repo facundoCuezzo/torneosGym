@@ -5,6 +5,7 @@ const registerValidatorSchema = yup.object().shape({
     .string()
     .email("Formato de correo electrónico inválido")
     .required("El correo electrónico es requerido"),
+  fullname: yup.string().required("El nombre completo es requerido"),
   password: yup
     .string()
     .required("La contraseña es requerida")
