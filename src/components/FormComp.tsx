@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Form } from "react-bootstrap";
 import InputComp from "./InputComp";
-import { EnvelopeAtFill, LockFill } from "react-bootstrap-icons";
+import { EnvelopeAtFill, LockFill, PersonCircle } from "react-bootstrap-icons";
 import type {
   FieldErrors,
   UseFormHandleSubmit,
@@ -36,6 +36,14 @@ export const RegisterFormComp: React.FC<Props<RegisterFormData>> = ({
           icon={<EnvelopeAtFill />}
           register={register("email")}
           error={errors.email?.message}
+        />
+        <InputComp
+          controlId="FullNameId"
+          label="Nombre completo"
+          placeholder="Ej: Juan Pérez"
+          icon={<PersonCircle />}
+          register={register("fullname")}
+          error={errors.fullname?.message}
         />
         <InputComp
           controlId="RegisterPasswordId"
