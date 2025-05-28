@@ -10,9 +10,9 @@ const Footer = () => {
     </div>
         <div className="footer-section about">
           <h1 className="logo-text">Federación Tucumana de Gimnasia</h1>
-          <p>
-            🔵Gimnasia artística femenina y masculina
-            🔵Gimnasia Rítmica
+          <p style={{ fontWeight: "bold", textTransform: "uppercase" }}>
+            Gimnasia artística femenina y masculina<br />
+            Gimnasia Rítmica
           </p>
           <div className="contact">
            
