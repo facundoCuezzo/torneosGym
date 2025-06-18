@@ -30,14 +30,6 @@ export const RegisterFormComp: React.FC<Props<RegisterFormData>> = ({
         <h5>Crear una nueva cuenta</h5>
         <hr />
         <InputComp
-          controlId="RegisterEmailId"
-          label="Correo electrónico"
-          placeholder="example@email.com"
-          icon={<EnvelopeAtFill />}
-          register={register("email")}
-          error={errors.email?.message}
-        />
-        <InputComp
           controlId="FullNameId"
           label="Nombre completo"
           placeholder="Ej: Juan Pérez"
@@ -79,7 +71,6 @@ export const RegisterFormComp: React.FC<Props<RegisterFormData>> = ({
     </>
   );
 };
-
 export const LoginFormComp: React.FC<Props<LoginFormData>> = ({
   register,
   errors,
@@ -94,12 +85,12 @@ export const LoginFormComp: React.FC<Props<LoginFormData>> = ({
         <h5>Iniciar sesión</h5>
         <hr />
         <InputComp
-          controlId="LoginEmailId"
-          label="Correo electrónico"
-          placeholder="example@email.com"
+          controlId="LoginFullnameId"
+          label="Nombre completo"
+          placeholder="Juan Pérez"
           icon={<EnvelopeAtFill />}
-          register={register("email")}
-          error={errors.email?.message}
+          register={register("fullname")}
+          error={errors.fullname?.message}
         />
         <InputComp
           controlId="LoginPasswordId"

@@ -1,10 +1,9 @@
 import * as yup from "yup";
 
 const loginValidatorSchema = yup.object().shape({
-  email: yup
+  fullname: yup
     .string()
-    .email("Formato de correo electrónico inválido")
-    .required("El correo electrónico es requerido"),
+    .required("El nombre completo es requerido"),
   password: yup
     .string()
     .required("La contraseña es requerida")

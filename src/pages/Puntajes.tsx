@@ -19,18 +19,16 @@ export default function Puntajes() {
         className="mb-2"
       >
         <Card.Header className="text-center" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-          Socio: NIEVA, TOMAS RODRIGO
+          Gimnasio: 
         </Card.Header>
         <Card.Body className="text-center">
           <Card.Title style={{ fontSize: "1.3rem", fontWeight: "bold" }}>
-            Numero Socio: 905
+            Numero Asociado: 
           </Card.Title>
           <Card.Text style={{ fontSize: "1.1rem" }}>
-            Categoría: Adherente / Activo
+            Categoría: 
           </Card.Text>
-          <Card.Text style={{ fontSize: "1.1rem" }}>
-            Estado: Activo / Desactivo
-          </Card.Text>
+          
           <div className="d-flex justify-content-center mt-4">
             <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-basic">

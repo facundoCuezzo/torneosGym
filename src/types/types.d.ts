@@ -1,9 +1,8 @@
 interface LoginFormData {
-  email: string;
+  fullname: string;
   password: string;
 }
 interface RegisterFormData {
-  email: string;
   fullname: string;
   password: string;
   repeatPassword: string;

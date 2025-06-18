@@ -22,17 +22,14 @@ export default function Alumnos() {
           className="mb-2"
         >
           <Card.Header className="text-center" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-            Socio: NIEVA, TOMAS RODRIGO
+            Gimnasio: 
           </Card.Header>
           <Card.Body className="text-center">
             <Card.Title style={{ fontSize: "1.3rem", fontWeight: "bold" }}>
-              Numero Socio: 905
+              Numero Asociado: 
             </Card.Title>
             <Card.Text style={{ fontSize: "1.1rem" }}>
-              Categoría: Adherente / Activo
-            </Card.Text>
-            <Card.Text style={{ fontSize: "1.1rem" }}>
-              Estado: Activo /Desactivo
+              Categoría: 
             </Card.Text>
           </Card.Body>
         </Card>
