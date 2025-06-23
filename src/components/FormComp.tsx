@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Spinner } from "react-bootstrap";
 import InputComp from "./InputComp";
 import { EnvelopeAtFill, LockFill, PersonCircle } from "react-bootstrap-icons";
 import type {
@@ -9,6 +9,7 @@ import type {
   UseFormRegister,
 } from "react-hook-form";
 import { Link } from "react-router-dom";
+import SelectComp from "./SelectComp";
 
 interface Props<T extends LoginFormData | RegisterFormData> {
   register: UseFormRegister<T>;
@@ -18,17 +19,30 @@ interface Props<T extends LoginFormData | RegisterFormData> {
   loading?: boolean;
 }
 
+const loadingSpinner = (
+  <div className="d-flex align-items-center justify-content-center gap-2">
+    <Spinner animation="border" variant="dark" />
+    <span>Cargando...</span>
+  </div>
+);
+
 export const RegisterFormComp: React.FC<Props<RegisterFormData>> = ({
   register,
   errors,
   handleSubmit,
   loading,
-  onSubmit
+  onSubmit,
 }) => {
+  const OPTIONS = [
+    { label: "Sin seleccionar rol", value: 0 },
+    { label: "Administrador", value: 1 },
+    { label: "Gimnasio", value: 2 },
+    { label: "Juez", value: 3 },
+  ];
   return (
     <>
       <Form
-        onSubmit={handleSubmit((onSubmit))}
+        onSubmit={handleSubmit(onSubmit)}
         className="bg-light p-3 rounded-4 mt-3"
       >
         <h5>Crear una nueva cuenta</h5>
@@ -50,18 +64,17 @@ export const RegisterFormComp: React.FC<Props<RegisterFormData>> = ({
           register={register("password")}
           error={errors.password?.message}
         />
-        <InputComp
-          controlId="RegisterRepeatPasswordId"
-          label="Repetir contraseña"
-          placeholder="************"
-          type="password"
-          icon={<LockFill />}
-          register={register("repeatPassword")}
-          error={errors.repeatPassword?.message}
+        <SelectComp
+          controlId="RegisterRoleId"
+          options={OPTIONS}
+          label="Rol del usuario"
+          icon={<PersonCircle />}
+          register={register("id_role")}
+          error={errors.id_role?.message}
         />
         <div className="d-flex justify-content-end">
           <Button type="submit" variant="dark" disabled={loading}>
-            {loading ? "Cargando..." : "Registrarse"}
+            {loading ? loadingSpinner : "Crear cuenta"}
           </Button>
         </div>
       </Form>
@@ -80,12 +93,12 @@ export const LoginFormComp: React.FC<Props<LoginFormData>> = ({
   errors,
   handleSubmit,
   loading,
-  onSubmit
+  onSubmit,
 }) => {
   return (
     <>
       <Form
-        onSubmit={handleSubmit((onSubmit))}
+        onSubmit={handleSubmit(onSubmit)}
         className="bg-light p-3 rounded-4 mt-3"
       >
         <h5>Iniciar sesión</h5>
@@ -109,7 +122,7 @@ export const LoginFormComp: React.FC<Props<LoginFormData>> = ({
         />
         <div className="d-flex justify-content-end">
           <Button type="submit" variant="dark" disabled={loading}>
-            {loading ? "Cargando..." : "Iniciar sesión"}
+            {loading ? loadingSpinner : "Iniciar sesión"}
           </Button>
         </div>
       </Form>

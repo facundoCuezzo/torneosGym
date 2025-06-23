@@ -3,13 +3,6 @@ interface User {
     full_name: string;
     role: string;
 }
-
-interface CreateUserData {
-    full_name: string;
-    password: string;
-    id_role: number;
-}
-
 interface LoginResponse {
   message: string;
   userId: number;

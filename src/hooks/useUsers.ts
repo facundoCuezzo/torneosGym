@@ -4,6 +4,7 @@ import {
   getUsers,
   createUser,
   deleteUser,
+  logout,
 } from "../helpers/userQueries";
 import { toast } from "sonner";
 
@@ -31,50 +32,51 @@ export const useUsers = () => {
       const res = await getUsers();
       setUsers(res.users);
     } catch (err) {
-      const error =
-        err instanceof Error ? err.message : "Error al obtener usuarios";
-      throw error;
+      toast.error((err as ErrorResponse).error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCreateUser = async (
-    data: CreateUserData
-  ): Promise<CreateUserResponse | undefined> => {
+  const handleCreateUser = async (data: RegisterFormData) => {
     setLoading(true);
     try {
       const res = await createUser(data);
       return res;
     } catch (err) {
-      const error =
-        err instanceof Error ? err.message : "Error al crear usuario";
-      throw error;
+      toast.error((err as ErrorResponse).error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDeleteUser = async (): Promise<
-    { message: string } | undefined
-  > => {
+  const handleDeleteUser = async () => {
     setLoading(true);
     try {
       const res = await deleteUser();
-      return res;
+      toast.success(res.message);
     } catch (err) {
-      const error =
-        err instanceof Error ? err.message : "Error al eliminar usuario";
-      throw error;
+      toast.error((err as ErrorResponse).error);
     } finally {
       setLoading(false);
     }
   };
+
+  const handleLogout = async () => {
+  try {
+    await logout();
+    toast.success("Sesión cerrada");
+  } catch (err) {
+    toast.error("Error al cerrar sesión");
+    console.error(err);
+  }
+};
 
   return {
     loading,
     users,
     handleLogin,
+    handleLogout,
     fetchUsers,
     handleCreateUser,
     handleDeleteUser,
