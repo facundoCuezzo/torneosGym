@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 const loginValidatorSchema = yup.object().shape({
-  fullname: yup
+  full_name: yup
     .string()
     .required("El nombre completo es requerido"),
   password: yup

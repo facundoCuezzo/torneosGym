@@ -1,10 +1,15 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Container, Image } from "react-bootstrap";
 import loginValidatorSchema from "../validation/loginValidatorSchema";
-import { useForm } from 'react-hook-form';
-import { LoginFormComp } from '../components/FormComp';
+import { useForm } from "react-hook-form";
+import { LoginFormComp } from "../components/FormComp";
+import { useUsers } from "../hooks/useUsers";
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const navigate = useNavigate()
+
+  const { handleLogin, loading } = useUsers();
   const {
     register,
     handleSubmit,
@@ -13,10 +18,20 @@ const LoginPage = () => {
     resolver: yupResolver(loginValidatorSchema),
   });
 
+  const onSubmit = async (data: LoginFormData) => {
+    const res = await handleLogin(data);
+    if (res?.logged) {
+      localStorage.setItem("logged", JSON.stringify(res.logged));
+      localStorage.setItem("userId", JSON.stringify(res.userId));
+
+      navigate("/homepage");
+    }
+  };
+
   return (
     <Container className="my-5 d-flex justify-content-center flex-column align-items-center">
       <div className="d-flex flex-column align-items-center justify-content-center">
-        <Image src="/logo_negro.png" alt="Logo de torneos" width={300}/>
+        <Image src="/logo_negro.png" alt="Logo de torneos" width={300} />
         <h3>Administración de torneos - Federación Tucumana de Gimnasia</h3>
       </div>
       <div className="w-75">
@@ -24,6 +39,8 @@ const LoginPage = () => {
           register={register}
           errors={errors}
           handleSubmit={handleSubmit}
+          onSubmit={onSubmit}
+          loading={loading}
         />
       </div>
     </Container>

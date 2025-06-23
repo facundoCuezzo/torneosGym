@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 const registerValidatorSchema = yup.object().shape({
-  fullname: yup.string().required("El nombre completo es requerido"),
+  full_name: yup.string().required("El nombre completo es requerido"),
   password: yup
     .string()
     .required("La contraseña es requerida")
