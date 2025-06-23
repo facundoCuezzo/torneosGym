@@ -1,9 +1,12 @@
 interface LoginFormData {
-  fullname: string;
+  full_name: string;
   password: string;
 }
 interface RegisterFormData {
-  fullname: string;
+  full_name: string;
   password: string;
   repeatPassword: string;
+}
+interface ErrorResponse {
+  error: string;
 }

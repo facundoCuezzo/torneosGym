@@ -4,27 +4,31 @@ import InputComp from "./InputComp";
 import { EnvelopeAtFill, LockFill, PersonCircle } from "react-bootstrap-icons";
 import type {
   FieldErrors,
+  SubmitHandler,
   UseFormHandleSubmit,
   UseFormRegister,
 } from "react-hook-form";
 import { Link } from "react-router-dom";
 
-
 interface Props<T extends LoginFormData | RegisterFormData> {
   register: UseFormRegister<T>;
   errors: FieldErrors<T>;
   handleSubmit: UseFormHandleSubmit<T>;
+  onSubmit: SubmitHandler<T>;
+  loading?: boolean;
 }
 
 export const RegisterFormComp: React.FC<Props<RegisterFormData>> = ({
   register,
   errors,
   handleSubmit,
+  loading,
+  onSubmit
 }) => {
   return (
     <>
       <Form
-        onSubmit={handleSubmit((data) => console.log(data))}
+        onSubmit={handleSubmit((onSubmit))}
         className="bg-light p-3 rounded-4 mt-3"
       >
         <h5>Crear una nueva cuenta</h5>
@@ -34,8 +38,8 @@ export const RegisterFormComp: React.FC<Props<RegisterFormData>> = ({
           label="Nombre completo"
           placeholder="Ej: Juan Pérez"
           icon={<PersonCircle />}
-          register={register("fullname")}
-          error={errors.fullname?.message}
+          register={register("full_name")}
+          error={errors.full_name?.message}
         />
         <InputComp
           controlId="RegisterPasswordId"
@@ -56,8 +60,8 @@ export const RegisterFormComp: React.FC<Props<RegisterFormData>> = ({
           error={errors.repeatPassword?.message}
         />
         <div className="d-flex justify-content-end">
-          <Button type="submit" variant="dark">
-            Registrarse
+          <Button type="submit" variant="dark" disabled={loading}>
+            {loading ? "Cargando..." : "Registrarse"}
           </Button>
         </div>
       </Form>
@@ -75,11 +79,13 @@ export const LoginFormComp: React.FC<Props<LoginFormData>> = ({
   register,
   errors,
   handleSubmit,
+  loading,
+  onSubmit
 }) => {
   return (
     <>
       <Form
-        onSubmit={handleSubmit((data) => console.log(data))}
+        onSubmit={handleSubmit((onSubmit))}
         className="bg-light p-3 rounded-4 mt-3"
       >
         <h5>Iniciar sesión</h5>
@@ -89,8 +95,8 @@ export const LoginFormComp: React.FC<Props<LoginFormData>> = ({
           label="Nombre completo"
           placeholder="Juan Pérez"
           icon={<EnvelopeAtFill />}
-          register={register("fullname")}
-          error={errors.fullname?.message}
+          register={register("full_name")}
+          error={errors.full_name?.message}
         />
         <InputComp
           controlId="LoginPasswordId"
@@ -102,8 +108,8 @@ export const LoginFormComp: React.FC<Props<LoginFormData>> = ({
           error={errors.password?.message}
         />
         <div className="d-flex justify-content-end">
-          <Button type="submit" variant="dark">
-            Iniciar sesión
+          <Button type="submit" variant="dark" disabled={loading}>
+            {loading ? "Cargando..." : "Iniciar sesión"}
           </Button>
         </div>
       </Form>
