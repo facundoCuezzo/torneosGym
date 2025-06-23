@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Navbar, Container, Nav, Button, Image } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useUsers } from '../hooks/useUsers';
 
 function NavbarComp() {
   const navigate = useNavigate();
 
+  const { handleLogout } = useUsers();
   const [userLogged, setUserLogged] = useState({
     userId: 0,
     logged: false,
@@ -21,7 +23,9 @@ function NavbarComp() {
     }
   }, [loggedLS, userIdLS]);
 
-  const logout = () => {
+  const logout = async () => {
+    await handleLogout()
+
     localStorage.removeItem("logged");
     localStorage.removeItem("userId");
     setUserLogged({

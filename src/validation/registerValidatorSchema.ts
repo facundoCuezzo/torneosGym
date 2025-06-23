@@ -6,10 +6,11 @@ const registerValidatorSchema = yup.object().shape({
     .string()
     .required("La contraseña es requerida")
     .min(8, "La contraseña debe tener al menos 8 caracteres"),
-  repeatPassword: yup
-    .string()
-    .required("La repetición de la contraseña es requerida")
-    .min(8, "La contraseña debe tener al menos 8 caracteres"),
+  id_role: yup
+    .number()
+    .typeError("El rol es requerido")
+    .moreThan(0, "El rol es requerido")
+    .required("El rol es requerido"),
 });
 
 export default registerValidatorSchema;

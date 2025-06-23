@@ -5,7 +5,7 @@ interface LoginFormData {
 interface RegisterFormData {
   full_name: string;
   password: string;
-  repeatPassword: string;
+  id_role: number;
 }
 interface ErrorResponse {
   error: string;

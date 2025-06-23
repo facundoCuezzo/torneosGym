@@ -9,6 +9,7 @@ export const login = async (data: LoginFormData) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
+    credentials: "include"
   });
   if (!response.ok) {
     const error: ErrorResponse = await response.json();
@@ -33,8 +34,8 @@ export const getUsers = async () => {
     return res;
 }
 
-export const createUser = async (user: CreateUserData) => {
-  const response = await fetch(`${URL}/register`, {
+export const createUser = async (user: RegisterFormData) => {
+  const response = await fetch(`${URL}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -44,6 +45,7 @@ export const createUser = async (user: CreateUserData) => {
   });
   if (!response.ok) {
     const error: ErrorResponse = await response.json();
+    console.log(error)
     throw error;
   }
   const res: CreateUserResponse = await response.json();
@@ -65,3 +67,16 @@ export const deleteUser = async () => {
   const res: { message: string } = await response.json();
   return res;
 }
+
+export const logout = async () => {
+  const response = await fetch(`${URL}/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw error;
+  }
+  await response.json();
+};
