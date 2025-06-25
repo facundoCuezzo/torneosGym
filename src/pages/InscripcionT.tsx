@@ -1,33 +1,28 @@
-import Dropdown from 'react-bootstrap/Dropdown';
-import Card from 'react-bootstrap/Card';
+import Dropdown from "react-bootstrap/Dropdown";
+import Card from "react-bootstrap/Card";
+import { useUsers } from "../hooks/useUsers";
 
-export default function Puntajes() {
+export default function InscripcionTorneos() {
+  const { user } = useUsers();
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-start",
-        minHeight: "60vh",
-        paddingTop: "90px"
-      }}
-    >
+    <div className="d-flex justify-content-center align-items-start min-vh-60 pt-5">
       <Card
         bg="warning"
         text="dark"
-        style={{ width: '35rem' }}
+        style={{ width: "35rem" }}
         className="mb-2"
       >
-        <Card.Header className="text-center" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-          Gimnasio: 
+        <Card.Header
+          className="text-center"
+          style={{ fontSize: "1.5rem", fontWeight: "bold" }}
+        >
+          Gimnasio: {user?.full_name}
         </Card.Header>
         <Card.Body className="text-center">
           <Card.Title style={{ fontSize: "1.3rem", fontWeight: "bold" }}>
-            Numero Asociado: 
+            Numero de asociado: {user?.userId}
           </Card.Title>
-          <Card.Text style={{ fontSize: "1.1rem" }}>
-            Categoría: 
-          </Card.Text>
+          <Card.Text style={{ fontSize: "1.1rem" }}>Categoría:</Card.Text>
           <div className="d-flex justify-content-center mt-4">
             <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-basic">

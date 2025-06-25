@@ -5,10 +5,16 @@ import {
   createUser,
   deleteUser,
   logout,
+  getOneUser,
 } from "../helpers/userQueries";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { useUserContext } from "./useUserContext";
 
 export const useUsers = () => {
+  const navigate = useNavigate();
+  const { user, setUser } = useUserContext();
+
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
 
@@ -18,9 +24,18 @@ export const useUsers = () => {
     setLoading(true);
     try {
       const res = await login(data);
+      if (res.userInfo) {
+        setUser({
+          userId: res.userInfo.userId,
+          full_name: res.userInfo.full_name,
+          role: res.userInfo.role,
+        });
+      }
       return res;
     } catch (err) {
-      toast.error((err as ErrorResponse).error);
+      const error = err as ErrorResponse;
+
+      toast.error(error.error);
     } finally {
       setLoading(false);
     }
@@ -32,7 +47,25 @@ export const useUsers = () => {
       const res = await getUsers();
       setUsers(res.users);
     } catch (err) {
-      toast.error((err as ErrorResponse).error);
+      const error = err as ErrorResponse;
+
+      toast.error(error.error);
+      if (error.redirect) navigate("/");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchOneUser = async (id: number) => {
+    setLoading(true);
+    try {
+      const res = await getOneUser(id);
+      return res;
+    } catch (err) {
+      const error = err as ErrorResponse;
+
+      toast.error(error.error);
+      if (error.redirect) navigate("/");
     } finally {
       setLoading(false);
     }
@@ -44,7 +77,10 @@ export const useUsers = () => {
       const res = await createUser(data);
       return res;
     } catch (err) {
-      toast.error((err as ErrorResponse).error);
+      const error = err as ErrorResponse;
+
+      toast.error(error.error);
+      if (error.redirect) navigate("/");
     } finally {
       setLoading(false);
     }
@@ -56,28 +92,34 @@ export const useUsers = () => {
       const res = await deleteUser();
       toast.success(res.message);
     } catch (err) {
-      toast.error((err as ErrorResponse).error);
+      const error = err as ErrorResponse;
+
+      toast.error(error.error);
+      if (error.redirect) navigate("/");
     } finally {
       setLoading(false);
     }
   };
 
   const handleLogout = async () => {
-  try {
-    await logout();
-    toast.success("Sesión cerrada");
-  } catch (err) {
-    toast.error("Error al cerrar sesión");
-    console.error(err);
-  }
-};
+    try {
+      await logout();
+      setUser(null);
+      toast.success("Sesión cerrada correctamente");
+    } catch (err) {
+      toast.error("Error al cerrar sesión");
+      console.error(err);
+    }
+  };
 
   return {
     loading,
     users,
+    user,
     handleLogin,
     handleLogout,
     fetchUsers,
+    fetchOneUser,
     handleCreateUser,
     handleDeleteUser,
   };

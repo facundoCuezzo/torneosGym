@@ -9,4 +9,10 @@ interface RegisterFormData {
 }
 interface ErrorResponse {
   error: string;
+  redirect?: boolean;
+}
+interface UserInfo {
+  userId: number;
+  role: string;
+  full_name: string;
 }

@@ -1,42 +1,37 @@
 import { Card, Button } from "react-bootstrap";
+import { useUsers } from '../hooks/useUsers';
 
 export default function Alumnos() {
+  const { user } = useUsers();
   return (
     <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center", // Centra la card
-        minHeight: "60vh",
-        paddingTop: "90px"
-      }}
+      className="d-flex flex-column align-items-center pt-5"
+      style={{ minHeight: "60vh" }}
     >
-      {[
-        'Danger',
-      ].map((variant) => (
-        <Card
-          bg={variant.toLowerCase()}
-          key={variant}
-          text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
-          style={{ width: '35rem' }}
-          className="mb-2"
+      <Card
+        bg="danger"
+        text="white"
+        style={{ width: "35rem" }}
+        className="mb-2"
+      >
+        <Card.Header
+          className="text-center"
+          style={{ fontSize: "1.5rem", fontWeight: "bold" }}
         >
-          <Card.Header className="text-center" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-            Gimnasio: 
-          </Card.Header>
-          <Card.Body className="text-center">
-            <Card.Title style={{ fontSize: "1.3rem", fontWeight: "bold" }}>
-              Numero Asociado: 
-            </Card.Title>
-            <Card.Text style={{ fontSize: "1.1rem" }}>
-              Categoría: 
-            </Card.Text>
-          </Card.Body>
-        </Card>
-      ))}
+          Gimnasio: {user?.full_name}
+        </Card.Header>
+        <Card.Body className="text-center">
+          <Card.Title style={{ fontSize: "1.3rem", fontWeight: "bold" }}>
+            Número de asociado: {user?.userId}
+          </Card.Title>
+          <Card.Text style={{ fontSize: "1.1rem" }}>Categoría:</Card.Text>
+        </Card.Body>
+      </Card>
 
-      <div style={{ width: "100%", maxWidth: "110rem", display: "flex", justifyContent: "flex-start", padding: "30px" }}>
-        <Button variant="danger">Añadir alumno</Button>
+      <div className="w-100" style={{ maxWidth: "110rem", padding: "30px" }}>
+        <div className="d-flex justify-content-start">
+          <Button variant="danger">Añadir alumno</Button>
+        </div>
       </div>
     </div>
   );
