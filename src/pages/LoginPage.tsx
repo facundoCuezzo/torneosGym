@@ -20,11 +20,10 @@ const LoginPage = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     const res = await handleLogin(data);
-    if (res?.logged) {
-      localStorage.setItem("logged", JSON.stringify(res.logged));
-      localStorage.setItem("userId", JSON.stringify(res.userId));
+    if (res?.userInfo) {
+      localStorage.setItem("userInfo", JSON.stringify(res.userInfo));
 
-      navigate("/homepage");
+      navigate("/inicio");
     }
   };
 

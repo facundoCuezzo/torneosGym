@@ -12,9 +12,9 @@ const RoutesView = () => {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/crear-usuario" element={<RegisterPage />} />
       <Route path="*" element={<h1>404</h1>} />
-      <Route path="/homePage" element={<HomePage />} />
+      <Route path="/inicio" element={<HomePage />} />
 
       <Route path="/mi-cuenta" element={<MiCuenta />} />
       <Route path="/inscripcion-torneos" element={<InscripcionT />} />
