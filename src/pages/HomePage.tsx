@@ -1,6 +1,6 @@
 import { List, ListItemButton, ListItemText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useUsers } from "../hooks/useUsers";
+import useUsers from "../hooks/useUsers";
 
 const ADMIN_OPTIONS = [
   { nombre: "MI CUENTA", ruta: "/mi-cuenta" },

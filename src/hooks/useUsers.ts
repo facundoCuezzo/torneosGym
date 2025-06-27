@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "./useUserContext";
 
-export const useUsers = () => {
+const useUsers = () => {
   const navigate = useNavigate();
   const { user, setUser } = useUserContext();
 
@@ -124,3 +124,5 @@ export const useUsers = () => {
     handleDeleteUser,
   };
 };
+
+export default useUsers;

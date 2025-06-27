@@ -4,7 +4,8 @@ import Footer from "./components/Footer";
 import NavbarComp from "./components/NavBar";
 import "./styles/App.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { Toaster } from 'sonner';
+import { Toaster } from "sonner";
+import MembersProvider from "./context/members/MembersProvider";
 
 function App() {
   return (
@@ -13,7 +14,9 @@ function App() {
         <NavbarComp />
         <main>
           <Toaster richColors />
-          <RoutesView />
+          <MembersProvider>
+            <RoutesView />
+          </MembersProvider>
         </main>
         <Footer />
       </div>
