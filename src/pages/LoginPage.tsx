@@ -3,7 +3,7 @@ import { Container, Image } from "react-bootstrap";
 import loginValidatorSchema from "../validation/loginValidatorSchema";
 import { useForm } from "react-hook-form";
 import { LoginFormComp } from "../components/FormComp";
-import { useUsers } from "../hooks/useUsers";
+import useUsers from "../hooks/useUsers";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 

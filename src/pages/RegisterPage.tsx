@@ -3,7 +3,7 @@ import { Container, Image } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import registerValidatorSchema from "../validation/registerValidatorSchema";
 import { RegisterFormComp } from "../components/FormComp";
-import { useUsers } from "../hooks/useUsers";
+import useUsers from "../hooks/useUsers";
 import { toast } from "sonner";
 
 const RegisterPage = () => {

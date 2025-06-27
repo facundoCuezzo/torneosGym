@@ -1,6 +1,6 @@
 import { Navbar, Container, Nav, Image } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useUsers } from "../hooks/useUsers";
+import useUsers from "../hooks/useUsers";
 import NavLinks from './NavLinks';
 import { useUserContext } from '../hooks/useUserContext';
 
