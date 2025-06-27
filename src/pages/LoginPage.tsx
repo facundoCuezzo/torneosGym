@@ -4,12 +4,20 @@ import loginValidatorSchema from "../validation/loginValidatorSchema";
 import { useForm } from "react-hook-form";
 import { LoginFormComp } from "../components/FormComp";
 import { useUsers } from "../hooks/useUsers";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const LoginPage = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const { handleLogin, loading } = useUsers();
+  const { handleLogin, loading, user } = useUsers();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/inicio");
+    }
+  }, [user, navigate]);
+
   const {
     register,
     handleSubmit,

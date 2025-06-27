@@ -1,38 +1,23 @@
-import Dropdown from 'react-bootstrap/Dropdown';
-import Card from 'react-bootstrap/Card';
+import Dropdown from "react-bootstrap/Dropdown";
+import Card from "react-bootstrap/Card";
+import { useUsers } from '../hooks/useUsers';
 
 export default function Puntajes() {
+  const { user } = useUsers();
   return (
     <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-start",
-        minHeight: "60vh",
-        paddingTop: "90px"
-      }}
+      className="d-flex justify-content-center align-items-start pt-5"
+      style={{ minHeight: "60vh" }}
     >
-      <Card
-        bg="light"
-        text="dark"
-        style={{ width: '35rem' }}
-        className="mb-2"
-      >
-        <Card.Header className="text-center" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-          Gimnasio: 
-        </Card.Header>
+      <Card bg="light" text="dark" className="mb-2" style={{ width: "35rem" }}>
+        <Card.Header className="text-center fw-bold fs-4">Juez: {user?.full_name}</Card.Header>
         <Card.Body className="text-center">
-          <Card.Title style={{ fontSize: "1.3rem", fontWeight: "bold" }}>
-            Numero Asociado: 
-          </Card.Title>
-          <Card.Text style={{ fontSize: "1.1rem" }}>
-            Categoría: 
-          </Card.Text>
-          
+          <Card.Title className="fw-bold fs-5">Número de asociado: {user?.userId}</Card.Title>
+
           <div className="d-flex justify-content-center mt-4">
             <Dropdown>
               <Dropdown.Toggle variant="success" id="dropdown-basic">
-                Seleccione el Torneo
+                Seleccione el torneo
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item href="#">Action</Dropdown.Item>

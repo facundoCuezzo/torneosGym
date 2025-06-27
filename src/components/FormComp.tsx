@@ -35,8 +35,8 @@ export const RegisterFormComp: React.FC<Props<RegisterFormData>> = ({
   const OPTIONS = [
     { label: "Sin seleccionar rol", value: 0 },
     { label: "Administrador", value: 1 },
-    { label: "Gimnasio", value: 2 },
-    { label: "Juez", value: 3 },
+    { label: "Juez", value: 2 },
+    { label: "Gimnasio", value: 3 },
   ];
   return (
     <Form

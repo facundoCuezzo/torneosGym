@@ -11,8 +11,11 @@ interface ErrorResponse {
   error: string;
   redirect?: boolean;
 }
+
+type UserRole = "Administrador" | "Gimnasio" | "Juez";
+
 interface UserInfo {
   userId: number;
-  role: string;
+  role: UserRole;
   full_name: string;
 }
