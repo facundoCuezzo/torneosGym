@@ -19,12 +19,13 @@ export default function Alumnos() {
       <hr />
       <MembersTableComp
         members={members}
-        options={[
+        headers={[
           "DNI",
-          "Nombre",
-          "Fecha de nacimiento | Edad",
+          "Nombre y apellido",
+          "Fecha de nacimiento",
           "Gimnasio",
           "Categoría",
+          "Nivel",
           "Acciones",
         ]}
       />

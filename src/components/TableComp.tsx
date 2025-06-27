@@ -3,15 +3,15 @@ import { Button, Table } from "react-bootstrap";
 
 interface Props {
   members: FullMemberInfo[] | null;
-  options: string[];
+  headers: string[];
 }
 
-export const MembersTableComp: React.FC<Props> = ({ members, options }) => {
+export const MembersTableComp: React.FC<Props> = ({ members, headers }) => {
   return (
     <Table striped bordered hover responsive>
       <thead>
         <tr className="text-center">
-          {options.map((option) => (
+          {headers.map((option) => (
             <th key={option}>{option}</th>
           ))}
         </tr>
@@ -26,8 +26,9 @@ export const MembersTableComp: React.FC<Props> = ({ members, options }) => {
             </td>
             <td>{member.gym}</td>
             <td>
-              {member.category} | Nivel {member.level}
+              {member.category}
             </td>
+            <td className='text-center'>{member.level}</td>
             <td>
               <div className='d-flex justify-content-evenly'>
                 <Button variant="info">Editar</Button>
