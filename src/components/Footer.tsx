@@ -37,7 +37,7 @@ const Footer = () => {
             </Link>
           </div>
         </Col>
-        <Col md={4} sm={12} className="footer-section social">
+        <Col md={4} sm={12} className="footer-section social ">
           <h1 className="logo-text">Redes sociales</h1>
           <div className="social-links">
             <Link

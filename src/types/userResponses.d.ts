@@ -5,7 +5,7 @@ interface User {
 }
 interface LoginResponse {
   message: string;
-  userInfo: { userId: number; logged: boolean; role: string; full_name: string };
+  userInfo: { userId: number; logged: boolean; role: UserRole; full_name: string };
 }
 interface GetAllUsersResponse {
     message: string;
