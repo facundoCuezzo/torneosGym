@@ -16,7 +16,7 @@ const NavLinks: React.FC<Props> = ({ user, logout, isLoggedIn }) => {
     },
     {
       to: "/mi-cuenta",
-      text: "Mi Cuenta",
+      text: "Mi cuenta",
     },
   ];
 
@@ -27,7 +27,7 @@ const NavLinks: React.FC<Props> = ({ user, logout, isLoggedIn }) => {
     },
     {
       to: "/mi-cuenta",
-      text: "Mi Cuenta",
+      text: "Mi cuenta",
     },
     {
       to: "/crear-usuario",
