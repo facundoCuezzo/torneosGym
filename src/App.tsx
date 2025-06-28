@@ -10,16 +10,16 @@ import MembersProvider from "./context/members/MembersProvider";
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
-        <NavbarComp />
-        <main>
-          <Toaster richColors />
-          <MembersProvider>
+      <MembersProvider>
+        <div className="App">
+          <NavbarComp />
+          <main>
+            <Toaster richColors />
             <RoutesView />
-          </MembersProvider>
-        </main>
-        <Footer />
-      </div>
+          </main>
+          <Footer />
+        </div>
+      </MembersProvider>
     </BrowserRouter>
   );
 }
