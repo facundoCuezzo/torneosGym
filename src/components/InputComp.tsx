@@ -11,6 +11,8 @@ interface Props {
   icon: ReactNode;
   register: UseFormRegisterReturn;
   error?: string;
+  onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
 }
 
 const InputComp: React.FC<Props> = ({
@@ -21,6 +23,8 @@ const InputComp: React.FC<Props> = ({
   icon,
   register,
   error,
+  onChange,
+  value,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -36,6 +40,8 @@ const InputComp: React.FC<Props> = ({
           type={inputType}
           {...register}
           isInvalid={!!error}
+          onChange={onChange}
+          value={value}
         />
         {isPassword && (
           <Button

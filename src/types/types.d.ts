@@ -7,6 +7,12 @@ interface RegisterFormData {
   password: string;
   id_role: number;
 }
+interface CreateMemberFormData {
+  full_name: string;
+  birth_date: string;
+  dni: string;
+  id_level: number;
+}
 interface ErrorResponse {
   error: string;
   redirect?: boolean;
