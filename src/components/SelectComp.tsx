@@ -1,11 +1,6 @@
-import type { ReactNode } from "react";
+import type { ElementType, ReactNode } from "react";
 import { Form, InputGroup } from "react-bootstrap";
 import type { UseFormRegisterReturn } from "react-hook-form";
-
-interface Option {
-  value: number;
-  label: string;
-}
 
 interface Props {
   options: Option[];
@@ -14,6 +9,7 @@ interface Props {
   icon: ReactNode;
   register: UseFormRegisterReturn;
   error?: string;
+  as?: ElementType;
 }
 
 const SelectComp: React.FC<Props> = ({
@@ -23,15 +19,18 @@ const SelectComp: React.FC<Props> = ({
   error,
   icon,
   register,
+  as,
 }) => {
   return (
-    <Form.Group className="mb-3" controlId={controlId}>
-        <Form.Label>{label}</Form.Label>
+    <Form.Group as={as} sm={6} md={3} className="mb-3" controlId={controlId}>
+      <Form.Label>{label}</Form.Label>
       <InputGroup>
         <InputGroup.Text id={`InputGroup${controlId}`}>{icon}</InputGroup.Text>
         <Form.Select {...register} isInvalid={!!error}>
           {options.map((option) => (
-            <option key={option.value} value={option.value}>{option.label}</option>
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
           ))}
         </Form.Select>
       </InputGroup>

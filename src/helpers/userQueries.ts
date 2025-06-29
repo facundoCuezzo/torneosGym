@@ -1,4 +1,6 @@
 import env from "../config/env";
+import type { LoginFormData } from '../validation/loginValidatorSchema';
+import type { RegisterFormData } from '../validation/registerValidatorSchema';
 import { refreshAccessToken } from './authQueries';
 
 const URL = `${env.URL_BACK_LOCAL}/users`;

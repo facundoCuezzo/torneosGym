@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-const loginValidatorSchema = yup.object().shape({
+export const loginValidatorSchema = yup.object().shape({
   full_name: yup
     .string()
     .required("El nombre completo es requerido"),
@@ -10,4 +10,4 @@ const loginValidatorSchema = yup.object().shape({
     .min(8, "La contraseña debe tener al menos 8 caracteres"),
 });
 
-export default loginValidatorSchema;
+export type LoginFormData = yup.InferType<typeof loginValidatorSchema>;

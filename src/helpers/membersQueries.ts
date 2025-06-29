@@ -1,19 +1,27 @@
 import env from "../config/env";
 import { refreshAccessToken } from "./authQueries";
 
-const URL = `${env.URL_BACK_LOCAL}/members`;
+const URL_API = `${env.URL_BACK_LOCAL}/members`;
 
 export const getMembersByGym = async (
+  paramsPayload: Params,
   gymId: number
 ): Promise<GetMembersByGymResponse> => {
-  const response = await fetch(`${URL}/${gymId}`, {
+  const url = new URL(`${URL_API}/${gymId}`);
+  const params = new URLSearchParams();
+
+  Object.entries(paramsPayload).forEach(([key, value]) => {
+    if(typeof value === "number" && value > 0) params.append(key, value.toString());
+    else if (value) params.append(key, value);
+  });
+  const response = await fetch(`${url}?${params}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
   });
   if (response.status === 401) {
     await refreshAccessToken();
-    return getMembersByGym(gymId);
+    return getMembersByGym(paramsPayload, gymId);
   }
   if (!response.ok) {
     const error: ErrorResponse = await response.json();
@@ -26,7 +34,7 @@ export const getMembersByGym = async (
 export const createMember = async (
   member: CreateMember
 ): Promise<CreateMemberResponse> => {
-  const response = await fetch(`${URL}`, {
+  const response = await fetch(`${URL_API}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(member),
@@ -47,7 +55,7 @@ export const createMember = async (
 export const deleteMember = async (
   id: number
 ): Promise<{ message: string }> => {
-  const response = await fetch(`${URL}/${id}`, {
+  const response = await fetch(`${URL_API}/${id}`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     credentials: "include",

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import useMembersContext from "./useMembersContext";
 import useUsers from "./useUsers";
 import {
@@ -7,22 +6,32 @@ import {
   getMembersByGym,
 } from "../helpers/membersQueries";
 import { toast } from "sonner";
-import { parseMember } from '../utils/parseFunctions';
+import { parseMember } from "../utils/parseFunctions";
+import type { CreateMemberFormData } from "../validation/createMemberValidatorSchema";
+import { useState } from 'react';
 
 const useMembers = () => {
   const { members, setMembers } = useMembersContext();
-  const { user } = useUsers();
+  const { user, handleLogout } = useUsers();
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (user && members === null) {
-      getMembersByGym(user.userId)
-        .then((res) => setMembers(res.members))
-        .catch((err) => {
-          const error = err as ErrorResponse;
-          toast.error(error.error);
-        });
+  const handleGetMembers = async (params: Params) => {
+    try {
+      if (user) {
+        setLoading(true);
+        const res = await getMembersByGym(params, user.userId);
+        setMembers(res.members);
+      }
+    } catch (error) {
+      const err = error as ErrorResponse;
+      toast.error(err.error);
+      if (err.redirect) {
+        await handleLogout();
+      }
+    } finally {
+      setLoading(false);
     }
-  }, [user, members, setMembers]);
+  };
 
   const handleCreateMember = async (member: CreateMemberFormData) => {
     try {
@@ -38,12 +47,15 @@ const useMembers = () => {
       const res = await createMember(FullMemberData);
       toast.success(res.message);
 
-      const parsedMember = parseMember(res.member, user);      
+      const parsedMember = parseMember(res.member, user);
       setMembers([...(members ?? []), parsedMember]);
       return res;
     } catch (err) {
       const error = err as ErrorResponse;
       toast.error(error.error);
+      if (error.redirect) {
+        await handleLogout();
+      }
     }
   };
 
@@ -63,9 +75,19 @@ const useMembers = () => {
     } catch (err) {
       const error = err as ErrorResponse;
       toast.error(error.error);
+      if (error.redirect) {
+        await handleLogout();
+      }
     }
   };
-  return { members, setMembers, handleCreateMember, handleDeleteMember };
+  return {
+    members,
+    setMembers,
+    handleCreateMember,
+    handleDeleteMember,
+    handleGetMembers,
+    loading
+  };
 };
 
 export default useMembers;

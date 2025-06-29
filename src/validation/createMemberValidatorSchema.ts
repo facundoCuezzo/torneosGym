@@ -36,7 +36,7 @@ const dateValidator = yup
   )
   .required("La fecha es requerida");
 
-const createMemberValidatorSchema = yup.object().shape({
+export const createMemberValidatorSchema = yup.object().shape({
   full_name: yup.string().required("El nombre completo es requerido"),
   birth_date: dateValidator,
   dni: yup
@@ -52,4 +52,6 @@ const createMemberValidatorSchema = yup.object().shape({
     .required("El nivel es requerido"),
 });
 
-export default createMemberValidatorSchema;
+export type CreateMemberFormData = yup.InferType<
+  typeof createMemberValidatorSchema
+>;

@@ -9,6 +9,8 @@ import type {
   UseFormRegister,
 } from "react-hook-form";
 import SelectComp from "./SelectComp";
+import type { RegisterFormData } from '../validation/registerValidatorSchema';
+import type { LoginFormData } from '../validation/loginValidatorSchema';
 
 interface Props<T extends LoginFormData | RegisterFormData> {
   register: UseFormRegister<T>;

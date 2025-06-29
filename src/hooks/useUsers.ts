@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   login,
   getUsers,
@@ -10,10 +10,12 @@ import {
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "./useUserContext";
+import type { LoginFormData } from '../validation/loginValidatorSchema';
+import type { RegisterFormData } from '../validation/registerValidatorSchema';
 
 const useUsers = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useUserContext();
+  const { user, setUser, isLoggedIn } = useUserContext();
 
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
@@ -50,7 +52,9 @@ const useUsers = () => {
       const error = err as ErrorResponse;
 
       toast.error(error.error);
-      if (error.redirect) navigate("/");
+      if (error.redirect) {
+        await handleLogout();
+      }
     } finally {
       setLoading(false);
     }
@@ -65,7 +69,9 @@ const useUsers = () => {
       const error = err as ErrorResponse;
 
       toast.error(error.error);
-      if (error.redirect) navigate("/");
+      if (error.redirect) {
+        await handleLogout();
+      }
     } finally {
       setLoading(false);
     }
@@ -80,7 +86,9 @@ const useUsers = () => {
       const error = err as ErrorResponse;
 
       toast.error(error.error);
-      if (error.redirect) navigate("/");
+      if (error.redirect) {
+        await handleLogout();
+      }
     } finally {
       setLoading(false);
     }
@@ -95,27 +103,30 @@ const useUsers = () => {
       const error = err as ErrorResponse;
 
       toast.error(error.error);
-      if (error.redirect) navigate("/");
+      if (error.redirect) {
+        await handleLogout();
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await logout();
       setUser(null);
-      toast.success("Sesión cerrada correctamente");
+      navigate("/");
     } catch (err) {
       toast.error("Error al cerrar sesión");
       console.error(err);
     }
-  };
+  }, [setUser, navigate]);
 
   return {
     loading,
     users,
     user,
+    isLoggedIn,
     handleLogin,
     handleLogout,
     fetchUsers,

@@ -1,19 +1,13 @@
 import { Navbar, Container, Nav, Image } from "react-bootstrap";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import useUsers from "../hooks/useUsers";
-import NavLinks from './NavLinks';
-import { useUserContext } from '../hooks/useUserContext';
+import NavLinks from "./NavLinks";
 
 function NavbarComp() {
-  const navigate = useNavigate();
-
-  const { handleLogout } = useUsers();
-  const { user, isLoggedIn } = useUserContext();
+  const { handleLogout, user, isLoggedIn } = useUsers();
 
   const logout = async () => {
     await handleLogout();
-
-    navigate("/");
   };
 
   return (
@@ -24,7 +18,7 @@ function NavbarComp() {
             <Image src="/logo_blanco.png" alt="Logo de torneos" width={50} />
           </NavLink>
           <div className="d-flex gap-3">
-            <NavLinks user={user} isLoggedIn={isLoggedIn} logout={logout}/>
+            <NavLinks user={user} isLoggedIn={isLoggedIn} logout={logout} />
           </div>
         </Nav>
       </Container>
