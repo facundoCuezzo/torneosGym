@@ -1,27 +1,21 @@
-interface LoginFormData {
-  full_name: string;
-  password: string;
-}
-interface RegisterFormData {
-  full_name: string;
-  password: string;
-  id_role: number;
-}
-interface CreateMemberFormData {
-  full_name: string;
-  birth_date: string;
-  dni: string;
-  id_level: number;
-}
 interface ErrorResponse {
   error: string;
   redirect?: boolean;
 }
-
+interface Option {
+  value: number;
+  label: string;
+}
 type UserRole = "Administrador" | "Gimnasio" | "Juez";
 
 interface UserInfo {
   userId: number;
   role: UserRole;
   full_name: string;
+}
+interface Params {
+  full_name?: string;
+  id_category: number;
+  id_level: number;
+  dni?: string;
 }

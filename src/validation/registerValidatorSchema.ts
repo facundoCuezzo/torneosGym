@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-const registerValidatorSchema = yup.object().shape({
+export const registerValidatorSchema = yup.object().shape({
   full_name: yup.string().required("El nombre completo es requerido"),
   password: yup
     .string()
@@ -13,4 +13,4 @@ const registerValidatorSchema = yup.object().shape({
     .required("El rol es requerido"),
 });
 
-export default registerValidatorSchema;
+export type RegisterFormData = yup.InferType<typeof registerValidatorSchema>;

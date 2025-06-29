@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   CalendarDate,
-  ListOl,
   PersonAdd,
   PersonCircle,
   Tag,
@@ -12,9 +11,10 @@ import Modal from "react-bootstrap/Modal";
 import InputComp from "./InputComp";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import createMemberValidatorSchema from "../validation/createMemberValidatorSchema";
 import SelectComp from "./SelectComp";
 import useMembers from "../hooks/useMembers";
+import { createMemberValidatorSchema, type CreateMemberFormData } from '../validation/createMemberValidatorSchema';
+import { OneTwoThreeIcon } from './Icons';
 
 const CreateMemberComp = () => {
   const { handleCreateMember } = useMembers();
@@ -95,7 +95,7 @@ const CreateMemberComp = () => {
               controlId="MemberDniId"
               label="DNI"
               placeholder="Ej: 12345678"
-              icon={<Tag />}
+              icon={<OneTwoThreeIcon />}
               register={register("dni")}
               error={errors.dni?.message}
             />
@@ -116,7 +116,7 @@ const CreateMemberComp = () => {
                 { label: "10", value: 11 },
               ]}
               controlId="MemberLevelId"
-              icon={<ListOl />}
+              icon={<Tag />}
               register={register("id_level")}
               error={errors.id_level?.message}
             />
