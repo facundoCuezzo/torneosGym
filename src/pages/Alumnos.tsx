@@ -31,7 +31,6 @@ export default function Alumnos() {
   };
 
   const submitFilter = async (values: FilterMembers) => {
-    console.log(values);
     await handleGetMembers(values);
   };
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Table } from "react-bootstrap";
 import { Trash3Fill } from "react-bootstrap-icons";
+import CreateMemberComp from './CreateMemberComp';
 
 interface Props {
   members: FullMemberInfo[] | null;
@@ -35,7 +36,7 @@ export const MembersTableComp: React.FC<Props> = ({
             <td className="text-center">{member.level}</td>
             <td>
               <div className="d-flex justify-content-evenly">
-                <Button variant="info">Editar</Button>
+                <CreateMemberComp member={member} />
                 <Button
                   variant="danger"
                   className="d-flex align-items-center gap-1"

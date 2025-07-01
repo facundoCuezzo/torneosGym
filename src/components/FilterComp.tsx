@@ -78,11 +78,11 @@ const FilterComp: React.FC<Props> = ({ submitFilter }) => {
         />
       </Row>
       <div className="d-flex justify-content-between align-items-center">
-        <div>
-          <h6 className="text-underline">¡Importante!</h6>
+        <div className="bg-danger p-2 rounded-4 text-white">
+          <h6 className="text-decoration-underline">¡Importante!</h6>
           <p>
             Si desea obtener todos sus alumnos, deje los campos en blanco y
-            presione en "Filtrar 🔍"
+            presione en <b>Filtrar 🔍</b>
           </p>
         </div>
         <Button

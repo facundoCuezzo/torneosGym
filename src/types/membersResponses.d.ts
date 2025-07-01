@@ -7,6 +7,7 @@ interface FullMemberInfo {
   gym: string;
   dni: number;
   level: string;
+  id_level?: number;
 }
 interface CreateMember {
   full_name: string;
