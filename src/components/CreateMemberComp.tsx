@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
   CalendarDate,
+  PencilSquare,
   PersonAdd,
   PersonCircle,
   Tag,
@@ -13,11 +14,18 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SelectComp from "./SelectComp";
 import useMembers from "../hooks/useMembers";
-import { createMemberValidatorSchema, type CreateMemberFormData } from '../validation/createMemberValidatorSchema';
-import { OneTwoThreeIcon } from './Icons';
+import {
+  createMemberValidatorSchema,
+  type CreateMemberFormData,
+} from "../validation/createMemberValidatorSchema";
+import { OneTwoThreeIcon } from "./Icons";
 
-const CreateMemberComp = () => {
-  const { handleCreateMember } = useMembers();
+interface Props {
+  member?: FullMemberInfo;
+}
+
+const CreateMemberComp: React.FC<Props> = ({ member }) => {
+  const { handleCreateMember, handleUpdateMember } = useMembers();
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -32,9 +40,23 @@ const CreateMemberComp = () => {
     watch,
   } = useForm<CreateMemberFormData>({
     resolver: yupResolver(createMemberValidatorSchema),
+    defaultValues: {
+      full_name: member?.full_name ?? "",
+      birth_date: member?.birth_date ?? "",
+      dni: member?.dni.toString() ?? "",
+      id_level: member?.id_level ?? 0,
+    },
   });
 
   const onSubmit = async (data: CreateMemberFormData) => {
+    if (member) {
+      const res = await handleUpdateMember(member.id, data);
+      if (res?.member) {
+        handleClose();
+      }
+      return;
+    }
+
     const res = await handleCreateMember(data);
     if (res?.member) {
       reset({
@@ -49,18 +71,29 @@ const CreateMemberComp = () => {
 
   return (
     <>
-      <Button
-        variant="danger"
-        onClick={handleShow}
-        className="d-flex align-items-center gap-2"
-      >
-        <PersonAdd />
-        <span>Añadir alumno</span>
-      </Button>
+      {member ? (
+        <Button
+          variant="info"
+          onClick={handleShow}
+          className="d-flex align-items-center gap-2"
+        >
+          <PencilSquare />
+          <span>Editar</span>
+        </Button>
+      ) : (
+        <Button
+          variant="danger"
+          onClick={handleShow}
+          className="d-flex align-items-center gap-2"
+        >
+          <PersonAdd />
+          <span>Crear alumno</span>
+        </Button>
+      )}
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Crear nuevo alumno</Modal.Title>
+          <Modal.Title>{member ? "Editar alumno" : "Crear alumno"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit(onSubmit)}>
@@ -122,7 +155,7 @@ const CreateMemberComp = () => {
             />
 
             <Button variant="dark" type="submit" className="w-100">
-              Crear alumno
+              {member ? "Guardar cambios" : "Crear alumno"}
             </Button>
           </Form>
         </Modal.Body>

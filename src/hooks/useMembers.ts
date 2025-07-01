@@ -4,11 +4,12 @@ import {
   createMember,
   deleteMember,
   getMembersByGym,
+  updateMember,
 } from "../helpers/membersQueries";
 import { toast } from "sonner";
 import { parseMember } from "../utils/parseFunctions";
 import type { CreateMemberFormData } from "../validation/createMemberValidatorSchema";
-import { useState } from 'react';
+import { useState } from "react";
 
 const useMembers = () => {
   const { members, setMembers } = useMembersContext();
@@ -59,6 +60,39 @@ const useMembers = () => {
     }
   };
 
+  const handleUpdateMember = async (
+    id: number,
+    member: CreateMemberFormData
+  ) => {
+    try {
+      if (!user) {
+        toast.error("Debe iniciar sesión para crear un miembro");
+        return;
+      }
+      const FullMemberData: CreateMember = {
+        ...member,
+        id_gym: user.userId,
+        dni: Number(member.dni),
+      };
+      const res = await updateMember(id, FullMemberData);
+      toast.success(res.message);
+
+      const updatedParsedMember = parseMember(res.member, user);
+      setMembers(
+        (members ?? []).map((m) =>
+          m.id === updatedParsedMember.id ? updatedParsedMember : m
+        )
+      );
+      return res;
+    } catch (err) {
+      const error = err as ErrorResponse;
+      toast.error(error.error);
+      if (error.redirect) {
+        await handleLogout();
+      }
+    }
+  };
+
   const handleDeleteMember = async (id: number) => {
     try {
       const res = await deleteMember(id);
@@ -86,7 +120,8 @@ const useMembers = () => {
     handleCreateMember,
     handleDeleteMember,
     handleGetMembers,
-    loading
+    handleUpdateMember,
+    loading,
   };
 };
 

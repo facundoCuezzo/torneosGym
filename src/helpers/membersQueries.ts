@@ -11,7 +11,8 @@ export const getMembersByGym = async (
   const params = new URLSearchParams();
 
   Object.entries(paramsPayload).forEach(([key, value]) => {
-    if(typeof value === "number" && value > 0) params.append(key, value.toString());
+    if (typeof value === "number" && value > 0)
+      params.append(key, value.toString());
     else if (value) params.append(key, value);
   });
   const response = await fetch(`${url}?${params}`, {
@@ -46,6 +47,29 @@ export const createMember = async (
   }
   if (!response.ok) {
     const error: ErrorResponse = await response.json();
+    throw error;
+  }
+  const res: CreateMemberResponse = await response.json();
+  return res;
+};
+
+export const updateMember = async (
+  id: number,
+  member: CreateMember
+): Promise<CreateMemberResponse> => {
+  const response = await fetch(`${URL_API}/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(member),
+    credentials: "include",
+  });
+  if (response.status === 401) {
+    await refreshAccessToken();
+    return updateMember(id, member);
+  }
+  if (!response.ok) {
+    const error: ErrorResponse = await response.json();
+    console.log(error);
     throw error;
   }
   const res: CreateMemberResponse = await response.json();
