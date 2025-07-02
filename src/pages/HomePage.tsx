@@ -4,8 +4,10 @@ import useUsers from "../hooks/useUsers";
 
 const ADMIN_OPTIONS = [
   { nombre: "MI CUENTA", ruta: "/mi-cuenta" },
+  { nombre: "REGISTRAR USUARIO", ruta: "/crear-usuario" },
+  { nombre: "ADMINISTRAR TORNEOS", ruta: "/admin-torneos" },
   { nombre: "INSCRIPCIÓN TORNEOS", ruta: "/inscripcion-torneos" },
-  { nombre: "MIS TORNEOS", ruta: "/misTorneos" },
+  { nombre: "MIS TORNEOS", ruta: "/mis-torneos" },
   { nombre: "ALUMNOS", ruta: "/alumnos" },
   { nombre: "PUNTAJES", ruta: "/puntajes" },
 ];
@@ -21,7 +23,7 @@ const GYM_OPTIONS = [
   },
   {
     nombre: "MIS TORNEOS",
-    ruta: "/misTorneos",
+    ruta: "/mis-torneos",
   },
   {
     nombre: "ALUMNOS",

@@ -7,7 +7,7 @@ import {
   updateMember,
 } from "../helpers/membersQueries";
 import { toast } from "sonner";
-import { parseMember } from "../utils/parseFunctions";
+import { parseMember } from "../utils/extraFunctions";
 import type { CreateMemberFormData } from "../validation/createMemberValidatorSchema";
 import { useState } from "react";
 
