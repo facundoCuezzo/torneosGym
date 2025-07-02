@@ -49,3 +49,13 @@ export const parseMember = (member: MemberInfoWithIDs, user: UserInfo) => {
 
   return parsedMember;
 };
+
+export const validateDates = (startDate: string, endDate: string) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+
+  return start <= end;
+};

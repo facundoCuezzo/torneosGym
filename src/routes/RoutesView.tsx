@@ -8,6 +8,7 @@ import Alumnos from "../pages/Alumnos";
 import Puntajes from "../pages/Puntajes";
 import MiCuenta from "../pages/MiCuenta";
 import PrivateRoutes from "../components/PrivateRoutes";
+import AdministrarTorneos from '../pages/AdministrarTorneos';
 
 const RoutesView = () => {
   return (
@@ -18,6 +19,14 @@ const RoutesView = () => {
         element={
           <PrivateRoutes role={["Administrador"]}>
             <RegisterPage />
+          </PrivateRoutes>
+        }
+      />
+      <Route
+        path="/admin-torneos"
+        element={
+          <PrivateRoutes role={["Administrador"]}>
+            <AdministrarTorneos />
           </PrivateRoutes>
         }
       />
@@ -40,7 +49,7 @@ const RoutesView = () => {
         }
       />
       <Route
-        path="/misTorneos"
+        path="/mis-torneos"
         element={
           <PrivateRoutes role={["Administrador", "Gimnasio"]}>
             <MisTorneos />
