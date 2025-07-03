@@ -1,12 +1,14 @@
 import React from "react";
 import { Button, Table } from "react-bootstrap";
-import { Trash3Fill } from "react-bootstrap-icons";
+import { CashCoin, ClipboardPlusFill, Trash3Fill } from "react-bootstrap-icons";
 import CreateMemberComp from "./CreateMemberComp";
 
 interface MembersProps {
   members: FullMemberInfo[] | null;
   headers: string[];
   onClickDelete: (id: number) => void;
+  onClickRegister: (id: number) => void;
+  actions?: boolean;
 }
 
 interface TournamentsProps {
@@ -15,10 +17,18 @@ interface TournamentsProps {
   onClickDelete: (id: number) => void;
 }
 
+interface MembersTournamentsProps {
+  membersTournaments: MembersTournaments[] | null;
+  headers: string[];
+  onClickPaid: (id_member: number, id_tournament: number) => void;
+}
+
 export const MembersTableComp: React.FC<MembersProps> = ({
   members,
   headers,
   onClickDelete,
+  actions = false,
+  onClickRegister,
 }) => {
   return (
     <Table striped bordered hover responsive>
@@ -41,17 +51,30 @@ export const MembersTableComp: React.FC<MembersProps> = ({
             <td>{member.category}</td>
             <td className="text-center">{member.level}</td>
             <td>
-              <div className="d-flex justify-content-evenly">
-                <CreateMemberComp member={member} />
-                <Button
-                  variant="danger"
-                  className="d-flex align-items-center gap-1"
-                  onClick={() => onClickDelete(member.id)}
-                >
-                  <Trash3Fill />
-                  <span>Eliminar</span>
-                </Button>
-              </div>
+              {!actions ? (
+                <div className="d-flex justify-content-evenly">
+                  <CreateMemberComp member={member} />
+                  <Button
+                    variant="danger"
+                    className="d-flex align-items-center gap-1"
+                    onClick={() => onClickDelete(member.id)}
+                  >
+                    <Trash3Fill />
+                    <span>Eliminar</span>
+                  </Button>
+                </div>
+              ) : (
+                <div className="d-flex justify-content-center">
+                  <Button
+                    variant="warning"
+                    className="d-flex align-items-center gap-1"
+                    onClick={() => onClickRegister(member.id)}
+                  >
+                    <ClipboardPlusFill />
+                    <span>Inscribir al torneo</span>
+                  </Button>
+                </div>
+              )}
             </td>
           </tr>
         ))}
@@ -78,8 +101,8 @@ export const TournamentsTableComp: React.FC<TournamentsProps> = ({
         {tournaments?.map((tournament) => (
           <tr key={tournament.id}>
             <td>{tournament.name}</td>
-            <td className='text-center'>{tournament.date_range}</td>
-            <td className='text-center'>{tournament.inscription_date_end}</td>
+            <td className="text-center">{tournament.date_range}</td>
+            <td className="text-center">{tournament.inscription_date_end}</td>
             <td>
               <div className="d-flex justify-content-center">
                 <Button
@@ -89,6 +112,47 @@ export const TournamentsTableComp: React.FC<TournamentsProps> = ({
                 >
                   <Trash3Fill />
                   <span>Eliminar</span>
+                </Button>
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
+  );
+};
+
+export const MembersTournamentsTableComp: React.FC<MembersTournamentsProps> = ({
+  headers,
+  membersTournaments,
+  onClickPaid,
+}) => {
+  return (
+    <Table striped bordered hover responsive>
+      <thead>
+        <tr className="text-center">
+          {headers.map((option) => (
+            <th key={option}>{option}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {membersTournaments?.map((mt) => (
+          <tr key={`${mt.id_gym}-${mt.id_tournament}-${mt.member}`}>
+            <td>{mt.dni}</td>
+            <td>{mt.member}</td>
+            <td>{mt.gym}</td>
+            <td className="text-center">{mt.paid ? "Si" : "No"}</td>
+            <td>
+              <div className="d-flex justify-content-center">
+                <Button
+                  variant="success"
+                  disabled={mt.paid}
+                  className="d-flex align-items-center gap-1"
+                  onClick={() => onClickPaid(mt.id_member, mt.id_tournament)}
+                >
+                  <CashCoin />
+                  <span>Marcar como pagado</span>
                 </Button>
               </div>
             </td>
