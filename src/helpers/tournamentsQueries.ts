@@ -9,6 +9,7 @@ export const getTournaments = async (): Promise<GetTournamentsResponse> => {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
   });
   if (response.status === 401) {
     await refreshAccessToken();
@@ -22,7 +23,9 @@ export const getTournaments = async (): Promise<GetTournamentsResponse> => {
   return data;
 };
 
-export const createTournament = async (tournament: CreateTournament): Promise<CreateTournamentResponse> => {
+export const createTournament = async (
+  tournament: CreateTournament
+): Promise<CreateTournamentResponse> => {
   const response = await fetch(`${URL}`, {
     method: "POST",
     headers: {
@@ -43,7 +46,9 @@ export const createTournament = async (tournament: CreateTournament): Promise<Cr
   return data;
 };
 
-export const deleteTournament = async (id: number): Promise<{ message: string }> => {
+export const deleteTournament = async (
+  id: number
+): Promise<{ message: string }> => {
   const response = await fetch(`${URL}/${id}`, {
     method: "DELETE",
     headers: {
@@ -61,4 +66,50 @@ export const deleteTournament = async (id: number): Promise<{ message: string }>
   }
   const data: { message: string } = await response.json();
   return data;
+};
+
+export const getMembersTournaments = async (
+  id_tournament: number,
+  id_gym: number
+): Promise<GetMembersTournamentsResponse> => {
+  const response = await fetch(`${URL}/${id_tournament}/gym/${id_gym}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  if (response.status === 401) {
+    await refreshAccessToken();
+    return getMembersTournaments(id_tournament, id_gym);
+  }
+  if (!response.ok) {
+    const error: ErrorResponse = await response.json();
+    throw error;
+  }
+  const res: GetMembersTournamentsResponse = await response.json();
+  return res;
+};
+
+export const getMembersNotInTournament = async (
+  id_tournament: number,
+  id_gym: number
+): Promise<GetMembersByGymResponse> => {
+  const response = await fetch(`${URL}/not-in/${id_tournament}/gym/${id_gym}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  if (response.status === 401) {
+    await refreshAccessToken();
+    return getMembersNotInTournament(id_tournament, id_gym);
+  }
+  if (!response.ok) {
+    const error: ErrorResponse = await response.json();
+    throw error;
+  }
+  const res: GetMembersByGymResponse = await response.json();
+  return res;
 };
