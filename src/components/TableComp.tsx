@@ -20,7 +20,11 @@ interface TournamentsProps {
 interface MembersTournamentsProps {
   membersTournaments: MembersTournaments[] | null;
   headers: string[];
-  onClickPaid: (id_member: number, id_tournament: number) => void;
+  onClickPaid: (
+    id_member: number,
+    id_tournament: number,
+    paid: boolean
+  ) => void;
 }
 
 export const MembersTableComp: React.FC<MembersProps> = ({
@@ -146,13 +150,16 @@ export const MembersTournamentsTableComp: React.FC<MembersTournamentsProps> = ({
             <td>
               <div className="d-flex justify-content-center">
                 <Button
-                  variant="success"
-                  disabled={mt.paid}
+                  variant={mt.paid ? "danger" : "success"}
                   className="d-flex align-items-center gap-1"
-                  onClick={() => onClickPaid(mt.id_member, mt.id_tournament)}
+                  onClick={() =>
+                    onClickPaid(mt.id_member, mt.id_tournament, !mt.paid)
+                  }
                 >
                   <CashCoin />
-                  <span>Marcar como pagado</span>
+                  <span>
+                    {mt.paid ? "Marcar como NO pagado" : "Marcar como pagado"}
+                  </span>
                 </Button>
               </div>
             </td>

@@ -113,3 +113,28 @@ export const getMembersNotInTournament = async (
   const res: GetMembersByGymResponse = await response.json();
   return res;
 };
+
+export const updatePayMemberTournament = async ({
+  paid,
+  id_tournament,
+  id_member,
+}: UpdatePayMemberTournamentData): Promise<{ message: string }> => {
+  const response = await fetch(`${URL}/${id_tournament}/member/${id_member}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ paid }),
+    credentials: "include",
+  });
+  if (response.status === 401) {
+    await refreshAccessToken();
+    return updatePayMemberTournament({ paid, id_tournament, id_member });
+  }
+  if (!response.ok) {
+    const error: ErrorResponse = await response.json();
+    throw error;
+  }
+  const res: { message: string } = await response.json();
+  return res;
+};
