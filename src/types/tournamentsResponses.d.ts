@@ -17,3 +17,8 @@ interface CreateTournamentResponse {
   message: string;
   tournament: Tournament;
 }
+interface UpdatePayMemberTournamentData {
+  id_member: number;
+  id_tournament: number;
+  paid: boolean;
+}

@@ -2,7 +2,7 @@ import useUsers from "../hooks/useUsers";
 import CardComp from "../components/CardComp";
 import useTournaments from "../hooks/useTournaments";
 import { Container, Form, Nav, Spinner } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   MembersTableComp,
   MembersTournamentsTableComp,
@@ -13,23 +13,17 @@ export default function InscripcionTorneos() {
   const {
     tournaments,
     loading,
-    handleGetMembersTournaments,
+    selectedTournament,
+    setSelectedTournament,
     membersTournaments,
     membersNotInTournament,
+    handleUpdatePayMemberTournament
   } = useTournaments();
-  const [selectedTournament, setSelectedTournament] = useState(0);
   const [activeKey, setActiveKey] = useState("registrados");
 
-  useEffect(() => {
-    const executeFunction = async () => {
-      if (selectedTournament === 0) return;
-      await handleGetMembersTournaments(selectedTournament);
-    };
-    executeFunction();
-  }, [selectedTournament, handleGetMembersTournaments]);
-
-  const handlePaid = (id_member: number, id_tournament: number) => {
-    console.log(id_member, id_tournament);
+  const handlePaid = async (id_member: number, id_tournament: number, paid: boolean) => {
+    console.log(id_member, id_tournament, paid);
+    await handleUpdatePayMemberTournament({paid, id_tournament, id_member});
   }
 
   const registerToTournament = (id: number) => {

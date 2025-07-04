@@ -7,6 +7,7 @@ import {
   getMembersNotInTournament,
   getMembersTournaments,
   getTournaments,
+  updatePayMemberTournament,
 } from "../helpers/tournamentsQueries";
 import { useCallback, useEffect, useState } from "react";
 import useMembersTournamentsContext from "./useMembersTournamentsContext";
@@ -18,6 +19,8 @@ const useTournaments = () => {
     setMembersTournaments,
     membersNotInTournament,
     setMembersNotInTournament,
+    selectedTournament,
+    setSelectedTournament,
   } = useMembersTournamentsContext();
 
   const { handleLogout, user } = useUsers();
@@ -39,35 +42,47 @@ const useTournaments = () => {
     }
   }, [handleLogout, setTournaments]);
 
-  const handleGetMembersTournaments = useCallback(
-    async (id_tournament: number) => {
-      if (!user) {
-        toast.error(
-          "Debe iniciar sesión para ver los alumnos registrados a este torneo"
-        );
-        return;
+  const handleGetMembersTournaments = useCallback(async () => {
+    if (!user) {
+      toast.error(
+        "Debe iniciar sesión para ver los alumnos registrados a este torneo"
+      );
+      return;
+    }
+    try {
+      setLoading(true);
+      const resMT = await getMembersTournaments(
+        selectedTournament,
+        user.userId
+      );
+      setMembersTournaments(resMT.membersTournaments);
+      const resMNT = await getMembersNotInTournament(
+        selectedTournament,
+        user.userId
+      );
+      setMembersNotInTournament(resMNT.members);
+    } catch (err) {
+      const error = err as ErrorResponse;
+      toast.error(error.error);
+      if (error.redirect) {
+        await handleLogout();
       }
-      try {
-        setLoading(true);
-        const resMT = await getMembersTournaments(id_tournament, user.userId);
-        setMembersTournaments(resMT.membersTournaments);
-        const resMNT = await getMembersNotInTournament(
-          id_tournament,
-          user.userId
-        );
-        setMembersNotInTournament(resMNT.members);
-      } catch (err) {
-        const error = err as ErrorResponse;
-        toast.error(error.error);
-        if (error.redirect) {
-          await handleLogout();
-        }
-      } finally {
-        setLoading(false);
-      }
-    },
-    [handleLogout, setMembersTournaments, setMembersNotInTournament, user]
-  );
+    } finally {
+      setLoading(false);
+    }
+  }, [
+    handleLogout,
+    setMembersTournaments,
+    setMembersNotInTournament,
+    user,
+    selectedTournament,
+  ]);
+
+  useEffect(() => {
+    if (user && selectedTournament !== 0) {
+      handleGetMembersTournaments();
+    }
+  }, [user, selectedTournament, handleGetMembersTournaments]);
 
   useEffect(() => {
     if (user && tournaments === null) {
@@ -85,7 +100,7 @@ const useTournaments = () => {
     try {
       const newTournament = await createTournament(tournament);
       toast.success(newTournament.message);
-      setTournaments([...(tournaments || []), newTournament.tournament]);
+      setTournaments([...(tournaments ?? []), newTournament.tournament]);
       return true;
     } catch (err) {
       const error = err as ErrorResponse;
@@ -110,14 +125,41 @@ const useTournaments = () => {
     }
   };
 
+  const handleUpdatePayMemberTournament = async (
+    data: UpdatePayMemberTournamentData
+  ) => {
+    try {
+      const res = await updatePayMemberTournament(data);
+      setMembersTournaments((prevState) =>
+        (prevState ?? []).map((mt) =>
+          mt.id_member === data.id_member &&
+          mt.id_tournament === data.id_tournament
+            ? { ...mt, paid: data.paid }
+            : mt
+        )
+      );
+
+      toast.success(res.message);
+    } catch (err) {
+      const error = err as ErrorResponse;
+      toast.error(error.error);
+      if (error.redirect) {
+        await handleLogout();
+      }
+    }
+  };
+
   return {
     tournaments,
     handleCreateTournament,
     handleDeleteTournament,
     handleGetMembersTournaments,
+    handleUpdatePayMemberTournament,
     membersTournaments,
     membersNotInTournament,
     loading,
+    selectedTournament,
+    setSelectedTournament,
   };
 };
 
