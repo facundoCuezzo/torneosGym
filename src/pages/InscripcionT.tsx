@@ -7,9 +7,11 @@ import {
   MembersTableComp,
   MembersTournamentsTableComp,
 } from "../components/TableComp";
+import useMembers from "../hooks/useMembers";
 
 export default function InscripcionTorneos() {
   const { user } = useUsers();
+  const { handleRegisterToTournament } = useMembers();
   const {
     tournaments,
     loading,
@@ -17,17 +19,20 @@ export default function InscripcionTorneos() {
     setSelectedTournament,
     membersTournaments,
     membersNotInTournament,
-    handleUpdatePayMemberTournament
+    handleUpdatePayMemberTournament,
   } = useTournaments();
   const [activeKey, setActiveKey] = useState("registrados");
 
-  const handlePaid = async (id_member: number, id_tournament: number, paid: boolean) => {
-    console.log(id_member, id_tournament, paid);
-    await handleUpdatePayMemberTournament({paid, id_tournament, id_member});
-  }
+  const handlePaid = async (
+    id_member: number,
+    id_tournament: number,
+    paid: boolean
+  ) => {
+    await handleUpdatePayMemberTournament({ paid, id_tournament, id_member });
+  };
 
-  const registerToTournament = (id: number) => {
-    console.log(id);
+  const registerToTournament = (member: FullMemberInfo) => {
+    handleRegisterToTournament(member);
   };
 
   return (
@@ -94,14 +99,20 @@ export default function InscripcionTorneos() {
               </h4>
             ) : (
               <MembersTournamentsTableComp
-                headers={["DNI del alumno","Nombre y apellido del alumno", "Gimnasio", "Pagado", "Acciones"]}
+                headers={[
+                  "DNI del alumno",
+                  "Nombre y apellido del alumno",
+                  "Gimnasio",
+                  "Pagado",
+                  "Acciones",
+                ]}
                 membersTournaments={membersTournaments}
                 onClickPaid={handlePaid}
               />
             )}
           </div>
         ) : selectedTournament !== 0 && activeKey === "inscribir" ? (
-          <div className='mt-3'>
+          <div className="mt-3">
             {loading ? (
               <div className="d-flex justify-content-center gap-1">
                 <Spinner animation="border" variant="dark" />

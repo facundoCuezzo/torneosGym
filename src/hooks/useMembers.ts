@@ -4,15 +4,22 @@ import {
   createMember,
   deleteMember,
   getMembersByGym,
+  registerToTournament,
   updateMember,
 } from "../helpers/membersQueries";
 import { toast } from "sonner";
 import { parseMember } from "../utils/extraFunctions";
 import type { CreateMemberFormData } from "../validation/createMemberValidatorSchema";
 import { useState } from "react";
+import useMembersTournamentsContext from "./useMembersTournamentsContext";
 
 const useMembers = () => {
   const { members, setMembers } = useMembersContext();
+  const {
+    selectedTournament,
+    setMembersNotInTournament,
+    setMembersTournaments,
+  } = useMembersTournamentsContext();
   const { user, handleLogout } = useUsers();
   const [loading, setLoading] = useState(false);
 
@@ -114,6 +121,41 @@ const useMembers = () => {
       }
     }
   };
+
+  const handleRegisterToTournament = async (member: FullMemberInfo) => {
+    if (!user) {
+      toast.error("Debe iniciar sesión para inscribir un alumno a un torneo");
+      return;
+    }
+    try {
+      const res = await registerToTournament({
+        id_member: member.id,
+        id_tournament: selectedTournament,
+      });
+
+      const newMember: MembersTournaments = {
+        id_gym: user?.userId,
+        id_member: member.id,
+        id_tournament: res.member.id_tournament,
+        member: member.full_name,
+        gym: member.gym,
+        paid: res.member.paid,
+        dni: member.dni,
+      };
+      setMembersTournaments((prevState) => [...(prevState ?? []), newMember]);
+      setMembersNotInTournament((prevState) =>
+        (prevState ?? []).filter((m) => m.id !== member.id)
+      );
+      toast.success(res.message);
+    } catch (err) {
+      const error = err as ErrorResponse;
+      toast.error(error.error);
+      if (error.redirect) {
+        await handleLogout();
+      }
+    }
+  };
+
   return {
     members,
     setMembers,
@@ -121,6 +163,7 @@ const useMembers = () => {
     handleDeleteMember,
     handleGetMembers,
     handleUpdateMember,
+    handleRegisterToTournament,
     loading,
   };
 };

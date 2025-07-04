@@ -7,7 +7,7 @@ interface MembersProps {
   members: FullMemberInfo[] | null;
   headers: string[];
   onClickDelete: (id: number) => void;
-  onClickRegister: (id: number) => void;
+  onClickRegister: (member: FullMemberInfo) => void;
   actions?: boolean;
 }
 
@@ -72,7 +72,7 @@ export const MembersTableComp: React.FC<MembersProps> = ({
                   <Button
                     variant="warning"
                     className="d-flex align-items-center gap-1"
-                    onClick={() => onClickRegister(member.id)}
+                    onClick={() => onClickRegister(member)}
                   >
                     <ClipboardPlusFill />
                     <span>Inscribir al torneo</span>
