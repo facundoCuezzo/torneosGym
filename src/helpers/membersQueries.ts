@@ -95,3 +95,27 @@ export const deleteMember = async (
   const res: { message: string } = await response.json();
   return res;
 };
+
+export const registerToTournament = async ({
+  id_member,
+  id_tournament,
+}: RegisterToTournamentData): Promise<RegisterToTournamentResponse> => {
+  const response = await fetch(
+    `${URL_API}/${id_member}/tournament/${id_tournament}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    }
+  );
+  if (response.status === 401) {
+    await refreshAccessToken();
+    return registerToTournament({ id_member, id_tournament });
+  }
+  if (!response.ok) {
+    const error: ErrorResponse = await response.json();
+    throw error;
+  }
+  const res: RegisterToTournamentResponse = await response.json();
+  return res;
+};
