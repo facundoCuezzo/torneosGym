@@ -1,13 +1,14 @@
 import useUsers from "../hooks/useUsers";
 import CardComp from "../components/CardComp";
 import useTournaments from "../hooks/useTournaments";
-import { Container, Form, Nav, Spinner } from "react-bootstrap";
+import { Container, Nav, Spinner } from "react-bootstrap";
 import { useState } from "react";
 import {
   MembersTableComp,
   MembersTournamentsTableComp,
 } from "../components/TableComp";
 import useMembers from "../hooks/useMembers";
+import SelectTournamentComp from "../components/SelectTournamentComp";
 
 export default function InscripcionTorneos() {
   const { user } = useUsers();
@@ -47,21 +48,11 @@ export default function InscripcionTorneos() {
           ) : !tournaments || tournaments.length === 0 ? (
             <p>No hay torneos disponibles</p>
           ) : (
-            <Form>
-              <Form.Select
-                value={selectedTournament}
-                onChange={(ev) =>
-                  setSelectedTournament(Number(ev.target.value))
-                }
-              >
-                <option value={0}>Seleccione un torneo</option>
-                {tournaments.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.name}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form>
+            <SelectTournamentComp
+              selectedTournament={selectedTournament}
+              setSelectedTournament={setSelectedTournament}
+              tournaments={tournaments}
+            />
           )}
         </CardComp>
       </div>
