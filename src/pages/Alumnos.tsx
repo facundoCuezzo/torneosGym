@@ -30,8 +30,8 @@ export default function Alumnos() {
     });
   };
 
-  const submitFilter = async (values: FilterMembers) => {
-    await handleGetMembers(values);
+  const submitFilter = (values: FilterMembers) => {
+    handleGetMembers(values);
   };
 
   return (
@@ -67,6 +67,7 @@ export default function Alumnos() {
             "Acciones",
           ]}
           onClickDelete={onClickDelete}
+          onClickRegister={() => {}}
         />
       )}
     </Container>
