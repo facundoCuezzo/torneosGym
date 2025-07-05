@@ -1,3 +1,13 @@
+type ColorType =
+  | "primary"
+  | "secondary"
+  | "success"
+  | "danger"
+  | "warning"
+  | "info"
+  | "light"
+  | "dark";
+  
 interface ErrorResponse {
   error: string;
   redirect?: boolean;
