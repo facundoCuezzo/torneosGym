@@ -38,8 +38,6 @@ const useScores = () => {
       return;
     }
     try {
-      console.log(data);
-      return;
       setLoading(true);
       const res = await getScoresByLevelCategoryAndGym({
         ...data,
