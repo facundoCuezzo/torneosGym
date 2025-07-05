@@ -37,9 +37,13 @@ export default function Puntajes() {
   
       {selectedTournament !== 0 && (
         <div className="mt-3 w-100" style={{ maxWidth: 600 }}>
-          <FilterComp submitFilter={(filtro) => {
-            console.log("Filtro enviado:", filtro);
-          }} />
+          <FilterComp
+  color="light"
+  textColor="dark"
+  submitFilter={(filtro) => {
+    console.log("Filtro enviado:", filtro);
+  }}
+/>
            <table className="table mt-3">
       <thead>
         <tr>
@@ -56,7 +60,7 @@ export default function Puntajes() {
             <td>{alumno.dni}</td>
             <td>{alumno.gym}</td>
             <td>{alumno.member}</td>
-            <td>{alumno.id_gym}</td>
+            <td>{alumno.id_tournament}</td>
           </tr>
         ))}
       </tbody>
