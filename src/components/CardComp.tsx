@@ -1,16 +1,6 @@
 import type { ReactNode } from "react";
 import { Card } from "react-bootstrap";
 
-type ColorType =
-  | "primary"
-  | "secondary"
-  | "success"
-  | "danger"
-  | "warning"
-  | "info"
-  | "light"
-  | "dark";
-
 interface Props {
   user: UserInfo | null;
   color: ColorType;

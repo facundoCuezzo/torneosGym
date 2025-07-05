@@ -45,7 +45,11 @@ export default function Alumnos() {
       </div>
       <hr />
       <h4>Filtrar por:</h4>
-      <FilterComp submitFilter={submitFilter} />
+      <FilterComp
+        submitFilter={submitFilter}
+        color="danger"
+        textColor="white"
+      />
       <hr />
       {!members || members.length === 0 ? (
         <h4 className="text-center">No se encontraron alumnos</h4>

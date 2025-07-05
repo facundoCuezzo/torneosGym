@@ -8,6 +8,7 @@ import { Toaster } from "sonner";
 import MembersProvider from "./context/members/MembersProvider";
 import TournamentsProvider from "./context/tournaments/TournamentsProvider";
 import MembersTournamentsProvider from "./context/members_tournaments/MembersTournamentsProvider";
+import ScoresProvider from "./context/scores/ScoresProvider";
 
 function App() {
   return (
@@ -15,14 +16,16 @@ function App() {
       <MembersProvider>
         <TournamentsProvider>
           <MembersTournamentsProvider>
-            <div className="App">
-              <NavbarComp />
-              <main>
-                <Toaster richColors />
-                <RoutesView />
-              </main>
-              <Footer />
-            </div>
+            <ScoresProvider>
+              <div className="App">
+                <NavbarComp />
+                <main>
+                  <Toaster richColors />
+                  <RoutesView />
+                </main>
+                <Footer />
+              </div>
+            </ScoresProvider>
           </MembersTournamentsProvider>
         </TournamentsProvider>
       </MembersProvider>

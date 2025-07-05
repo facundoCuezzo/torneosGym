@@ -1,61 +1,40 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { Bookmark, PersonCircle, Search, TagFill } from "react-bootstrap-icons";
-import { OneTwoThreeIcon } from "./Icons";
+import { Bookmark, Search, TagFill } from "react-bootstrap-icons";
 import { CATEGORIES, LEVELS } from "../constants/const";
-import {
-  filterMembersValidatorSchema,
-  type FilterMembers,
-} from "../validation/filterMembersValidatorSchema";
 import { useFormik } from "formik";
-import { FormikInputComp, FormikSelectComp } from "./FormikInputComp";
+import { FormikSelectComp } from "./FormikInputComp";
+import {
+  filterScoresValidatorSchema,
+  type FilterScores,
+} from "../validation/filterScoresValidatorSchema";
 
 interface Props {
-  submitFilter: (values: FilterMembers) => void;
+  submitFilter: (values: FilterScores) => void;
   color: ColorType;
   textColor: "white" | "dark";
 }
 
-const FilterComp: React.FC<Props> = ({ submitFilter, color, textColor }) => {
+const FilterScoresComp: React.FC<Props> = ({
+  submitFilter,
+  color,
+  textColor,
+}) => {
   const formik = useFormik({
     initialValues: {
-      full_name: "",
-      dni: "",
       id_category: 0,
       id_level: 0,
     },
-    validationSchema: filterMembersValidatorSchema,
+    validationSchema: filterScoresValidatorSchema,
     onSubmit: (values) => {
       submitFilter(values);
     },
   });
 
-  const { values, errors, handleChange, handleSubmit } = formik;
+  const { values, errors, handleSubmit, setFieldValue } = formik;
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Row>
-        <FormikInputComp
-          as={Col}
-          controlId="FilterNameId"
-          label="Nombre completo (o parcial)"
-          placeholder="Ej: Juan"
-          icon={<PersonCircle />}
-          value={values.full_name}
-          onChange={handleChange}
-          errors={errors.full_name}
-          name="full_name"
-        />
-        <FormikInputComp
-          as={Col}
-          controlId="FilterDniId"
-          label="DNI completo"
-          placeholder="Ej: 12345678"
-          icon={<OneTwoThreeIcon />}
-          value={values.dni}
-          onChange={handleChange}
-          errors={errors.dni}
-          name="dni"
-        />
+      <Row className="justify-content-center">
         <FormikSelectComp
           as={Col}
           controlId="FilterCategoryId"
@@ -63,7 +42,9 @@ const FilterComp: React.FC<Props> = ({ submitFilter, color, textColor }) => {
           options={CATEGORIES}
           icon={<Bookmark />}
           value={values.id_category}
-          onChange={handleChange}
+          onChange={(ev) => {
+            setFieldValue("id_category", Number(ev.target.value));
+          }}
           errors={errors.id_category}
           name="id_category"
         />
@@ -74,7 +55,9 @@ const FilterComp: React.FC<Props> = ({ submitFilter, color, textColor }) => {
           options={LEVELS}
           icon={<TagFill />}
           value={values.id_level}
-          onChange={handleChange}
+          onChange={(ev) => {
+            setFieldValue("id_level", Number(ev.target.value));
+          }}
           errors={errors.id_level}
           name="id_level"
         />
@@ -100,4 +83,4 @@ const FilterComp: React.FC<Props> = ({ submitFilter, color, textColor }) => {
   );
 };
 
-export default FilterComp;
+export default FilterScoresComp;
