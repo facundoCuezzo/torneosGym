@@ -6,6 +6,7 @@ import {
   getScoresByLevelCategoryAndGym,
 } from "../helpers/scoresQueries";
 import { useState } from "react";
+import { createScore } from "../helpers/scoresQueries";
 
 const useScores = () => {
   const { scores, setScores } = useScoresContext();
@@ -55,10 +56,37 @@ const useScores = () => {
     }
   };
 
+    const handleCreateScore = async (data: {
+    id_tournament: number;
+    id_category: number;
+    id_level: number;
+    puntaje: number;
+  }) => {
+    if (!user) {
+      toast.error("Debe iniciar sesión para crear un puntaje");
+      return;
+    }
+    try {
+      setLoading(true);
+      const res = await createScore(data);
+      toast.success("Puntaje creado correctamente");
+      setScores((prev) => [...(prev ?? []), res]);
+    } catch (error) {
+      const err = error as ErrorResponse;
+      toast.error(err.error);
+      if (err.redirect) {
+        await handleLogout();
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     scores,
     handleGetScoresByCategoryAndLevel,
     handleGetScoresByGym,
+    handleCreateScore,
     loading,
   };
 };
