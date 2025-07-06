@@ -24,8 +24,3 @@ interface RegisterToTournamentResponse {
   };
   message: string;
 }
-declare module "../types/membersTournamentsResponses" {
-  export type MemberTournament = {
-    // ... tus propiedades aquí ...
-  };
-}
