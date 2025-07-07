@@ -66,34 +66,28 @@ export const getScoresByLevelCategoryAndGym = async ({
   return res;
 };
 
-
-/* POST -----------------------------------------------  */
-export const createScore = async (data: {
-  id_tournament: number;
-  id_category: number;
-  id_level: number;
-  puntaje: number;
-  
-}): Promise<any> => {
-  const response = await fetch(`${URL}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify(data),
-  });
-
+export const createScore = async (
+  data: CreateScoreData
+): Promise<CreateScoreResponse> => {
+  const response = await fetch(
+    `${URL}/${data.id_member}/tournament/${data.id_tournament}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ puntaje: data.puntaje }),
+    }
+  );
   if (response.status === 401) {
     await refreshAccessToken();
     return createScore(data);
   }
-
   if (!response.ok) {
     const error = await response.json();
     throw error;
   }
-
-  const res = await response.json();
-  return res.score;
+  const res: CreateScoreResponse = await response.json();
+  return res;
 };

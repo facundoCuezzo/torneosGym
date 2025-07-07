@@ -69,19 +69,48 @@ export const deleteTournament = async (
 };
 
 export const getMembersTournaments = async (
-  id_tournament: number,
-  id_gym: number
+  dataIds: FilterScoresData & { id_tournament: number }
 ): Promise<GetMembersTournamentsResponse> => {
-  const response = await fetch(`${URL}/${id_tournament}/gym/${id_gym}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  });
+  const { id_tournament, id_category, id_level } = dataIds;
+  const response = await fetch(
+    `${URL}/${id_tournament}/category/${id_category}/level/${id_level}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
   if (response.status === 401) {
     await refreshAccessToken();
-    return getMembersTournaments(id_tournament, id_gym);
+    return getMembersTournaments(dataIds);
+  }
+  if (!response.ok) {
+    const error: ErrorResponse = await response.json();
+    throw error;
+  }
+  const res: GetMembersTournamentsResponse = await response.json();
+  return res;
+};
+
+export const getMembersTournamentsByGym = async (
+  dataIds: FilterScoresData & { id_gym: number; id_tournament: number }
+): Promise<GetMembersTournamentsResponse> => {
+  const { id_tournament, id_gym, id_category, id_level } = dataIds;
+  const response = await fetch(
+    `${URL}/${id_tournament}/category/${id_category}/level/${id_level}/gym/${id_gym}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
+  if (response.status === 401) {
+    await refreshAccessToken();
+    return getMembersTournamentsByGym(dataIds);
   }
   if (!response.ok) {
     const error: ErrorResponse = await response.json();
@@ -92,19 +121,22 @@ export const getMembersTournaments = async (
 };
 
 export const getMembersNotInTournament = async (
-  id_tournament: number,
-  id_gym: number
+  dataIds: FilterScoresData & { id_gym: number; id_tournament: number }
 ): Promise<GetMembersByGymResponse> => {
-  const response = await fetch(`${URL}/not-in/${id_tournament}/gym/${id_gym}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  });
+  const { id_tournament, id_gym, id_category, id_level } = dataIds;
+  const response = await fetch(
+    `${URL}/not-in/${id_tournament}/category/${id_category}/level/${id_level}/gym/${id_gym}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }
+  );
   if (response.status === 401) {
     await refreshAccessToken();
-    return getMembersNotInTournament(id_tournament, id_gym);
+    return getMembersNotInTournament(dataIds);
   }
   if (!response.ok) {
     const error: ErrorResponse = await response.json();

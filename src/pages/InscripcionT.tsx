@@ -4,11 +4,13 @@ import useTournaments from "../hooks/useTournaments";
 import { Container, Nav, Spinner } from "react-bootstrap";
 import { useState } from "react";
 import {
-  MembersTableComp,
+  MembersNotInTournamentTableComp,
   MembersTournamentsTableComp,
 } from "../components/TableComp";
 import useMembers from "../hooks/useMembers";
 import SelectTournamentComp from "../components/SelectTournamentComp";
+import FilterScoresComp from "../components/FilterScoresComp";
+import type { FilterScores } from "../validation/filterScoresValidatorSchema";
 
 export default function InscripcionTorneos() {
   const { user } = useUsers();
@@ -21,8 +23,12 @@ export default function InscripcionTorneos() {
     membersTournaments,
     membersNotInTournament,
     handleUpdatePayMemberTournament,
+    handleGetMembersTournamentsByGym,
   } = useTournaments();
   const [activeKey, setActiveKey] = useState("registrados");
+  const [loadingFilter, setLoadingFilter] = useState(true);
+
+  const condition = selectedTournament !== 0 && loadingFilter === false;
 
   const handlePaid = async (
     id_member: number,
@@ -36,48 +42,54 @@ export default function InscripcionTorneos() {
     handleRegisterToTournament(member);
   };
 
+  const handleFilter = (values: FilterScores) => {
+    setLoadingFilter(false);
+    console.log(values);
+    handleGetMembersTournamentsByGym(values);
+  };
+
   return (
     <>
       <div className="d-flex flex-column align-items-center min-vh-60 pt-5">
         <CardComp user={user} color="warning" textColor="dark">
-          {loading ? (
-            <div className="d-flex justify-content-center gap-1">
-              <Spinner animation="border" variant="light" size="sm" />
-              <h6 className="text-white">Cargando...</h6>
-            </div>
-          ) : !tournaments || tournaments.length === 0 ? (
-            <p>No hay torneos disponibles</p>
-          ) : (
-            <SelectTournamentComp
-              selectedTournament={selectedTournament}
-              setSelectedTournament={setSelectedTournament}
-              tournaments={tournaments}
-            />
-          )}
+          <SelectTournamentComp
+            selectedTournament={selectedTournament}
+            setSelectedTournament={setSelectedTournament}
+            tournaments={tournaments}
+            loading={loading}
+          />
         </CardComp>
       </div>
-      {selectedTournament !== 0 && (
-        <Nav fill variant="tabs" defaultActiveKey={activeKey} className="mt-3">
-          <Nav.Item>
-            <Nav.Link
-              eventKey={"registrados"}
-              onClick={() => setActiveKey("registrados")}
-            >
-              Alumnos registrados
-            </Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link
-              eventKey={"/inscribir"}
-              onClick={() => setActiveKey("inscribir")}
-            >
-              Alumnos para inscribir
-            </Nav.Link>
-          </Nav.Item>
-        </Nav>
-      )}
       <Container>
-        {selectedTournament !== 0 && activeKey === "registrados" ? (
+        {selectedTournament !== 0 && (
+          <FilterScoresComp submitFilter={handleFilter} />
+        )}
+        {condition && (
+          <Nav
+            fill
+            variant="tabs"
+            defaultActiveKey={activeKey}
+            className="mt-3"
+          >
+            <Nav.Item>
+              <Nav.Link
+                eventKey={"registrados"}
+                onClick={() => setActiveKey("registrados")}
+              >
+                Alumnos registrados
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                eventKey={"/inscribir"}
+                onClick={() => setActiveKey("inscribir")}
+              >
+                Alumnos para inscribir
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        )}
+        {condition && activeKey === "registrados" ? (
           <div className="mt-3">
             {loading ? (
               <div className="d-flex justify-content-center gap-1">
@@ -97,12 +109,13 @@ export default function InscripcionTorneos() {
                   "Pagado",
                   "Acciones",
                 ]}
+                location="membersTournaments"
                 membersTournaments={membersTournaments}
                 onClickPaid={handlePaid}
               />
             )}
           </div>
-        ) : selectedTournament !== 0 && activeKey === "inscribir" ? (
+        ) : condition && activeKey === "inscribir" ? (
           <div className="mt-3">
             {loading ? (
               <div className="d-flex justify-content-center gap-1">
@@ -115,20 +128,11 @@ export default function InscripcionTorneos() {
                 No hay alumnos para inscribir al torneo
               </h4>
             ) : (
-              <MembersTableComp
-                headers={[
-                  "DNI",
-                  "Nombre",
-                  "Fecha de nacimiento",
-                  "Gimnasio",
-                  "Categoría",
-                  "Nivel",
-                  "Acciones",
-                ]}
+              <MembersNotInTournamentTableComp
+                headers={["DNI", "Nombre", "Gimnasio", "Acciones"]}
                 members={membersNotInTournament}
                 onClickDelete={() => {}}
                 onClickRegister={registerToTournament}
-                actions
               />
             )}
           </div>

@@ -10,15 +10,9 @@ import {
 
 interface Props {
   submitFilter: (values: FilterScores) => void;
-  color: ColorType;
-  textColor: "white" | "dark";
 }
 
-const FilterScoresComp: React.FC<Props> = ({
-  submitFilter,
-  color,
-  textColor,
-}) => {
+const FilterScoresComp: React.FC<Props> = ({ submitFilter }) => {
   const formik = useFormik({
     initialValues: {
       id_category: 0,
@@ -33,7 +27,11 @@ const FilterScoresComp: React.FC<Props> = ({
   const { values, errors, handleSubmit, setFieldValue } = formik;
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} className="my-3">
+      <div>
+        <h5>Filtrar alumnos por categoría y nivel</h5>
+        <hr />
+      </div>
       <Row className="justify-content-center">
         <FormikSelectComp
           as={Col}
@@ -62,14 +60,7 @@ const FilterScoresComp: React.FC<Props> = ({
           name="id_level"
         />
       </Row>
-      <div className="d-flex justify-content-between align-items-center">
-        <div className={`bg-${color} p-2 rounded-4 text-${textColor}`}>
-          <h6 className="text-decoration-underline">¡Importante!</h6>
-          <p>
-            Si desea obtener todos sus alumnos, deje los campos en blanco y
-            presione en <b>Filtrar 🔍</b>
-          </p>
-        </div>
+      <div className="d-flex justify-content-end">
         <Button
           type="submit"
           variant="dark"

@@ -7,6 +7,12 @@ interface Score {
   gym: string;
   puntaje: number;
 }
+interface ScoreWithIds {
+  id_member: number;
+  id_tournament: number;
+  puntaje: number;
+  id: number;
+}
 interface FilterScoresData {
   id_category: number;
   id_level: number;
@@ -16,4 +22,13 @@ interface FilterScoresData {
 interface GetScoresByLevelAndCategoryResponse {
   scores: Score[];
   message: string;
+}
+interface CreateScoreData {
+  id_tournament: number;
+  id_member: number;
+  puntaje: number;
+}
+interface CreateScoreResponse {
+  message: string;
+  score: ScoreWithIds;
 }

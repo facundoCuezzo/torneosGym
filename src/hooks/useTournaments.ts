@@ -6,11 +6,13 @@ import {
   deleteTournament,
   getMembersNotInTournament,
   getMembersTournaments,
+  getMembersTournamentsByGym,
   getTournaments,
   updatePayMemberTournament,
 } from "../helpers/tournamentsQueries";
 import { useCallback, useEffect, useState } from "react";
 import useMembersTournamentsContext from "./useMembersTournamentsContext";
+import type { FilterScores } from "../validation/filterScoresValidatorSchema";
 
 const useTournaments = () => {
   const { tournaments, setTournaments } = useTournamentsContext();
@@ -42,7 +44,26 @@ const useTournaments = () => {
     }
   }, [handleLogout, setTournaments]);
 
-  const handleGetMembersTournaments = useCallback(async () => {
+  const handleGetMembersTournaments = async (dataIds: FilterScores) => {
+    try {
+      setLoading(true);
+      const resMT = await getMembersTournaments({
+        ...dataIds,
+        id_tournament: selectedTournament,
+      });
+      setMembersTournaments(resMT.membersTournaments);
+    } catch (err) {
+      const error = err as ErrorResponse;
+      toast.error(error.error);
+      if (error.redirect) {
+        await handleLogout();
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGetMembersTournamentsByGym = async (dataIds: FilterScores) => {
     if (!user) {
       toast.error(
         "Debe iniciar sesión para ver los alumnos registrados a este torneo"
@@ -51,15 +72,17 @@ const useTournaments = () => {
     }
     try {
       setLoading(true);
-      const resMT = await getMembersTournaments(
-        selectedTournament,
-        user.userId
-      );
+      const resMT = await getMembersTournamentsByGym({
+        ...dataIds,
+        id_gym: user.userId,
+        id_tournament: selectedTournament,
+      });
       setMembersTournaments(resMT.membersTournaments);
-      const resMNT = await getMembersNotInTournament(
-        selectedTournament,
-        user.userId
-      );
+      const resMNT = await getMembersNotInTournament({
+        ...dataIds,
+        id_gym: user.userId,
+        id_tournament: selectedTournament,
+      });
       setMembersNotInTournament(resMNT.members);
     } catch (err) {
       const error = err as ErrorResponse;
@@ -70,19 +93,7 @@ const useTournaments = () => {
     } finally {
       setLoading(false);
     }
-  }, [
-    handleLogout,
-    setMembersTournaments,
-    setMembersNotInTournament,
-    user,
-    selectedTournament,
-  ]);
-
-  useEffect(() => {
-    if (user && selectedTournament !== 0) {
-      handleGetMembersTournaments();
-    }
-  }, [user, selectedTournament, handleGetMembersTournaments]);
+  };
 
   useEffect(() => {
     if (user && tournaments === null) {
@@ -154,12 +165,14 @@ const useTournaments = () => {
     handleCreateTournament,
     handleDeleteTournament,
     handleGetMembersTournaments,
+    handleGetMembersTournamentsByGym,
     handleUpdatePayMemberTournament,
     membersTournaments,
     membersNotInTournament,
     loading,
     selectedTournament,
     setSelectedTournament,
+    setMembersTournaments,
   };
 };
 
