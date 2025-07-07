@@ -1,7 +1,11 @@
-import React from "react";
 import { Button, Table } from "react-bootstrap";
-import { CashCoin, ClipboardPlusFill, Trash3Fill } from "react-bootstrap-icons";
+import {
+  CashCoin,
+  ClipboardPlusFill,
+  Trash3Fill,
+} from "react-bootstrap-icons";
 import CreateMemberComp from "./CreateMemberComp";
+import CreateScoreModalComp from "./CreateScoreModalComp";
 
 interface MembersProps {
   members: FullMemberInfo[] | null;
@@ -20,11 +24,19 @@ interface TournamentsProps {
 interface MembersTournamentsProps {
   membersTournaments: MembersTournaments[] | null;
   headers: string[];
-  onClickPaid: (
+  onClickPaid?: (
     id_member: number,
     id_tournament: number,
     paid: boolean
   ) => void;
+  showPaidColumn?: boolean;
+  location: "scores" | "membersTournaments";
+}
+
+interface ScoresProps {
+  scores: Score[] | null;
+  headers: string[];
+  onClickDelete: (id: number) => void;
 }
 
 export const MembersTableComp: React.FC<MembersProps> = ({
@@ -86,7 +98,44 @@ export const MembersTableComp: React.FC<MembersProps> = ({
     </Table>
   );
 };
-
+export const MembersNotInTournamentTableComp: React.FC<MembersProps> = ({
+  members,
+  headers,
+  onClickRegister,
+}) => {
+  return (
+    <Table striped bordered hover responsive>
+      <thead>
+        <tr className="text-center">
+          {headers.map((option) => (
+            <th key={option}>{option}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {members?.map((member) => (
+          <tr key={member.id}>
+            <td>{member.dni}</td>
+            <td>{member.full_name}</td>
+            <td>{member.gym}</td>
+            <td>
+              <div className="d-flex justify-content-center">
+                <Button
+                  variant="warning"
+                  className="d-flex align-items-center gap-1"
+                  onClick={() => onClickRegister(member)}
+                >
+                  <ClipboardPlusFill />
+                  <span>Inscribir al torneo</span>
+                </Button>
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
+  );
+};
 export const TournamentsTableComp: React.FC<TournamentsProps> = ({
   tournaments,
   headers,
@@ -130,6 +179,8 @@ export const MembersTournamentsTableComp: React.FC<MembersTournamentsProps> = ({
   headers,
   membersTournaments,
   onClickPaid,
+  showPaidColumn = true,
+  location,
 }) => {
   return (
     <Table striped bordered hover responsive>
@@ -146,20 +197,62 @@ export const MembersTournamentsTableComp: React.FC<MembersTournamentsProps> = ({
             <td>{mt.dni}</td>
             <td>{mt.member}</td>
             <td>{mt.gym}</td>
-            <td className="text-center">{mt.paid ? "Si" : "No"}</td>
+            {showPaidColumn && (
+              <td className="text-center">{mt.paid ? "Si" : "No"}</td>
+            )}
+            <td>
+              <div className="d-flex justify-content-center">
+                {location === "membersTournaments" && onClickPaid ? (
+                  <Button
+                    variant={mt.paid ? "danger" : "success"}
+                    className="d-flex align-items-center gap-1"
+                    onClick={() =>
+                      onClickPaid(mt.id_member, mt.id_tournament, !mt.paid)
+                    }
+                  >
+                    <CashCoin />
+                    <span>
+                      {mt.paid ? "Marcar como NO pagado" : "Marcar como pagado"}
+                    </span>
+                  </Button>
+                ) : (
+                  <CreateScoreModalComp member={mt}/>
+                )}
+              </div>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
+  );
+};
+
+export const ScoresTableComp: React.FC<ScoresProps> = ({ headers, scores }) => {
+  return (
+    <Table striped bordered hover responsive>
+      <thead>
+        <tr className="text-center">
+          {headers.map((option) => (
+            <th key={option}>{option}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {scores?.map((score) => (
+          <tr key={score.id}>
+            <td>{score.member}</td>
+            <td>{score.gym}</td>
+            {/* <td>{mt.gym}</td>
+            <td className="text-center">{mt.paid ? "Si" : "No"}</td> */}
             <td>
               <div className="d-flex justify-content-center">
                 <Button
-                  variant={mt.paid ? "danger" : "success"}
+                  variant="dark"
                   className="d-flex align-items-center gap-1"
-                  onClick={() =>
-                    onClickPaid(mt.id_member, mt.id_tournament, !mt.paid)
-                  }
+                  onClick={() => {}}
                 >
                   <CashCoin />
-                  <span>
-                    {mt.paid ? "Marcar como NO pagado" : "Marcar como pagado"}
-                  </span>
+                  <span>Puntuar</span>
                 </Button>
               </div>
             </td>
