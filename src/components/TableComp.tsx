@@ -8,7 +8,7 @@ import CreateMemberComp from "./CreateMemberComp";
 import CreateScoreModalComp from "./CreateScoreModalComp";
 
 interface MembersProps {
-  members: FullMemberInfo[] | null;
+  members: FullMemberInfo[];
   headers: string[];
   onClickDelete: (id: number) => void;
   onClickRegister: (member: FullMemberInfo) => void;
@@ -16,13 +16,13 @@ interface MembersProps {
 }
 
 interface TournamentsProps {
-  tournaments: Tournament[] | null;
+  tournaments: Tournament[];
   headers: string[];
   onClickDelete: (id: number) => void;
 }
 
 interface MembersTournamentsProps {
-  membersTournaments: MembersTournaments[] | null;
+  membersTournaments: MembersTournaments[];
   headers: string[];
   onClickPaid?: (
     id_member: number,
@@ -34,9 +34,8 @@ interface MembersTournamentsProps {
 }
 
 interface ScoresProps {
-  scores: Score[] | null;
+  scores: Score[];
   headers: string[];
-  onClickDelete: (id: number) => void;
 }
 
 export const MembersTableComp: React.FC<MembersProps> = ({
@@ -238,24 +237,12 @@ export const ScoresTableComp: React.FC<ScoresProps> = ({ headers, scores }) => {
         </tr>
       </thead>
       <tbody>
-        {scores?.map((score) => (
+        {scores.map((score) => (
           <tr key={score.id}>
-            <td>{score.member}</td>
+            <td>{score.member_dni}</td>
+            <td>{score.member_name}</td>
             <td>{score.gym}</td>
-            {/* <td>{mt.gym}</td>
-            <td className="text-center">{mt.paid ? "Si" : "No"}</td> */}
-            <td>
-              <div className="d-flex justify-content-center">
-                <Button
-                  variant="dark"
-                  className="d-flex align-items-center gap-1"
-                  onClick={() => {}}
-                >
-                  <CashCoin />
-                  <span>Puntuar</span>
-                </Button>
-              </div>
-            </td>
+            <td className='text-center'>{score.puntaje}</td>
           </tr>
         ))}
       </tbody>
