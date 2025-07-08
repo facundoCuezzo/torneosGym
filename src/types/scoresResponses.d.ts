@@ -1,6 +1,7 @@
 interface Score {
   id: number;
-  member: string;
+  member_name: string;
+  member_dni: number;
   id_tournament: number;
   id_category: number;
   id_gym: number;

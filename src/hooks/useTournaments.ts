@@ -7,6 +7,7 @@ import {
   getMembersNotInTournament,
   getMembersTournaments,
   getMembersTournamentsByGym,
+  getPastTournaments,
   getTournaments,
   updatePayMemberTournament,
 } from "../helpers/tournamentsQueries";
@@ -15,7 +16,7 @@ import useMembersTournamentsContext from "./useMembersTournamentsContext";
 import type { FilterScores } from "../validation/filterScoresValidatorSchema";
 
 const useTournaments = () => {
-  const { tournaments, setTournaments } = useTournamentsContext();
+  const { tournaments, setTournaments, pastTournaments, setPastTournaments } = useTournamentsContext();
   const {
     membersTournaments,
     setMembersTournaments,
@@ -31,8 +32,10 @@ const useTournaments = () => {
   const handleGetTournaments = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await getTournaments();
-      setTournaments(res.tournaments);
+      const resTournaments = await getTournaments();
+      setTournaments(resTournaments.tournaments);
+      const resPastTournaments = await getPastTournaments()
+      setPastTournaments(resPastTournaments.tournaments);
     } catch (err) {
       const error = err as ErrorResponse;
       toast.error(error.error);
@@ -42,7 +45,7 @@ const useTournaments = () => {
     } finally {
       setLoading(false);
     }
-  }, [handleLogout, setTournaments]);
+  }, [handleLogout, setTournaments, setPastTournaments]);
 
   const handleGetMembersTournaments = async (dataIds: FilterScores) => {
     try {
@@ -162,6 +165,7 @@ const useTournaments = () => {
 
   return {
     tournaments,
+    pastTournaments,
     handleCreateTournament,
     handleDeleteTournament,
     handleGetMembersTournaments,

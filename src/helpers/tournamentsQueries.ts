@@ -23,6 +23,26 @@ export const getTournaments = async (): Promise<GetTournamentsResponse> => {
   return data;
 };
 
+export const getPastTournaments = async (): Promise<GetTournamentsResponse> => {
+  const response = await fetch(`${URL}/date/past`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  if (response.status === 401) {
+    await refreshAccessToken();
+    return getPastTournaments();
+  }
+  if (!response.ok) {
+    const error: ErrorResponse = await response.json();
+    throw error;
+  }
+  const data: GetTournamentsResponse = await response.json();
+  return data;
+};
+
 export const createTournament = async (
   tournament: CreateTournament
 ): Promise<CreateTournamentResponse> => {
