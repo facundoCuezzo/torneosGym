@@ -9,6 +9,7 @@ import Puntajes from "../pages/Puntajes";
 import MiCuenta from "../pages/MiCuenta";
 import PrivateRoutes from "../components/PrivateRoutes";
 import AdministrarTorneos from '../pages/AdministrarTorneos';
+import HistorialPuntajes from '../pages/HistorialPuntajes';
 
 const RoutesView = () => {
   return (
@@ -69,6 +70,14 @@ const RoutesView = () => {
         element={
           <PrivateRoutes role={["Administrador", "Juez"]}>
             <Puntajes />
+          </PrivateRoutes>
+        }
+      />
+      <Route
+        path="/historial-puntajes"
+        element={
+          <PrivateRoutes role={["Administrador", "Juez"]}>
+            <HistorialPuntajes />
           </PrivateRoutes>
         }
       />

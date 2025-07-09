@@ -10,6 +10,7 @@ const ADMIN_OPTIONS = [
   { nombre: "MIS TORNEOS", ruta: "/mis-torneos" },
   { nombre: "ALUMNOS", ruta: "/alumnos" },
   { nombre: "PUNTAJES", ruta: "/puntajes" },
+  { nombre: "HISTORIAL DE PUNTAJES", ruta: "/historial-puntajes" },
 ];
 
 const GYM_OPTIONS = [
