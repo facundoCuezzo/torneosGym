@@ -29,3 +29,9 @@ interface Params {
   id_level: number;
   dni?: string;
 }
+interface Pagination {
+  total: number;
+  page: number;
+  perPage: number;
+  totalPages: number;
+}

@@ -19,6 +19,7 @@ interface CreateMember {
 interface GetMembersByGymResponse {
   message: string;
   members: FullMemberInfo[];
+  pagination: Pagination;
 }
 
 type MemberInfoWithIDs = Omit<FullMemberInfo, "category" | "gym" | "level"> & {

@@ -14,7 +14,8 @@ import { useState } from "react";
 import useMembersTournamentsContext from "./useMembersTournamentsContext";
 
 const useMembers = () => {
-  const { members, setMembers } = useMembersContext();
+  const { members, setMembers, membersPagination, setMembersPagination } =
+    useMembersContext();
   const {
     selectedTournament,
     setMembersNotInTournament,
@@ -23,12 +24,14 @@ const useMembers = () => {
   const { user, handleLogout } = useUsers();
   const [loading, setLoading] = useState(false);
 
-  const handleGetMembers = async (params: Params) => {
+  const handleGetMembers = async (params: Params, page: number) => {
     try {
       if (user) {
         setLoading(true);
-        const res = await getMembersByGym(params, user.userId);
+        const res = await getMembersByGym(params, user.userId, page);
+        console.log(res);
         setMembers(res.members);
+        setMembersPagination(res.pagination);
       }
     } catch (error) {
       const err = error as ErrorResponse;
@@ -55,8 +58,16 @@ const useMembers = () => {
       const res = await createMember(FullMemberData);
       toast.success(res.message);
 
-      const parsedMember = parseMember(res.member, user);
-      setMembers([...(members ?? []), parsedMember]);
+      if (members && members.length < 20) {
+        const parsedMember = parseMember(res.member, user);
+        setMembers([...(members ?? []), parsedMember]);
+      } else if (members && members.length === 20 && membersPagination) {
+        setMembersPagination({
+          ...membersPagination,
+          total: membersPagination.total + 1,
+          totalPages: membersPagination.totalPages + 1,
+        });
+      }
       return res;
     } catch (err) {
       const error = err as ErrorResponse;
@@ -165,6 +176,8 @@ const useMembers = () => {
     handleUpdateMember,
     handleRegisterToTournament,
     loading,
+    membersPagination,
+    setMembersPagination,
   };
 };
 

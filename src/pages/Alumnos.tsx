@@ -7,11 +7,15 @@ import CreateMemberComp from "../components/CreateMemberComp";
 import Swal from "sweetalert2";
 import FilterComp from "../components/FilterComp";
 import type { FilterMembers } from "../validation/filterMembersValidatorSchema";
+import PaginationComp from "../components/PaginationComp";
+import { useState } from "react";
 
 export default function Alumnos() {
   const { user } = useUsers();
-  const { members, handleDeleteMember, handleGetMembers, loading } =
+  const { members, handleDeleteMember, handleGetMembers, loading, membersPagination } =
     useMembers();
+  const [filters, setFilters] = useState<FilterMembers | null>(null);
+  const [actualPage, setActualPage] = useState(1);
 
   const onClickDelete = (id: number) => {
     Swal.fire({
@@ -30,8 +34,12 @@ export default function Alumnos() {
     });
   };
 
-  const submitFilter = (values: FilterMembers) => {
-    handleGetMembers(values);
+  const submitFilter = async () => {
+    if (filters) await handleGetMembers(filters, actualPage);
+  };
+
+  const handlePageChange = async (page: number) => {
+    if (filters) await handleGetMembers(filters, page);
   };
 
   return (
@@ -47,6 +55,7 @@ export default function Alumnos() {
       <h4>Filtrar por:</h4>
       <FilterComp
         submitFilter={submitFilter}
+        setFilters={setFilters}
         color="danger"
         textColor="white"
       />
@@ -59,20 +68,29 @@ export default function Alumnos() {
           <h4>Obteniendo alumnos...</h4>
         </div>
       ) : (
-        <MembersTableComp
-          members={members}
-          headers={[
-            "DNI",
-            "Nombre y apellido",
-            "Fecha de nacimiento",
-            "Gimnasio",
-            "Categoría",
-            "Nivel",
-            "Acciones",
-          ]}
-          onClickDelete={onClickDelete}
-          onClickRegister={() => {}}
-        />
+        <>
+          <MembersTableComp
+            members={members}
+            headers={[
+              "DNI",
+              "Nombre y apellido",
+              "Fecha de nacimiento",
+              "Gimnasio",
+              "Categoría",
+              "Nivel",
+              "Acciones",
+            ]}
+            onClickDelete={onClickDelete}
+            onClickRegister={() => {}}
+          />
+          {membersPagination && (
+            <PaginationComp
+              pagination={membersPagination}
+              setActualPage={setActualPage}
+              handlePageChange={handlePageChange}
+            />
+          )}
+        </>
       )}
     </Container>
   );

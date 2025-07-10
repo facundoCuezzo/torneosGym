@@ -10,12 +10,18 @@ import { useFormik } from "formik";
 import { FormikInputComp, FormikSelectComp } from "./FormikInputComp";
 
 interface Props {
-  submitFilter: (values: FilterMembers) => void;
+  submitFilter: () => void;
   color: ColorType;
   textColor: "white" | "dark";
+  setFilters: React.Dispatch<React.SetStateAction<FilterMembers | null>>;
 }
 
-const FilterComp: React.FC<Props> = ({ submitFilter, color, textColor }) => {
+const FilterComp: React.FC<Props> = ({
+  color,
+  textColor,
+  setFilters,
+  submitFilter,
+}) => {
   const formik = useFormik({
     initialValues: {
       full_name: "",
@@ -25,7 +31,8 @@ const FilterComp: React.FC<Props> = ({ submitFilter, color, textColor }) => {
     },
     validationSchema: filterMembersValidatorSchema,
     onSubmit: (values) => {
-      submitFilter(values);
+      setFilters(values);
+      submitFilter();
     },
   });
 
