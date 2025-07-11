@@ -10,9 +10,10 @@ import {
 
 interface Props {
   submitFilter: (values: FilterScores) => void;
+  setFilters: React.Dispatch<React.SetStateAction<FilterScores | null>>
 }
 
-const FilterScoresComp: React.FC<Props> = ({ submitFilter }) => {
+const FilterScoresComp: React.FC<Props> = ({ submitFilter, setFilters }) => {
   const formik = useFormik({
     initialValues: {
       id_category: 0,
@@ -20,6 +21,7 @@ const FilterScoresComp: React.FC<Props> = ({ submitFilter }) => {
     },
     validationSchema: filterScoresValidatorSchema,
     onSubmit: (values) => {
+      setFilters(values);
       submitFilter(values);
     },
   });

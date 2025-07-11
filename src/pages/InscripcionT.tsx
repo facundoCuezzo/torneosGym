@@ -11,6 +11,7 @@ import useMembers from "../hooks/useMembers";
 import SelectTournamentComp from "../components/SelectTournamentComp";
 import FilterScoresComp from "../components/FilterScoresComp";
 import type { FilterScores } from "../validation/filterScoresValidatorSchema";
+import PaginationComp from "../components/PaginationComp";
 
 export default function InscripcionTorneos() {
   const { user } = useUsers();
@@ -24,9 +25,14 @@ export default function InscripcionTorneos() {
     membersNotInTournament,
     handleUpdatePayMemberTournament,
     handleGetMembersTournamentsByGym,
+    membersTournamentsPagination,
+    membersNotInTournamentsPagination,
   } = useTournaments();
   const [activeKey, setActiveKey] = useState("registrados");
   const [loadingFilter, setLoadingFilter] = useState(true);
+  const [filters, setFilters] = useState<FilterScores | null>(null);
+  const [actualPage, setActualPage] = useState(1);
+  const [, setActualPageMNT] = useState(1);
 
   const condition = selectedTournament !== 0 && loadingFilter === false;
 
@@ -44,8 +50,18 @@ export default function InscripcionTorneos() {
 
   const handleFilter = (values: FilterScores) => {
     setLoadingFilter(false);
-    console.log(values);
-    handleGetMembersTournamentsByGym(values);
+    handleGetMembersTournamentsByGym(values, actualPage);
+  };
+
+  const handlePageChangeMT = async (page: number) => {
+    if (filters) {
+      await handleGetMembersTournamentsByGym(filters, page);
+    }
+  };
+  const handlePageChangeMNT = async (page: number) => {
+    if (filters) {
+      await handleGetMembersTournamentsByGym(filters, page);
+    }
   };
 
   return (
@@ -62,7 +78,10 @@ export default function InscripcionTorneos() {
       </div>
       <Container>
         {selectedTournament !== 0 && (
-          <FilterScoresComp submitFilter={handleFilter} />
+          <FilterScoresComp
+            submitFilter={handleFilter}
+            setFilters={setFilters}
+          />
         )}
         {condition && (
           <Nav
@@ -101,18 +120,27 @@ export default function InscripcionTorneos() {
                 No hay alumnos registrados en este torneo
               </h4>
             ) : (
-              <MembersTournamentsTableComp
-                headers={[
-                  "DNI del alumno",
-                  "Nombre y apellido del alumno",
-                  "Gimnasio",
-                  "Pagado",
-                  "Acciones",
-                ]}
-                location="membersTournaments"
-                membersTournaments={membersTournaments}
-                onClickPaid={handlePaid}
-              />
+              <>
+                <MembersTournamentsTableComp
+                  headers={[
+                    "DNI del alumno",
+                    "Nombre y apellido del alumno",
+                    "Gimnasio",
+                    "Pagado",
+                    "Acciones",
+                  ]}
+                  location="membersTournaments"
+                  membersTournaments={membersTournaments}
+                  onClickPaid={handlePaid}
+                />
+                {membersTournamentsPagination && (
+                  <PaginationComp
+                    pagination={membersTournamentsPagination}
+                    handlePageChange={handlePageChangeMT}
+                    setActualPage={setActualPage}
+                  />
+                )}
+              </>
             )}
           </div>
         ) : condition && activeKey === "inscribir" ? (
@@ -128,12 +156,21 @@ export default function InscripcionTorneos() {
                 No hay alumnos para inscribir al torneo
               </h4>
             ) : (
-              <MembersNotInTournamentTableComp
-                headers={["DNI", "Nombre", "Gimnasio", "Acciones"]}
-                members={membersNotInTournament}
-                onClickDelete={() => {}}
-                onClickRegister={registerToTournament}
-              />
+              <>
+                <MembersNotInTournamentTableComp
+                  headers={["DNI", "Nombre", "Gimnasio", "Acciones"]}
+                  members={membersNotInTournament}
+                  onClickDelete={() => {}}
+                  onClickRegister={registerToTournament}
+                />
+                {membersNotInTournamentsPagination && (
+                  <PaginationComp
+                    pagination={membersNotInTournamentsPagination}
+                    handlePageChange={handlePageChangeMNT}
+                    setActualPage={setActualPageMNT}
+                  />
+                )}
+              </>
             )}
           </div>
         ) : (

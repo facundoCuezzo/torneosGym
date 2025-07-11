@@ -16,7 +16,8 @@ import useMembersTournamentsContext from "./useMembersTournamentsContext";
 import type { FilterScores } from "../validation/filterScoresValidatorSchema";
 
 const useTournaments = () => {
-  const { tournaments, setTournaments, pastTournaments, setPastTournaments } = useTournamentsContext();
+  const { tournaments, setTournaments, pastTournaments, setPastTournaments } =
+    useTournamentsContext();
   const {
     membersTournaments,
     setMembersTournaments,
@@ -24,6 +25,10 @@ const useTournaments = () => {
     setMembersNotInTournament,
     selectedTournament,
     setSelectedTournament,
+    membersTournamentsPagination,
+    setMembersTournamentsPagination,
+    membersNotInTournamentsPagination,
+    setMembersNotInTournamentsPagination,
   } = useMembersTournamentsContext();
 
   const { handleLogout, user } = useUsers();
@@ -34,7 +39,7 @@ const useTournaments = () => {
       setLoading(true);
       const resTournaments = await getTournaments();
       setTournaments(resTournaments.tournaments);
-      const resPastTournaments = await getPastTournaments()
+      const resPastTournaments = await getPastTournaments();
       setPastTournaments(resPastTournaments.tournaments);
     } catch (err) {
       const error = err as ErrorResponse;
@@ -47,14 +52,21 @@ const useTournaments = () => {
     }
   }, [handleLogout, setTournaments, setPastTournaments]);
 
-  const handleGetMembersTournaments = async (dataIds: FilterScores) => {
+  const handleGetMembersTournaments = async (
+    dataIds: FilterScores,
+    page: number
+  ) => {
     try {
       setLoading(true);
-      const resMT = await getMembersTournaments({
-        ...dataIds,
-        id_tournament: selectedTournament,
-      });
+      const resMT = await getMembersTournaments(
+        {
+          ...dataIds,
+          id_tournament: selectedTournament,
+        },
+        page
+      );
       setMembersTournaments(resMT.membersTournaments);
+      setMembersTournamentsPagination(resMT.pagination);
     } catch (err) {
       const error = err as ErrorResponse;
       toast.error(error.error);
@@ -66,7 +78,10 @@ const useTournaments = () => {
     }
   };
 
-  const handleGetMembersTournamentsByGym = async (dataIds: FilterScores) => {
+  const handleGetMembersTournamentsByGym = async (
+    dataIds: FilterScores,
+    page: number
+  ) => {
     if (!user) {
       toast.error(
         "Debe iniciar sesión para ver los alumnos registrados a este torneo"
@@ -75,18 +90,26 @@ const useTournaments = () => {
     }
     try {
       setLoading(true);
-      const resMT = await getMembersTournamentsByGym({
-        ...dataIds,
-        id_gym: user.userId,
-        id_tournament: selectedTournament,
-      });
+      const resMT = await getMembersTournamentsByGym(
+        {
+          ...dataIds,
+          id_gym: user.userId,
+          id_tournament: selectedTournament,
+        },
+        page
+      );
       setMembersTournaments(resMT.membersTournaments);
-      const resMNT = await getMembersNotInTournament({
-        ...dataIds,
-        id_gym: user.userId,
-        id_tournament: selectedTournament,
-      });
+      setMembersTournamentsPagination(resMT.pagination);
+      const resMNT = await getMembersNotInTournament(
+        {
+          ...dataIds,
+          id_gym: user.userId,
+          id_tournament: selectedTournament,
+        },
+        page
+      );
       setMembersNotInTournament(resMNT.members);
+      setMembersNotInTournamentsPagination(resMNT.pagination);
     } catch (err) {
       const error = err as ErrorResponse;
       toast.error(error.error);
@@ -177,6 +200,10 @@ const useTournaments = () => {
     selectedTournament,
     setSelectedTournament,
     setMembersTournaments,
+    membersTournamentsPagination,
+    setMembersTournamentsPagination,
+    membersNotInTournamentsPagination,
+    setMembersNotInTournamentsPagination,
   };
 };
 

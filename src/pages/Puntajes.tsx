@@ -7,6 +7,7 @@ import { Container, Spinner } from "react-bootstrap";
 import { useState } from "react";
 import { MembersTournamentsTableComp } from "../components/TableComp";
 import type { FilterScores } from "../validation/filterScoresValidatorSchema";
+import PaginationComp from "../components/PaginationComp";
 
 export default function Puntajes() {
   const { user } = useUsers();
@@ -17,14 +18,23 @@ export default function Puntajes() {
     loading,
     membersTournaments,
     handleGetMembersTournaments,
+    membersTournamentsPagination,
   } = useTournaments();
   const [loadingFilter, setLoadingFilter] = useState(true);
+  const [filters, setFilters] = useState<FilterScores | null>(null);
+  const [actualPage, setActualPage] = useState(1);
 
   const condition = selectedTournament !== 0 && loadingFilter === false;
 
   const handleFilter = (values: FilterScores) => {
     setLoadingFilter(false);
-    handleGetMembersTournaments(values);
+    handleGetMembersTournaments(values, actualPage);
+  };
+
+  const handlePageChange = async (page: number) => {
+    if (filters) {
+      await handleGetMembersTournaments(filters, page);
+    }
   };
 
   return (
@@ -41,7 +51,10 @@ export default function Puntajes() {
       </div>
       <Container>
         {selectedTournament !== 0 && (
-          <FilterScoresComp submitFilter={handleFilter} />
+          <FilterScoresComp
+            submitFilter={handleFilter}
+            setFilters={setFilters}
+          />
         )}
         {condition && (
           <>
@@ -51,17 +64,26 @@ export default function Puntajes() {
                 <h6 className="text-white">Cargando...</h6>
               </div>
             ) : membersTournaments && membersTournaments.length > 0 ? (
-              <MembersTournamentsTableComp
-                membersTournaments={membersTournaments}
-                headers={[
-                  "DNI del alumno",
-                  "Nombre y apellido del alumno",
-                  "Gimnasio",
-                  "Acciones",
-                ]}
-                showPaidColumn={false}
-                location="scores"
-              />
+              <>
+                <MembersTournamentsTableComp
+                  membersTournaments={membersTournaments}
+                  headers={[
+                    "DNI del alumno",
+                    "Nombre y apellido del alumno",
+                    "Gimnasio",
+                    "Acciones",
+                  ]}
+                  showPaidColumn={false}
+                  location="scores"
+                />
+                {membersTournamentsPagination && (
+                  <PaginationComp
+                    pagination={membersTournamentsPagination}
+                    setActualPage={setActualPage}
+                    handlePageChange={handlePageChange}
+                  />
+                )}
+              </>
             ) : (
               <h5 className="text-center">
                 No hay alumnos registrados en este torneo

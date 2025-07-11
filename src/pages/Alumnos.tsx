@@ -74,8 +74,19 @@ export default function Alumnos() {
               <Spinner variant="dark" />
               <h4>Obteniendo alumnos...</h4>
             </div>
-          ) : !members || members.length === 0 ? (
+          ) : !members ||
+            (members.length === 0 &&
+              membersPagination &&
+              membersPagination.total === 0) ? (
             <h4 className="text-center">No se encontraron alumnos</h4>
+          ) : members.length === 0 &&
+            membersPagination &&
+            membersPagination.total > 0 ? (
+            <PaginationComp
+              pagination={membersPagination}
+              setActualPage={setActualPage}
+              handlePageChange={handlePageChange}
+            />
           ) : (
             <>
               <MembersTableComp

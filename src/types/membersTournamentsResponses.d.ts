@@ -11,6 +11,7 @@ interface MembersTournaments {
 interface GetMembersTournamentsResponse {
   message: string;
   membersTournaments: MembersTournaments[];
+  pagination: Pagination;
 }
 interface RegisterToTournamentData {
   id_member: number;

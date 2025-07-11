@@ -20,6 +20,10 @@ const useMembers = () => {
     selectedTournament,
     setMembersNotInTournament,
     setMembersTournaments,
+    setMembersTournamentsPagination,
+    setMembersNotInTournamentsPagination,
+    membersTournaments,
+    membersNotInTournament,
   } = useMembersTournamentsContext();
   const { user, handleLogout } = useUsers();
   const [loading, setLoading] = useState(false);
@@ -148,9 +152,53 @@ const useMembers = () => {
         dni: member.dni,
       };
       setMembersTournaments((prevState) => [...(prevState ?? []), newMember]);
+      setMembersTournamentsPagination((prevState) => {
+        if (!prevState) {
+          return {
+            total: 1,
+            totalPages: 1,
+            page: 1,
+            perPage: 20,
+          };
+        }
+        const condition =
+          membersTournaments &&
+          (membersTournaments.length === 0 || membersTournaments.length === 20);
+        return {
+          ...prevState,
+          total: prevState.total + 1,
+          totalPages: condition
+            ? prevState.totalPages + 1
+            : prevState.totalPages,
+        };
+      });
+
       setMembersNotInTournament((prevState) =>
         (prevState ?? []).filter((m) => m.id !== member.id)
       );
+
+      setMembersNotInTournamentsPagination((prevState) => {
+        if (!prevState) {
+          return {
+            total: 1,
+            totalPages: 1,
+            page: 1,
+            perPage: 20,
+          };
+        }
+        if (
+          membersNotInTournament &&
+          membersNotInTournament.length === 0 &&
+          prevState.totalPages === 1 && prevState.total === 1
+        ) {
+          return null;
+        }
+        return {
+          ...prevState,
+          total: prevState.total - 1,
+          totalPages: prevState.totalPages === 1 ? 1 : prevState.totalPages - 1,
+        };
+      });
       toast.success(res.message);
     } catch (err) {
       const error = err as ErrorResponse;
