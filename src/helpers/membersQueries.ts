@@ -5,10 +5,11 @@ const URL_API = `${env.URL_BACK_LOCAL}/members`;
 
 export const getMembersByGym = async (
   paramsPayload: Params,
-  gymId: number
+  gymId: number,
+  page: number = 1
 ): Promise<GetMembersByGymResponse> => {
   const url = new URL(`${URL_API}/${gymId}`);
-  const params = new URLSearchParams();
+  const params = new URLSearchParams({ page: page.toString() });
 
   Object.entries(paramsPayload).forEach(([key, value]) => {
     if (typeof value === "number" && value > 0)
@@ -22,7 +23,7 @@ export const getMembersByGym = async (
   });
   if (response.status === 401) {
     await refreshAccessToken();
-    return getMembersByGym(paramsPayload, gymId);
+    return getMembersByGym(paramsPayload, gymId, page);
   }
   if (!response.ok) {
     const error: ErrorResponse = await response.json();

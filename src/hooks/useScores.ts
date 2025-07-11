@@ -10,20 +10,21 @@ import { createScore } from "../helpers/scoresQueries";
 import useTournaments from "./useTournaments";
 
 const useScores = () => {
-  const { scores, setScores } = useScoresContext();
+  const { scores, setScores, scoresPagination, setScoresPagination } = useScoresContext();
   const { setMembersTournaments } = useTournaments();
   const { user, handleLogout } = useUsers();
   const [loading, setLoading] = useState(false);
 
-  const handleGetScoresByCategoryAndLevel = async (data: FilterScoresData) => {
+  const handleGetScoresByCategoryAndLevel = async (data: FilterScoresData, page: number) => {
     if (!user) {
       toast.error("Debe iniciar sesión para ver los puntajes");
       return;
     }
     try {
       setLoading(true);
-      const res = await getScoresByLevelAndCategory(data);
+      const res = await getScoresByLevelAndCategory(data, page);
       setScores(res.scores);
+      setScoresPagination(res.pagination);
     } catch (error) {
       const err = error as ErrorResponse;
       toast.error(err.error);
@@ -35,7 +36,7 @@ const useScores = () => {
     }
   };
 
-  const handleGetScoresByGym = async (data: FilterScoresData) => {
+  const handleGetScoresByGym = async (data: FilterScoresData, page: number) => {
     if (!user) {
       toast.error("Debe iniciar sesión para ver los puntajes");
       return;
@@ -45,8 +46,9 @@ const useScores = () => {
       const res = await getScoresByLevelCategoryAndGym({
         ...data,
         id_gym: user.userId,
-      });
+      }, page);
       setScores(res.scores);
+      setScoresPagination(res.pagination);
     } catch (error) {
       const err = error as ErrorResponse;
       toast.error(err.error);
@@ -60,7 +62,7 @@ const useScores = () => {
 
   const handleCreateScore = async (
     puntaje: number,
-    member: MembersTournaments
+    member: MembersTournaments,
   ) => {
     if (!user) {
       toast.error("Debe iniciar sesión para crear un puntaje");
@@ -94,6 +96,8 @@ const useScores = () => {
     handleGetScoresByGym,
     handleCreateScore,
     loading,
+    scoresPagination,
+    setScoresPagination,
   };
 };
 

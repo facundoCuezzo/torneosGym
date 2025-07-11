@@ -3,13 +3,12 @@ import { refreshAccessToken } from "./authQueries";
 
 const URL = `${env.URL_BACK_LOCAL}/puntajes`;
 
-export const getScoresByLevelAndCategory = async ({
-  id_category,
-  id_level,
-  id_tournament,
-}: FilterScoresData): Promise<GetScoresByLevelAndCategoryResponse> => {
+export const getScoresByLevelAndCategory = async (
+  { id_category, id_level, id_tournament }: FilterScoresData,
+  page: number
+): Promise<GetScoresByLevelAndCategoryResponse> => {
   const response = await fetch(
-    `${URL}/tournament/${id_tournament}/category/${id_category}/level/${id_level}`,
+    `${URL}/tournament/${id_tournament}/category/${id_category}/level/${id_level}?page=${page}`,
     {
       method: "GET",
       headers: {
@@ -24,7 +23,7 @@ export const getScoresByLevelAndCategory = async ({
       id_category,
       id_level,
       id_tournament,
-    });
+    }, page);
   }
   if (!response.ok) {
     const error = await response.json();
@@ -33,14 +32,12 @@ export const getScoresByLevelAndCategory = async ({
   const res: GetScoresByLevelAndCategoryResponse = await response.json();
   return res;
 };
-export const getScoresByLevelCategoryAndGym = async ({
-  id_category,
-  id_level,
-  id_tournament,
-  id_gym,
-}: FilterScoresData): Promise<GetScoresByLevelAndCategoryResponse> => {
+export const getScoresByLevelCategoryAndGym = async (
+  { id_category, id_level, id_tournament, id_gym }: FilterScoresData,
+  page: number
+): Promise<GetScoresByLevelAndCategoryResponse> => {
   const response = await fetch(
-    `${URL}/tournament/${id_tournament}/category/${id_category}/level/${id_level}/gym/${id_gym}`,
+    `${URL}/tournament/${id_tournament}/category/${id_category}/level/${id_level}/gym/${id_gym}?page=${page}`,
     {
       method: "GET",
       headers: {
@@ -51,12 +48,15 @@ export const getScoresByLevelCategoryAndGym = async ({
   );
   if (response.status === 401) {
     await refreshAccessToken();
-    return getScoresByLevelAndCategory({
-      id_category,
-      id_level,
-      id_tournament,
-      id_gym,
-    });
+    return getScoresByLevelCategoryAndGym(
+      {
+        id_category,
+        id_level,
+        id_tournament,
+        id_gym,
+      },
+      page
+    );
   }
   if (!response.ok) {
     const error = await response.json();

@@ -89,11 +89,11 @@ export const deleteTournament = async (
 };
 
 export const getMembersTournaments = async (
-  dataIds: FilterScoresData & { id_tournament: number }
+  dataIds: FilterScoresData & { id_tournament: number }, page: number
 ): Promise<GetMembersTournamentsResponse> => {
   const { id_tournament, id_category, id_level } = dataIds;
   const response = await fetch(
-    `${URL}/${id_tournament}/category/${id_category}/level/${id_level}`,
+    `${URL}/${id_tournament}/category/${id_category}/level/${id_level}?page=${page}`,
     {
       method: "GET",
       headers: {
@@ -104,7 +104,7 @@ export const getMembersTournaments = async (
   );
   if (response.status === 401) {
     await refreshAccessToken();
-    return getMembersTournaments(dataIds);
+    return getMembersTournaments(dataIds, page);
   }
   if (!response.ok) {
     const error: ErrorResponse = await response.json();
@@ -115,11 +115,11 @@ export const getMembersTournaments = async (
 };
 
 export const getMembersTournamentsByGym = async (
-  dataIds: FilterScoresData & { id_gym: number; id_tournament: number }
+  dataIds: FilterScoresData & { id_gym: number; id_tournament: number }, page: number
 ): Promise<GetMembersTournamentsResponse> => {
   const { id_tournament, id_gym, id_category, id_level } = dataIds;
   const response = await fetch(
-    `${URL}/${id_tournament}/category/${id_category}/level/${id_level}/gym/${id_gym}`,
+    `${URL}/${id_tournament}/category/${id_category}/level/${id_level}/gym/${id_gym}?page=${page}`,
     {
       method: "GET",
       headers: {
@@ -130,7 +130,7 @@ export const getMembersTournamentsByGym = async (
   );
   if (response.status === 401) {
     await refreshAccessToken();
-    return getMembersTournamentsByGym(dataIds);
+    return getMembersTournamentsByGym(dataIds, page);
   }
   if (!response.ok) {
     const error: ErrorResponse = await response.json();
@@ -141,11 +141,11 @@ export const getMembersTournamentsByGym = async (
 };
 
 export const getMembersNotInTournament = async (
-  dataIds: FilterScoresData & { id_gym: number; id_tournament: number }
+  dataIds: FilterScoresData & { id_gym: number; id_tournament: number }, page: number
 ): Promise<GetMembersByGymResponse> => {
   const { id_tournament, id_gym, id_category, id_level } = dataIds;
   const response = await fetch(
-    `${URL}/not-in/${id_tournament}/category/${id_category}/level/${id_level}/gym/${id_gym}`,
+    `${URL}/not-in/${id_tournament}/category/${id_category}/level/${id_level}/gym/${id_gym}?page=${page}`,
     {
       method: "GET",
       headers: {
@@ -156,7 +156,7 @@ export const getMembersNotInTournament = async (
   );
   if (response.status === 401) {
     await refreshAccessToken();
-    return getMembersNotInTournament(dataIds);
+    return getMembersNotInTournament(dataIds, page);
   }
   if (!response.ok) {
     const error: ErrorResponse = await response.json();

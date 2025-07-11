@@ -10,7 +10,10 @@ const MembersTournamentsProvider = ({ children }: { children: ReactNode }) => {
   >(null);
 
   const [selectedTournament, setSelectedTournament] = useState(0);
-
+  const [membersTournamentsPagination, setMembersTournamentsPagination] =
+    useState<Pagination | null>(null);
+  const [membersNotInTournamentsPagination, setMembersNotInTournamentsPagination] =
+    useState<Pagination | null>(null);
   return (
     <MembersTournamentsContext.Provider
       value={{
@@ -20,6 +23,10 @@ const MembersTournamentsProvider = ({ children }: { children: ReactNode }) => {
         setMembersNotInTournament,
         selectedTournament,
         setSelectedTournament,
+        membersTournamentsPagination,
+        setMembersTournamentsPagination,
+        membersNotInTournamentsPagination,
+        setMembersNotInTournamentsPagination,
       }}
     >
       {children}

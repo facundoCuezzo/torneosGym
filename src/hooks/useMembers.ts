@@ -14,21 +14,27 @@ import { useState } from "react";
 import useMembersTournamentsContext from "./useMembersTournamentsContext";
 
 const useMembers = () => {
-  const { members, setMembers } = useMembersContext();
+  const { members, setMembers, membersPagination, setMembersPagination } =
+    useMembersContext();
   const {
     selectedTournament,
     setMembersNotInTournament,
     setMembersTournaments,
+    setMembersTournamentsPagination,
+    setMembersNotInTournamentsPagination,
+    membersTournaments,
+    membersNotInTournament,
   } = useMembersTournamentsContext();
   const { user, handleLogout } = useUsers();
   const [loading, setLoading] = useState(false);
 
-  const handleGetMembers = async (params: Params) => {
+  const handleGetMembers = async (params: Params, page: number) => {
     try {
       if (user) {
         setLoading(true);
-        const res = await getMembersByGym(params, user.userId);
+        const res = await getMembersByGym(params, user.userId, page);
         setMembers(res.members);
+        setMembersPagination(res.pagination);
       }
     } catch (error) {
       const err = error as ErrorResponse;
@@ -55,8 +61,16 @@ const useMembers = () => {
       const res = await createMember(FullMemberData);
       toast.success(res.message);
 
-      const parsedMember = parseMember(res.member, user);
-      setMembers([...(members ?? []), parsedMember]);
+      if (members && members.length < 20) {
+        const parsedMember = parseMember(res.member, user);
+        setMembers([...(members ?? []), parsedMember]);
+      } else if (members && members.length === 20 && membersPagination) {
+        setMembersPagination({
+          ...membersPagination,
+          total: membersPagination.total + 1,
+          totalPages: membersPagination.totalPages + 1,
+        });
+      }
       return res;
     } catch (err) {
       const error = err as ErrorResponse;
@@ -73,7 +87,7 @@ const useMembers = () => {
   ) => {
     try {
       if (!user) {
-        toast.error("Debe iniciar sesión para crear un miembro");
+        toast.error("Debe iniciar sesión para crear un alumno");
         return;
       }
       const FullMemberData: CreateMember = {
@@ -105,14 +119,9 @@ const useMembers = () => {
       const res = await deleteMember(id);
       toast.success(res.message);
 
-      const filteredMembers = members?.filter((member) => member.id !== id);
-      if (!filteredMembers || filteredMembers?.length === 0) {
-        toast.error(
-          "Hubo un error al actualizar la lista de alumnos, por favor recargue la pagina"
-        );
-        return;
-      }
-      setMembers(filteredMembers);
+      setMembers((prevMembers) =>
+        (prevMembers ?? []).filter((member) => member.id !== id)
+      );
     } catch (err) {
       const error = err as ErrorResponse;
       toast.error(error.error);
@@ -143,9 +152,53 @@ const useMembers = () => {
         dni: member.dni,
       };
       setMembersTournaments((prevState) => [...(prevState ?? []), newMember]);
+      setMembersTournamentsPagination((prevState) => {
+        if (!prevState) {
+          return {
+            total: 1,
+            totalPages: 1,
+            page: 1,
+            perPage: 20,
+          };
+        }
+        const condition =
+          membersTournaments &&
+          (membersTournaments.length === 0 || membersTournaments.length === 20);
+        return {
+          ...prevState,
+          total: prevState.total + 1,
+          totalPages: condition
+            ? prevState.totalPages + 1
+            : prevState.totalPages,
+        };
+      });
+
       setMembersNotInTournament((prevState) =>
         (prevState ?? []).filter((m) => m.id !== member.id)
       );
+
+      setMembersNotInTournamentsPagination((prevState) => {
+        if (!prevState) {
+          return {
+            total: 1,
+            totalPages: 1,
+            page: 1,
+            perPage: 20,
+          };
+        }
+        if (
+          membersNotInTournament &&
+          membersNotInTournament.length === 0 &&
+          prevState.totalPages === 1 && prevState.total === 1
+        ) {
+          return null;
+        }
+        return {
+          ...prevState,
+          total: prevState.total - 1,
+          totalPages: prevState.totalPages === 1 ? 1 : prevState.totalPages - 1,
+        };
+      });
       toast.success(res.message);
     } catch (err) {
       const error = err as ErrorResponse;
@@ -165,6 +218,8 @@ const useMembers = () => {
     handleUpdateMember,
     handleRegisterToTournament,
     loading,
+    membersPagination,
+    setMembersPagination,
   };
 };
 

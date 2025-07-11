@@ -23,6 +23,7 @@ interface FilterScoresData {
 interface GetScoresByLevelAndCategoryResponse {
   scores: Score[];
   message: string;
+  pagination: Pagination;
 }
 interface CreateScoreData {
   id_tournament: number;
