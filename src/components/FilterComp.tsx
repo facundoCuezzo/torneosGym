@@ -10,10 +10,11 @@ import { useFormik } from "formik";
 import { FormikInputComp, FormikSelectComp } from "./FormikInputComp";
 
 interface Props {
-  submitFilter: () => void;
+  submitFilter: (paramFilters: FilterMembers) => void;
   color: ColorType;
   textColor: "white" | "dark";
   setFilters: React.Dispatch<React.SetStateAction<FilterMembers | null>>;
+  setLoadingFilter: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FilterComp: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const FilterComp: React.FC<Props> = ({
   textColor,
   setFilters,
   submitFilter,
+  setLoadingFilter
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -32,7 +34,8 @@ const FilterComp: React.FC<Props> = ({
     validationSchema: filterMembersValidatorSchema,
     onSubmit: (values) => {
       setFilters(values);
-      submitFilter();
+      setLoadingFilter(false);
+      submitFilter(values);
     },
   });
 

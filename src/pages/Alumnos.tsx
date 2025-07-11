@@ -12,10 +12,16 @@ import { useState } from "react";
 
 export default function Alumnos() {
   const { user } = useUsers();
-  const { members, handleDeleteMember, handleGetMembers, loading, membersPagination } =
-    useMembers();
+  const {
+    members,
+    handleDeleteMember,
+    handleGetMembers,
+    loading,
+    membersPagination,
+  } = useMembers();
   const [filters, setFilters] = useState<FilterMembers | null>(null);
   const [actualPage, setActualPage] = useState(1);
+  const [loadingFilter, setLoadingFilter] = useState(true);
 
   const onClickDelete = (id: number) => {
     Swal.fire({
@@ -34,8 +40,8 @@ export default function Alumnos() {
     });
   };
 
-  const submitFilter = async () => {
-    if (filters) await handleGetMembers(filters, actualPage);
+  const submitFilter = async (paramFilters: FilterMembers) => {
+    await handleGetMembers(paramFilters, actualPage);
   };
 
   const handlePageChange = async (page: number) => {
@@ -56,41 +62,48 @@ export default function Alumnos() {
       <FilterComp
         submitFilter={submitFilter}
         setFilters={setFilters}
+        setLoadingFilter={setLoadingFilter}
         color="danger"
         textColor="white"
       />
       <hr />
-      {!members || members.length === 0 ? (
-        <h4 className="text-center">No se encontraron alumnos</h4>
-      ) : loading ? (
-        <div className="d-flex flex-column align-items-center justify-content-center">
-          <Spinner variant="dark" />
-          <h4>Obteniendo alumnos...</h4>
-        </div>
-      ) : (
+      {!loadingFilter ? (
         <>
-          <MembersTableComp
-            members={members}
-            headers={[
-              "DNI",
-              "Nombre y apellido",
-              "Fecha de nacimiento",
-              "Gimnasio",
-              "Categoría",
-              "Nivel",
-              "Acciones",
-            ]}
-            onClickDelete={onClickDelete}
-            onClickRegister={() => {}}
-          />
-          {membersPagination && (
-            <PaginationComp
-              pagination={membersPagination}
-              setActualPage={setActualPage}
-              handlePageChange={handlePageChange}
-            />
+          {loading ? (
+            <div className="d-flex flex-column align-items-center justify-content-center">
+              <Spinner variant="dark" />
+              <h4>Obteniendo alumnos...</h4>
+            </div>
+          ) : !members || members.length === 0 ? (
+            <h4 className="text-center">No se encontraron alumnos</h4>
+          ) : (
+            <>
+              <MembersTableComp
+                members={members}
+                headers={[
+                  "DNI",
+                  "Nombre y apellido",
+                  "Fecha de nacimiento",
+                  "Gimnasio",
+                  "Categoría",
+                  "Nivel",
+                  "Acciones",
+                ]}
+                onClickDelete={onClickDelete}
+                onClickRegister={() => {}}
+              />
+              {membersPagination && (
+                <PaginationComp
+                  pagination={membersPagination}
+                  setActualPage={setActualPage}
+                  handlePageChange={handlePageChange}
+                />
+              )}
+            </>
           )}
         </>
+      ) : (
+        ""
       )}
     </Container>
   );

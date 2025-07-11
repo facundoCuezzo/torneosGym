@@ -29,7 +29,6 @@ const useMembers = () => {
       if (user) {
         setLoading(true);
         const res = await getMembersByGym(params, user.userId, page);
-        console.log(res);
         setMembers(res.members);
         setMembersPagination(res.pagination);
       }
@@ -84,7 +83,7 @@ const useMembers = () => {
   ) => {
     try {
       if (!user) {
-        toast.error("Debe iniciar sesión para crear un miembro");
+        toast.error("Debe iniciar sesión para crear un alumno");
         return;
       }
       const FullMemberData: CreateMember = {
@@ -116,14 +115,9 @@ const useMembers = () => {
       const res = await deleteMember(id);
       toast.success(res.message);
 
-      const filteredMembers = members?.filter((member) => member.id !== id);
-      if (!filteredMembers || filteredMembers?.length === 0) {
-        toast.error(
-          "Hubo un error al actualizar la lista de alumnos, por favor recargue la pagina"
-        );
-        return;
-      }
-      setMembers(filteredMembers);
+      setMembers((prevMembers) =>
+        (prevMembers ?? []).filter((member) => member.id !== id)
+      );
     } catch (err) {
       const error = err as ErrorResponse;
       toast.error(error.error);
