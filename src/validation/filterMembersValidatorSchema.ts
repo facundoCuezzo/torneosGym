@@ -17,6 +17,10 @@ export const filterMembersValidatorSchema = yup.object({
     .optional(),
   id_category: yup.number().required(),
   id_level: yup.number().required(),
+  id_gimnasio: yup.number()
+    .typeError("El gimnasio es obligatorio")
+    .required("El gimnasio es obligatorio")
+    .moreThan(0, "Debe seleccionar un gimnasio válido"),
 });
 
 export type FilterMembers = InferType<typeof filterMembersValidatorSchema>;

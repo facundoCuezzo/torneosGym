@@ -8,6 +8,15 @@ import {
 } from "../validation/filterMembersValidatorSchema";
 import { useFormik } from "formik";
 import { FormikInputComp, FormikSelectComp } from "./FormikInputComp";
+import { useEffect } from "react";
+import { useState } from "react";
+import axios from "axios";
+
+interface Gimnasio {
+  id_gimnasio: number;
+  full_name: string;
+}
+
 
 interface Props {
   submitFilter: (paramFilters: FilterMembers) => void;
@@ -30,6 +39,7 @@ const FilterComp: React.FC<Props> = ({
       dni: "",
       id_category: 0,
       id_level: 0,
+      id_gimnasio: 0,
     },
     validationSchema: filterMembersValidatorSchema,
     onSubmit: (values) => {
@@ -39,8 +49,35 @@ const FilterComp: React.FC<Props> = ({
     },
   });
 
+
+
+
   const { values, errors, handleChange, handleSubmit } = formik;
 
+
+  const [gimnasios, setGimnasios] = useState<Gimnasio[]>([]);
+
+
+  
+useEffect(() => {
+  const fetchGimnasios = async () => {
+    try {
+      const { data: gimnasiosData } = await axios.get("/api/gimnasios");
+      setGimnasios(gimnasiosData);
+
+      const gimnasioIds = gimnasiosData.map((g: Gimnasio) => g.id_gimnasio);
+
+      const { data: alumnosData } = await axios.post("/api/alumnos", { ids: gimnasioIds });
+
+      console.log("Alumnos de todos los gimnasios:", alumnosData);
+
+    } catch (error) {
+      console.error("Error al obtener datos:", error);
+    }
+  };
+
+  fetchGimnasios();
+}, []);
   return (
     <Form onSubmit={handleSubmit}>
       <Row>
@@ -88,6 +125,18 @@ const FilterComp: React.FC<Props> = ({
           errors={errors.id_level}
           name="id_level"
         />
+        <FormikSelectComp
+          as={Col}
+          controlId="FilterGymId"
+          label="Gimnasio"
+          options={gimnasios.map((g) => ({ value: g.id_gimnasio, label: g.full_name }))}
+          icon={<PersonCircle />}
+          value={values.id_gimnasio}
+          onChange={handleChange}
+          errors={errors.id_gimnasio}
+          name="id_gimnasio"
+        />
+
       </Row>
       <div className="d-flex justify-content-between align-items-center">
         <div className={`bg-${color} p-2 rounded-4 text-${textColor}`}>
