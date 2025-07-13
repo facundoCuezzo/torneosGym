@@ -30,12 +30,17 @@ const useMembers = () => {
 
   const handleGetMembers = async (params: Params, page: number) => {
     try {
-      if (user) {
-        setLoading(true);
-        const res = await getMembersByGym(params, user.userId, page);
-        setMembers(res.members);
-        setMembersPagination(res.pagination);
+      if (!user) {
+        toast.error("Debe iniciar sesión para ver los alumnos");
+        return;
       }
+      setLoading(true);
+
+      const id = user.role === "Administrador" ? params.id_gym : user.userId;
+      
+      const res = await getMembersByGym(params, id, page);
+      setMembers(res.members);
+      setMembersPagination(res.pagination);
     } catch (error) {
       const err = error as ErrorResponse;
       toast.error(err.error);
@@ -189,7 +194,8 @@ const useMembers = () => {
         if (
           membersNotInTournament &&
           membersNotInTournament.length === 0 &&
-          prevState.totalPages === 1 && prevState.total === 1
+          prevState.totalPages === 1 &&
+          prevState.total === 1
         ) {
           return null;
         }

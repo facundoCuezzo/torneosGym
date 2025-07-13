@@ -21,6 +21,7 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: yupResolver(loginValidatorSchema),
@@ -48,6 +49,7 @@ const LoginPage = () => {
           handleSubmit={handleSubmit}
           onSubmit={onSubmit}
           loading={loading}
+          setValue={setValue}
         />
       </div>
     </Container>

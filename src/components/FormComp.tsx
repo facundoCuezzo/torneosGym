@@ -7,10 +7,11 @@ import type {
   SubmitHandler,
   UseFormHandleSubmit,
   UseFormRegister,
+  UseFormSetValue,
 } from "react-hook-form";
 import SelectComp from "./SelectComp";
-import type { RegisterFormData } from '../validation/registerValidatorSchema';
-import type { LoginFormData } from '../validation/loginValidatorSchema';
+import type { RegisterFormData } from "../validation/registerValidatorSchema";
+import type { LoginFormData } from "../validation/loginValidatorSchema";
 
 interface Props<T extends LoginFormData | RegisterFormData> {
   register: UseFormRegister<T>;
@@ -18,6 +19,7 @@ interface Props<T extends LoginFormData | RegisterFormData> {
   handleSubmit: UseFormHandleSubmit<T>;
   onSubmit: SubmitHandler<T>;
   loading?: boolean;
+  setValue?: UseFormSetValue<T>;
 }
 
 const loadingSpinner = (
@@ -86,6 +88,7 @@ export const LoginFormComp: React.FC<Props<LoginFormData>> = ({
   handleSubmit,
   loading,
   onSubmit,
+  setValue,
 }) => {
   return (
     <Form
@@ -101,6 +104,9 @@ export const LoginFormComp: React.FC<Props<LoginFormData>> = ({
         icon={<EnvelopeAtFill />}
         register={register("full_name")}
         error={errors.full_name?.message}
+        autoComplete="full_name"
+        setValue={setValue}
+        name="full_name"
       />
       <InputComp
         controlId="LoginPasswordId"
@@ -110,6 +116,9 @@ export const LoginFormComp: React.FC<Props<LoginFormData>> = ({
         icon={<LockFill />}
         register={register("password")}
         error={errors.password?.message}
+        autoComplete="current-password"
+        setValue={setValue}
+        name="password"
       />
       <div className="d-flex justify-content-end">
         <Button type="submit" variant="dark" disabled={loading}>

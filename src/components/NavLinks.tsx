@@ -20,21 +20,6 @@ const NavLinks: React.FC<Props> = ({ user, logout, isLoggedIn }) => {
     },
   ];
 
-  const ADMIN_NAVS = [
-    {
-      to: "/inicio",
-      text: "Inicio",
-    },
-    {
-      to: "/mi-cuenta",
-      text: "Mi cuenta",
-    },
-    {
-      to: "/crear-usuario",
-      text: "Registrar usuario",
-    },
-  ];
-
   if (!user) {
     return (
       <NavLink to="/" className={"text-decoration-none btn btn-outline-light"}>
@@ -44,26 +29,9 @@ const NavLinks: React.FC<Props> = ({ user, logout, isLoggedIn }) => {
   }
   return (
     <>
-      {isLoggedIn &&
-      (user.role === "Gimnasio" || user.role === "Juez") &&
-      user.userId > 0 ? (
+      {isLoggedIn && user.userId > 0 ? (
         <>
           {LOGGED_USER_NAVS.map((nav, index) => (
-            <NavLink
-              key={index}
-              to={nav.to}
-              className={"text-decoration-none btn btn-outline-light"}
-            >
-              {nav.text}
-            </NavLink>
-          ))}
-          <Button onClick={logout} variant="outline-light">
-            Cerrar sesión
-          </Button>
-        </>
-      ) : isLoggedIn && user.role === "Administrador" && user.userId > 0 ? (
-        <>
-          {ADMIN_NAVS.map((nav, index) => (
             <NavLink
               key={index}
               to={nav.to}

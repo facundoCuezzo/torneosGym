@@ -1,7 +1,8 @@
 import { useState, type ReactNode } from "react";
-import type { UseFormRegisterReturn } from "react-hook-form";
+import type { UseFormRegisterReturn, UseFormSetValue } from "react-hook-form";
 import { Button, Form, InputGroup } from "react-bootstrap";
 import { Eye, EyeSlash } from "react-bootstrap-icons";
+import type { LoginFormData } from "../validation/loginValidatorSchema";
 
 interface Props {
   controlId: string;
@@ -13,6 +14,9 @@ interface Props {
   error?: string;
   onChange?: (ev: React.ChangeEvent<HTMLInputElement>) => void;
   value?: string;
+  autoComplete?: string;
+  setValue?: UseFormSetValue<LoginFormData>;
+  name?: string;
 }
 
 const InputComp: React.FC<Props> = ({
@@ -25,6 +29,9 @@ const InputComp: React.FC<Props> = ({
   error,
   onChange,
   value,
+  autoComplete,
+  setValue,
+  name,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -42,6 +49,11 @@ const InputComp: React.FC<Props> = ({
           isInvalid={!!error}
           onChange={onChange}
           value={value}
+          autoComplete={autoComplete}
+          name={name}
+          onInput={(ev: React.ChangeEvent<HTMLInputElement>) =>
+            setValue?.(name as keyof LoginFormData, ev.target.value)
+          }
         />
         {isPassword && (
           <Button

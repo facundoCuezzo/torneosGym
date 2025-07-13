@@ -28,6 +28,7 @@ interface Params {
   id_category: number;
   id_level: number;
   dni?: string;
+  id_gym: number;
 }
 interface Pagination {
   total: number;
