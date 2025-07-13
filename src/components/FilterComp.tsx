@@ -8,15 +8,6 @@ import {
 } from "../validation/filterMembersValidatorSchema";
 import { useFormik } from "formik";
 import { FormikInputComp, FormikSelectComp } from "./FormikInputComp";
-import { useEffect } from "react";
-import { useState } from "react";
-import axios from "axios";
-
-interface Gimnasio {
-  id_gimnasio: number;
-  full_name: string;
-}
-
 
 interface Props {
   submitFilter: (paramFilters: FilterMembers) => void;
@@ -24,6 +15,8 @@ interface Props {
   textColor: "white" | "dark";
   setFilters: React.Dispatch<React.SetStateAction<FilterMembers | null>>;
   setLoadingFilter: React.Dispatch<React.SetStateAction<boolean>>;
+  gyms: User[] | null;
+  user: UserInfo | null;
 }
 
 const FilterComp: React.FC<Props> = ({
@@ -31,7 +24,9 @@ const FilterComp: React.FC<Props> = ({
   textColor,
   setFilters,
   submitFilter,
-  setLoadingFilter
+  setLoadingFilter,
+  gyms,
+  user,
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -39,7 +34,7 @@ const FilterComp: React.FC<Props> = ({
       dni: "",
       id_category: 0,
       id_level: 0,
-      id_gimnasio: 0,
+      id_gym: 0,
     },
     validationSchema: filterMembersValidatorSchema,
     onSubmit: (values) => {
@@ -49,35 +44,8 @@ const FilterComp: React.FC<Props> = ({
     },
   });
 
-
-
-
   const { values, errors, handleChange, handleSubmit } = formik;
 
-
-  const [gimnasios, setGimnasios] = useState<Gimnasio[]>([]);
-
-
-  
-useEffect(() => {
-  const fetchGimnasios = async () => {
-    try {
-      const { data: gimnasiosData } = await axios.get("/api/gimnasios");
-      setGimnasios(gimnasiosData);
-
-      const gimnasioIds = gimnasiosData.map((g: Gimnasio) => g.id_gimnasio);
-
-      const { data: alumnosData } = await axios.post("/api/alumnos", { ids: gimnasioIds });
-
-      console.log("Alumnos de todos los gimnasios:", alumnosData);
-
-    } catch (error) {
-      console.error("Error al obtener datos:", error);
-    }
-  };
-
-  fetchGimnasios();
-}, []);
   return (
     <Form onSubmit={handleSubmit}>
       <Row>
@@ -125,24 +93,30 @@ useEffect(() => {
           errors={errors.id_level}
           name="id_level"
         />
-        <FormikSelectComp
-          as={Col}
-          controlId="FilterGymId"
-          label="Gimnasio"
-          options={gimnasios.map((g) => ({ value: g.id_gimnasio, label: g.full_name }))}
-          icon={<PersonCircle />}
-          value={values.id_gimnasio}
-          onChange={handleChange}
-          errors={errors.id_gimnasio}
-          name="id_gimnasio"
-        />
-
+        {gyms && user && user.role === "Administrador" ? (
+          <FormikSelectComp
+            as={Col}
+            controlId="FilterGymId"
+            label="Gimnasio"
+            options={gyms.map((gym) => ({
+              value: gym.id,
+              label: gym.full_name,
+            }))}
+            icon={<PersonCircle />}
+            value={values.id_gym}
+            onChange={handleChange}
+            errors={errors.id_gym}
+            name="id_gym"
+          />
+        ) : (
+          ""
+        )}
       </Row>
       <div className="d-flex justify-content-between align-items-center">
         <div className={`bg-${color} p-2 rounded-4 text-${textColor}`}>
           <h6 className="text-decoration-underline">¡Importante!</h6>
           <p>
-            Si desea obtener todos sus alumnos, deje los campos en blanco y
+            Si desea obtener todos los alumnos, deje los campos en blanco y
             presione en <b>Filtrar 🔍</b>
           </p>
         </div>

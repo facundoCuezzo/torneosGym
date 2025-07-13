@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { UserContext } from './UsersContext';
 
-export const UserProvider = ({ children }: { children: ReactNode }) => {
+const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUserState] = useState<UserInfo | null>(() => {
     const stored = localStorage.getItem("userInfo");
     return stored ? JSON.parse(stored) : null;
@@ -24,3 +24,5 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     </UserContext.Provider>
   );
 };
+
+export default UserProvider;

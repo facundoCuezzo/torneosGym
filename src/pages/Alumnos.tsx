@@ -9,9 +9,12 @@ import FilterComp from "../components/FilterComp";
 import type { FilterMembers } from "../validation/filterMembersValidatorSchema";
 import PaginationComp from "../components/PaginationComp";
 import { useState } from "react";
+import useGyms from "../hooks/useGyms";
+import { toast } from "sonner";
 
 export default function Alumnos() {
   const { user } = useUsers();
+  const { gyms } = useGyms();
   const {
     members,
     handleDeleteMember,
@@ -41,6 +44,10 @@ export default function Alumnos() {
   };
 
   const submitFilter = async (paramFilters: FilterMembers) => {
+    if (user && user.role === "Administrador" && paramFilters.id_gym === 0) {
+      toast.error("Debe seleccionar un gimnasio");
+      return;
+    }
     await handleGetMembers(paramFilters, actualPage);
   };
 
@@ -63,6 +70,8 @@ export default function Alumnos() {
         submitFilter={submitFilter}
         setFilters={setFilters}
         setLoadingFilter={setLoadingFilter}
+        gyms={gyms}
+        user={user}
         color="danger"
         textColor="white"
       />

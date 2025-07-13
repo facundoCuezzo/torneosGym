@@ -1,7 +1,7 @@
 import env from "../config/env";
-import type { LoginFormData } from '../validation/loginValidatorSchema';
-import type { RegisterFormData } from '../validation/registerValidatorSchema';
-import { refreshAccessToken } from './authQueries';
+import type { LoginFormData } from "../validation/loginValidatorSchema";
+import type { RegisterFormData } from "../validation/registerValidatorSchema";
+import { refreshAccessToken } from "./authQueries";
 
 const URL = `${env.URL_BACK_LOCAL}/users`;
 
@@ -29,7 +29,7 @@ export const getUsers = async (): Promise<GetAllUsersResponse> => {
       "Content-Type": "application/json",
     },
   });
-    if (response.status === 401) {
+  if (response.status === 401) {
     await refreshAccessToken();
     return getUsers();
   }
@@ -49,7 +49,7 @@ export const getOneUser = async (id: number): Promise<GetOneUserResponse> => {
     },
     credentials: "include",
   });
-    if (response.status === 401) {
+  if (response.status === 401) {
     await refreshAccessToken();
     return getOneUser(id);
   }
@@ -61,7 +61,31 @@ export const getOneUser = async (id: number): Promise<GetOneUserResponse> => {
   return res;
 };
 
-export const createUser = async (user: RegisterFormData): Promise<CreateUserResponse> => {
+export const getUsersByRole = async (
+  id: number
+): Promise<GetAllUsersResponse> => {
+  const response = await fetch(`${URL}/role/${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  if (response.status === 401) {
+    await refreshAccessToken();
+    return getUsersByRole(id);
+  }
+  if (!response.ok) {
+    const error: ErrorResponse = await response.json();
+    throw error;
+  }
+  const res: GetAllUsersResponse = await response.json();
+  return res;
+};
+
+export const createUser = async (
+  user: RegisterFormData
+): Promise<CreateUserResponse> => {
   const response = await fetch(`${URL}`, {
     method: "POST",
     headers: {
@@ -70,7 +94,7 @@ export const createUser = async (user: RegisterFormData): Promise<CreateUserResp
     body: JSON.stringify(user),
     credentials: "include",
   });
-  if(response.status === 401) {
+  if (response.status === 401) {
     await refreshAccessToken();
     return createUser(user);
   }
@@ -90,7 +114,7 @@ export const deleteUser = async (): Promise<{ message: string }> => {
     },
     credentials: "include",
   });
-  if(response.status === 401) {
+  if (response.status === 401) {
     await refreshAccessToken();
     return deleteUser();
   }
