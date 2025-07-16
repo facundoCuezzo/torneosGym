@@ -10,8 +10,8 @@ import {
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "./useUserContext";
-import type { LoginFormData } from '../validation/loginValidatorSchema';
-import type { RegisterFormData } from '../validation/registerValidatorSchema';
+import type { LoginFormData } from "../validation/loginValidatorSchema";
+import type { RegisterFormData } from "../validation/registerValidatorSchema";
 
 const useUsers = () => {
   const navigate = useNavigate();
@@ -26,17 +26,11 @@ const useUsers = () => {
     setLoading(true);
     try {
       const res = await login(data);
-      if (res.userInfo) {
-        setUser({
-          userId: res.userInfo.userId,
-          full_name: res.userInfo.full_name,
-          role: res.userInfo.role,
-        });
-      }
+      setUser(res.userInfo);
+
       return res;
     } catch (err) {
       const error = err as ErrorResponse;
-
       toast.error(error.error);
     } finally {
       setLoading(false);
@@ -50,7 +44,6 @@ const useUsers = () => {
       setUsers(res.users);
     } catch (err) {
       const error = err as ErrorResponse;
-
       toast.error(error.error);
       if (error.redirect) {
         await handleLogout();
@@ -67,7 +60,6 @@ const useUsers = () => {
       return res;
     } catch (err) {
       const error = err as ErrorResponse;
-
       toast.error(error.error);
       if (error.redirect) {
         await handleLogout();
@@ -84,7 +76,6 @@ const useUsers = () => {
       return res;
     } catch (err) {
       const error = err as ErrorResponse;
-
       toast.error(error.error);
       if (error.redirect) {
         await handleLogout();
@@ -101,7 +92,6 @@ const useUsers = () => {
       toast.success(res.message);
     } catch (err) {
       const error = err as ErrorResponse;
-
       toast.error(error.error);
       if (error.redirect) {
         await handleLogout();

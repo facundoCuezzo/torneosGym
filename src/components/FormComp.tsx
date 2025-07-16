@@ -2,24 +2,33 @@ import React from "react";
 import { Button, Form, Spinner } from "react-bootstrap";
 import InputComp from "./InputComp";
 import { EnvelopeAtFill, LockFill, PersonCircle } from "react-bootstrap-icons";
-import type {
-  FieldErrors,
-  SubmitHandler,
-  UseFormHandleSubmit,
-  UseFormRegister,
-  UseFormSetValue,
+import {
+  type FieldErrors,
+  type SubmitHandler,
+  type UseFormHandleSubmit,
+  type UseFormRegister,
+  type UseFormSetValue,
 } from "react-hook-form";
-import SelectComp from "./SelectComp";
 import type { RegisterFormData } from "../validation/registerValidatorSchema";
 import type { LoginFormData } from "../validation/loginValidatorSchema";
+import { FormikInputComp, FormikSelectComp } from "./FormikInputComp";
+import type { FormikErrors, FormikHandlers } from "formik";
 
-interface Props<T extends LoginFormData | RegisterFormData> {
-  register: UseFormRegister<T>;
-  errors: FieldErrors<T>;
-  handleSubmit: UseFormHandleSubmit<T>;
-  onSubmit: SubmitHandler<T>;
+interface LoginProps {
+  register: UseFormRegister<LoginFormData>;
+  errors: FieldErrors<LoginFormData>;
+  handleSubmit: UseFormHandleSubmit<LoginFormData>;
+  onSubmit: SubmitHandler<LoginFormData>;
   loading?: boolean;
-  setValue?: UseFormSetValue<T>;
+  setValue?: UseFormSetValue<LoginFormData>;
+}
+
+interface RegisterProps {
+  errors: FormikErrors<RegisterFormData>;
+  values: RegisterFormData;
+  handleSubmit: FormikHandlers["handleSubmit"];
+  handleChange: FormikHandlers["handleChange"];
+  loading?: boolean;
 }
 
 const loadingSpinner = (
@@ -29,51 +38,85 @@ const loadingSpinner = (
   </div>
 );
 
-export const RegisterFormComp: React.FC<Props<RegisterFormData>> = ({
-  register,
+export const RegisterFormComp: React.FC<RegisterProps> = ({
   errors,
   handleSubmit,
   loading,
-  onSubmit,
+  handleChange,
+  values,
 }) => {
-  const OPTIONS = [
+  const ROLES_OPTIONS = [
     { label: "Sin seleccionar rol", value: 0 },
     { label: "Administrador", value: 1 },
     { label: "Juez", value: 2 },
     { label: "Gimnasio", value: 3 },
   ];
+  const CATEGORIES_OPTIONS = [
+    { label: "Sin categoría", value: 1 },
+    { label: "Activo", value: 2 },
+    { label: "Adherente", value: 3 },
+  ];
   return (
-    <Form
-      onSubmit={handleSubmit(onSubmit)}
-      className="bg-light p-3 rounded-4 mt-3"
-    >
+    <Form onSubmit={handleSubmit} className="bg-light p-3 rounded-4 mt-3">
       <h5>Crear una nueva cuenta</h5>
       <hr />
-      <InputComp
+      <FormikInputComp
         controlId="FullNameId"
         label="Nombre completo"
         placeholder="Ej: Juan Pérez"
         icon={<PersonCircle />}
-        register={register("full_name")}
-        error={errors.full_name?.message}
+        value={values.full_name}
+        onChange={handleChange}
+        name="full_name"
+        errors={errors.full_name}
       />
-      <InputComp
+      <FormikInputComp
         controlId="RegisterPasswordId"
         label="Contraseña"
         placeholder="************"
         type="password"
         icon={<LockFill />}
-        register={register("password")}
-        error={errors.password?.message}
+        value={values.password}
+        onChange={handleChange}
+        errors={errors.password}
+        name="password"
       />
-      <SelectComp
+      <FormikSelectComp
         controlId="RegisterRoleId"
-        options={OPTIONS}
+        options={ROLES_OPTIONS}
         label="Rol del usuario"
         icon={<PersonCircle />}
-        register={register("id_role")}
-        error={errors.id_role?.message}
+        value={values.id_role}
+        onChange={(ev: React.ChangeEvent<HTMLSelectElement>) => {
+          handleChange({
+            target: {
+              name: "id_role",
+              value: Number(ev.target.value),
+            },
+          });
+        }}
+        errors={errors.id_role}
+        name="id_role"
       />
+      {values.id_role === 3 && (
+        <FormikSelectComp
+          controlId="RegisterCategoryId"
+          options={CATEGORIES_OPTIONS}
+          label="Categoría del gimnasio"
+          icon={<PersonCircle />}
+          value={values.id_category}
+          onChange={(ev: React.ChangeEvent<HTMLSelectElement>) => {
+            handleChange({
+              target: {
+                name: "id_category",
+                value: Number(ev.target.value),
+              },
+            });
+          }}
+          errors={errors.id_category}
+          name="id_category"
+        />
+      )}
       <div className="d-flex justify-content-end">
         <Button type="submit" variant="dark" disabled={loading}>
           {loading ? loadingSpinner : "Crear cuenta"}
@@ -82,7 +125,7 @@ export const RegisterFormComp: React.FC<Props<RegisterFormData>> = ({
     </Form>
   );
 };
-export const LoginFormComp: React.FC<Props<LoginFormData>> = ({
+export const LoginFormComp: React.FC<LoginProps> = ({
   register,
   errors,
   handleSubmit,

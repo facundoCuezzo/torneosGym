@@ -1,33 +1,31 @@
-import { yupResolver } from "@hookform/resolvers/yup";
 import { Container, Image } from "react-bootstrap";
-import { useForm } from "react-hook-form";
-import { registerValidatorSchema, type RegisterFormData } from "../validation/registerValidatorSchema";
+import { registerValidatorSchema} from "../validation/registerValidatorSchema";
 import { RegisterFormComp } from "../components/FormComp";
 import useUsers from "../hooks/useUsers";
 import { toast } from "sonner";
+import { useFormik } from 'formik';
 
 const RegisterPage = () => {
   const { handleCreateUser } = useUsers();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<RegisterFormData>({
-    resolver: yupResolver(registerValidatorSchema),
-  });
 
-  const onSubmit = async (data: RegisterFormData) => {
-    const res = await handleCreateUser(data);
-    if (res?.user) {
-      toast.success(res.message);
-      reset({
-        full_name: "",
-        password: "",
-        id_role: 0,
-      });
-    }
-  };
+  const formik = useFormik({
+    initialValues: {
+      full_name: "",
+      password: "",
+      id_role: 0,
+      id_category: 1,
+    },
+    validationSchema: registerValidatorSchema,
+    onSubmit: async (values) => {
+      const res = await handleCreateUser(values);
+      if (res?.user) {
+        toast.success(res.message);
+        resetForm();
+      }
+    },
+  })
+
+  const { values, errors, handleChange, handleSubmit, resetForm } = formik;
 
   return (
     <Container className="my-5 d-flex justify-content-center flex-column align-items-center">
@@ -37,10 +35,10 @@ const RegisterPage = () => {
       </div>
       <div className="w-75">
         <RegisterFormComp
-          register={register}
           errors={errors}
           handleSubmit={handleSubmit}
-          onSubmit={onSubmit}
+          values={values}
+          handleChange={handleChange}
         />
       </div>
     </Container>

@@ -11,6 +11,10 @@ export const registerValidatorSchema = yup.object().shape({
     .typeError("El rol es requerido")
     .moreThan(0, "El rol es requerido")
     .required("El rol es requerido"),
+  id_category: yup
+    .number()
+    .typeError("La categoría es requerida")
+    .required("La categoría es requerida"),
 });
 
 export type RegisterFormData = yup.InferType<typeof registerValidatorSchema>;

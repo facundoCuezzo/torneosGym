@@ -79,9 +79,6 @@ export const FormikSelectComp: React.FC<SelectProps> = ({
           onChange={onChange}
           name={name}
         >
-
-                    <option value={0}>Seleccionar...</option>
-
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
