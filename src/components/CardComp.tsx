@@ -8,12 +8,7 @@ interface Props {
   children?: ReactNode;
 }
 
-const CardComp: React.FC<Props> = ({
-  user,
-  color,
-  textColor,
-  children,
-}) => {
+const CardComp: React.FC<Props> = ({ user, color, textColor, children }) => {
   return (
     <Card
       bg={color}
@@ -31,7 +26,11 @@ const CardComp: React.FC<Props> = ({
         <Card.Title style={{ fontSize: "1.3rem", fontWeight: "bold" }}>
           Número de asociado: {user?.userId}
         </Card.Title>
-        <Card.Text style={{ fontSize: "1.1rem" }}>Categoría:</Card.Text>
+        {user?.id_category && user.id_category > 1 && (
+          <Card.Text style={{ fontSize: "1.1rem" }}>
+            Categoría: {user.category}
+          </Card.Text>
+        )}
         {children && (
           <div className="d-flex justify-content-center mt-4">{children}</div>
         )}
