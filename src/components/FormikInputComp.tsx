@@ -1,3 +1,4 @@
+import type { FormikHandlers } from "formik";
 import React, { type ElementType, type ReactNode } from "react";
 import { Form, InputGroup } from "react-bootstrap";
 
@@ -9,7 +10,7 @@ interface InputProps {
   icon: ReactNode;
   value: string | number;
   errors?: string;
-  onChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: FormikHandlers["handleChange"];
   as?: ElementType;
   name: string;
 }
@@ -22,7 +23,7 @@ interface SelectProps {
   icon: ReactNode;
   as?: ElementType;
   value: number;
-  onChange: (ev: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChange: FormikHandlers["handleChange"];
   name: string;
 }
 
