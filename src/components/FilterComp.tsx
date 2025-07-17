@@ -8,6 +8,7 @@ import {
 } from "../validation/filterMembersValidatorSchema";
 import { useFormik } from "formik";
 import { FormikInputComp, FormikSelectComp } from "./FormikInputComp";
+import { toast } from "sonner";
 
 interface Props {
   submitFilter: (paramFilters: FilterMembers) => void;
@@ -38,6 +39,11 @@ const FilterComp: React.FC<Props> = ({
     },
     validationSchema: filterMembersValidatorSchema,
     onSubmit: (values) => {
+      console.log(values);
+      if (user && user.role === "Administrador" && values.id_gym === 0) {
+        toast.error("Debe seleccionar un gimnasio");
+        return;
+      }
       setFilters(values);
       setLoadingFilter(false);
       submitFilter(values);
@@ -78,7 +84,14 @@ const FilterComp: React.FC<Props> = ({
           options={CATEGORIES}
           icon={<Bookmark />}
           value={values.id_category}
-          onChange={handleChange}
+          onChange={(ev: React.ChangeEvent<HTMLSelectElement>) => {
+            handleChange({
+              target: {
+                name: "id_category",
+                value: Number(ev.target.value),
+              },
+            });
+          }}
           errors={errors.id_category}
           name="id_category"
         />
@@ -89,7 +102,14 @@ const FilterComp: React.FC<Props> = ({
           options={LEVELS}
           icon={<TagFill />}
           value={values.id_level}
-          onChange={handleChange}
+          onChange={(ev: React.ChangeEvent<HTMLSelectElement>) => {
+            handleChange({
+              target: {
+                name: "id_level",
+                value: Number(ev.target.value),
+              },
+            });
+          }}
           errors={errors.id_level}
           name="id_level"
         />
@@ -98,13 +118,23 @@ const FilterComp: React.FC<Props> = ({
             as={Col}
             controlId="FilterGymId"
             label="Gimnasio"
-            options={gyms.map((gym) => ({
-              value: gym.id,
-              label: gym.full_name,
-            }))}
+            options={[
+              { value: 0, label: "Sin seleccionar gimnasio" },
+              ...gyms.map((gym) => ({
+                value: gym.id,
+                label: gym.full_name,
+              })),
+            ]}
             icon={<PersonCircle />}
             value={values.id_gym}
-            onChange={handleChange}
+            onChange={(ev: React.ChangeEvent<HTMLSelectElement>) => {
+              handleChange({
+                target: {
+                  name: "id_gym",
+                  value: Number(ev.target.value),
+                },
+              });
+            }}
             errors={errors.id_gym}
             name="id_gym"
           />

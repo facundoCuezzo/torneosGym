@@ -12,7 +12,7 @@ import PaginationComp from "../components/PaginationComp";
 export default function Puntajes() {
   const { user } = useUsers();
   const {
-    tournaments,
+    pastTournaments,
     selectedTournament,
     setSelectedTournament,
     loading,
@@ -44,7 +44,7 @@ export default function Puntajes() {
           <SelectTournamentComp
             selectedTournament={selectedTournament}
             setSelectedTournament={setSelectedTournament}
-            tournaments={tournaments}
+            tournaments={pastTournaments}
             loading={loading}
           />
         </CardComp>
