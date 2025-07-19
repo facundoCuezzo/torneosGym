@@ -1,5 +1,5 @@
 interface MembersTournaments {
-  member: string;
+  full_name: string;
   dni: number;
   id_tournament: number;
   id_gym: number;

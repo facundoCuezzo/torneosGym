@@ -44,13 +44,13 @@ export default function InscripcionTorneos() {
     await handleUpdatePayMemberTournament({ paid, id_tournament, id_member });
   };
 
-  const registerToTournament = (member: FullMemberInfo) => {
-    handleRegisterToTournament(member);
+  const registerToTournament = async (member: FullMemberInfo) => {
+    await handleRegisterToTournament(member);
   };
 
-  const handleFilter = (values: FilterScores) => {
+  const handleFilter = async (values: FilterScores) => {
     setLoadingFilter(false);
-    handleGetMembersTournamentsByGym(values, actualPage);
+    await handleGetMembersTournamentsByGym(values, actualPage);
   };
 
   const handlePageChangeMT = async (page: number) => {

@@ -192,9 +192,9 @@ export const MembersTournamentsTableComp: React.FC<MembersTournamentsProps> = ({
       </thead>
       <tbody>
         {membersTournaments?.map((mt) => (
-          <tr key={`${mt.id_gym}-${mt.id_tournament}-${mt.member}`}>
+          <tr key={`${mt.id_gym}-${mt.id_tournament}-${mt.full_name}`}>
             <td>{mt.dni}</td>
-            <td>{mt.member}</td>
+            <td>{mt.full_name}</td>
             <td>{mt.gym}</td>
             {showPaidColumn && (
               <td className="text-center">{mt.paid ? "Si" : "No"}</td>
