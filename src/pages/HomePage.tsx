@@ -41,6 +41,10 @@ const JUEZ_OPTIONS = [
     nombre: "PUNTAJES",
     ruta: "/puntajes",
   },
+  {
+    nombre: "HISTORIAL DE PUNTAJES",
+    ruta: "/historial-puntajes",
+  }
 ];
 
 const Menu = () => {

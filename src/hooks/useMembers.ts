@@ -151,7 +151,7 @@ const useMembers = () => {
         id_gym: user?.userId,
         id_member: member.id,
         id_tournament: res.member.id_tournament,
-        member: member.full_name,
+        full_name: member.full_name,
         gym: member.gym,
         paid: res.member.paid,
         dni: member.dni,

@@ -9,16 +9,11 @@ import {
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import InputComp from "./InputComp";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import SelectComp from "./SelectComp";
 import useMembers from "../hooks/useMembers";
-import {
-  createMemberValidatorSchema,
-  type CreateMemberFormData,
-} from "../validation/createMemberValidatorSchema";
+import { createMemberValidatorSchema } from "../validation/createMemberValidatorSchema";
 import { OneTwoThreeIcon } from "./Icons";
+import { useFormik } from "formik";
+import { FormikInputComp, FormikSelectComp } from "./FormikInputComp";
 
 interface Props {
   member?: FullMemberInfo;
@@ -31,43 +26,46 @@ const CreateMemberComp: React.FC<Props> = ({ member }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-    watch,
-  } = useForm<CreateMemberFormData>({
-    resolver: yupResolver(createMemberValidatorSchema),
-    defaultValues: {
+  const formik = useFormik({
+    initialValues: {
       full_name: member?.full_name ?? "",
       birth_date: member?.birth_date ?? "",
       dni: member?.dni.toString() ?? "",
       id_level: member?.id_level ?? 0,
     },
-  });
+    validationSchema: createMemberValidatorSchema,
+    onSubmit: async (values) => {
+      if (member) {
+        const res = await handleUpdateMember(member.id, values);
+        if (res?.member) {
+          handleClose();
+        }
+        return;
+      }
 
-  const onSubmit = async (data: CreateMemberFormData) => {
-    if (member) {
-      const res = await handleUpdateMember(member.id, data);
+      const res = await handleCreateMember(values);
       if (res?.member) {
+        resetForm({
+          values: {
+            full_name: "",
+            birth_date: "",
+            dni: "",
+            id_level: 0,
+          },
+        });
         handleClose();
       }
-      return;
-    }
+    },
+  });
 
-    const res = await handleCreateMember(data);
-    if (res?.member) {
-      reset({
-        full_name: "",
-        birth_date: "",
-        dni: "",
-        id_level: 0,
-      });
-      handleClose();
-    }
-  };
+  const {
+    values,
+    errors,
+    handleChange,
+    handleSubmit,
+    resetForm,
+    setFieldValue,
+  } = formik;
 
   return (
     <>
@@ -96,22 +94,24 @@ const CreateMemberComp: React.FC<Props> = ({ member }) => {
           <Modal.Title>{member ? "Editar alumno" : "Crear alumno"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <InputComp
+          <Form onSubmit={handleSubmit}>
+            <FormikInputComp
               controlId="MemberFullNameId"
               label="Nombre completo"
               placeholder="Ej: Juan Perez"
               icon={<PersonCircle />}
-              register={register("full_name")}
-              error={errors.full_name?.message}
+              onChange={handleChange}
+              value={values.full_name}
+              errors={errors.full_name}
+              name="full_name"
             />
-            <InputComp
+            <FormikInputComp
               controlId="MemberBirthDateId"
               label="Fecha de nacimiento"
               placeholder="YYYY-MM-DD"
               icon={<CalendarDate />}
-              register={register("birth_date")}
-              error={errors.birth_date?.message}
+              value={values.birth_date}
+              name="birth_date"
               onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
                 let value = ev.target.value.replace(/[^0-9]/g, "");
 
@@ -120,19 +120,20 @@ const CreateMemberComp: React.FC<Props> = ({ member }) => {
                 if (value.length > 7)
                   value = `${value.slice(0, 7)}-${value.slice(7, 9)}`;
 
-                setValue("birth_date", value);
+                setFieldValue("birth_date", value);
               }}
-              value={watch("birth_date") || ""}
             />
-            <InputComp
+            <FormikInputComp
               controlId="MemberDniId"
               label="DNI"
               placeholder="Ej: 12345678"
               icon={<OneTwoThreeIcon />}
-              register={register("dni")}
-              error={errors.dni?.message}
+              value={values.dni}
+              onChange={handleChange}
+              name="dni"
+              errors={errors.dni}
             />
-            <SelectComp
+            <FormikSelectComp
               label="Nivel"
               options={[
                 { label: "Sin seleccionar nivel", value: 0 },
@@ -150,8 +151,17 @@ const CreateMemberComp: React.FC<Props> = ({ member }) => {
               ]}
               controlId="MemberLevelId"
               icon={<Tag />}
-              register={register("id_level")}
-              error={errors.id_level?.message}
+              errors={errors.id_level}
+              value={values.id_level}
+              onChange={(ev: React.ChangeEvent<HTMLSelectElement>) => {
+                handleChange({
+                  target: {
+                    name: "id_level",
+                    value: Number(ev.target.value),
+                  },
+                });
+              }}
+              name="id_level"
             />
 
             <Button variant="dark" type="submit" className="w-100">

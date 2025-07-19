@@ -62,7 +62,7 @@ export default function Alumnos() {
       </div>
       <div className="d-flex justify-content-between">
         <h3>Tabla de alumnos</h3>
-        <CreateMemberComp />
+        {user && user.role === "Gimnasio" && <CreateMemberComp />}
       </div>
       <hr />
       <h4>Filtrar por:</h4>

@@ -39,7 +39,6 @@ const FilterComp: React.FC<Props> = ({
     },
     validationSchema: filterMembersValidatorSchema,
     onSubmit: (values) => {
-      console.log(values);
       if (user && user.role === "Administrador" && values.id_gym === 0) {
         toast.error("Debe seleccionar un gimnasio");
         return;
