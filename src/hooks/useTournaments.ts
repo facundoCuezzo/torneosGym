@@ -33,6 +33,7 @@ const useTournaments = () => {
 
   const { handleLogout, user } = useUsers();
   const [loading, setLoading] = useState(false);
+  const [nextTournament, setNextTournament] = useState<Tournament | null>(null);
 
   const handleGetTournaments = useCallback(async () => {
     try {
@@ -41,6 +42,7 @@ const useTournaments = () => {
       setTournaments(resTournaments.tournaments);
       const resPastTournaments = await getPastTournaments();
       setPastTournaments(resPastTournaments.tournaments);
+      setNextTournament(resPastTournaments.tournaments[0]);
     } catch (err) {
       const error = err as ErrorResponse;
       toast.error(error.error);
@@ -204,6 +206,7 @@ const useTournaments = () => {
     setMembersTournamentsPagination,
     membersNotInTournamentsPagination,
     setMembersNotInTournamentsPagination,
+    nextTournament,
   };
 };
 

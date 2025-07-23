@@ -2,6 +2,28 @@ import env from "../config/env";
 import { refreshAccessToken } from "./authQueries";
 
 const URL = `${env.URL_BACK_LOCAL}/puntajes`;
+const T_URL = `${env.URL_BACK_LOCAL}/tournaments`;
+
+export const redirectToGoogleSheets = async (id: number): Promise<{ scriptUrl: string }> => {
+  const response = await fetch(`${T_URL}/${id}/sheets`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  });
+  if (response.status === 401) {
+    await refreshAccessToken();
+    return redirectToGoogleSheets(id);
+  }
+  if (!response.ok) {
+    const error = await response.json();
+    throw error;
+  }
+
+  const res: { scriptUrl: string } = await response.json();
+  return res;
+}
 
 export const getScoresByLevelAndCategory = async (
   { id_category, id_level, id_tournament }: FilterScoresData,

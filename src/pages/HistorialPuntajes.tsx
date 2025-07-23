@@ -1,108 +1,64 @@
 import useUsers from "../hooks/useUsers";
 import CardComp from "../components/CardComp";
-import SelectTournamentComp from "../components/SelectTournamentComp";
 import useTournaments from "../hooks/useTournaments";
-import { Container, Spinner } from "react-bootstrap";
-import FilterScoresComp from "../components/FilterScoresComp";
+import { Button } from "react-bootstrap";
+import { OneTwoThreeIcon } from "../components/Icons";
 import useScores from "../hooks/useScores";
-import type { FilterScores } from "../validation/filterScoresValidatorSchema";
+import SelectTournamentComp from "../components/SelectTournamentComp";
 import { useState } from "react";
-import { ScoresTableComp } from "../components/TableComp";
-import PaginationComp from "../components/PaginationComp";
+import { toast } from "sonner";
 
 const HistorialPuntajes = () => {
   const { user } = useUsers();
-  const {
-    selectedTournament,
-    setSelectedTournament,
-    pastTournaments,
-    loading,
-  } = useTournaments();
-  const {
-    handleGetScoresByCategoryAndLevel,
-    scores,
-    loading: loadingScores,
-    scoresPagination,
-  } = useScores();
-  const [loadingFilter, setLoadingFilter] = useState(true);
-  const [actualPage, setActualPage] = useState(1);
-  const [filters, setFilters] = useState<FilterScores | null>(null);
+  const { pastTournaments, loading } = useTournaments();
+  const { handleRedirect } = useScores();
+  const [selectedTournament, setSelectedTournament] = useState(0);
 
-  const condition = selectedTournament !== 0 && loadingFilter === false;
-
-  const handleSubmit = (values: FilterScores) => {
-    setLoadingFilter(false);
-    handleGetScoresByCategoryAndLevel(
-      {
-        ...values,
-        id_tournament: selectedTournament,
-      },
-      actualPage
-    );
-  };
-
-  const handlePageChange = async (page: number) => {
-    if (filters) {
-      await handleGetScoresByCategoryAndLevel(
-        { ...filters, id_tournament: selectedTournament },
-        page
-      );
+  const redirect = async (id: number) => {
+    if (selectedTournament === 0) {
+      toast.error("Debe seleccionar un torneo");
+      return;
+    }
+    const res = await handleRedirect(id);
+    if (res?.scriptUrl) {
+      window.open(res.scriptUrl, "_blank");
     }
   };
-  return (
-    <>
+
+  if (!pastTournaments || pastTournaments.length === 0) {
+    return (
       <div className="d-flex justify-content-center align-items-start min-vh-60 pt-5">
         <CardComp user={user} color="dark" textColor="white">
-          <SelectTournamentComp
-            selectedTournament={selectedTournament}
-            setSelectedTournament={setSelectedTournament}
-            tournaments={pastTournaments}
-            loading={loading}
-          />
+          <Button variant="outline-light" disabled>
+            {loading ? "Cargando..." : "No hay torneos disponibles"}
+          </Button>
         </CardComp>
       </div>
-      <Container>
-        {selectedTournament !== 0 && (
-          <FilterScoresComp
-            submitFilter={handleSubmit}
-            setFilters={setFilters}
+    );
+  }
+
+  return (
+    <div className="d-flex justify-content-center align-items-start min-vh-60 pt-5">
+      <CardComp user={user} color="dark" textColor="white">
+        <div className="d-flex flex-column gap-2">
+          <SelectTournamentComp
+            tournaments={pastTournaments}
+            loading={loading}
+            selectedTournament={selectedTournament}
+            setSelectedTournament={setSelectedTournament}
           />
-        )}
-        {condition && (
-          <>
-            {loadingScores ? (
-              <div className="d-flex justify-content-center gap-1">
-                <Spinner animation="border" variant="dark" />
-                <h6 className="text-white">Cargando...</h6>
-              </div>
-            ) : scores && scores.length > 0 ? (
-              <>
-                <ScoresTableComp
-                  scores={scores}
-                  headers={[
-                    "DNI del alumno",
-                    "Nombre y apellido del alumno",
-                    "Gimnasio",
-                    "Puntaje",
-                  ]}
-                />
-                {scoresPagination && (
-                  <PaginationComp
-                    pagination={scoresPagination}
-                    setActualPage={setActualPage}
-                    handlePageChange={handlePageChange}
-                  />
-                )}
-              </>
-            ) : (
-              <h5 className="text-center">
-                No hay alumnos registrados en este torneo
-              </h5>
-            )}
-          </>
-        )}
-      </Container>
-    </>
+          <Button
+            onClick={() => redirect(selectedTournament)}
+            variant="outline-light"
+            disabled={selectedTournament === 0}
+            className="d-flex justify-content-center align-items-center gap-1"
+          >
+            <OneTwoThreeIcon />
+            <span>Puntuar</span>
+          </Button>
+        </div>
+      </CardComp>
+    </div>
   );
 };
 

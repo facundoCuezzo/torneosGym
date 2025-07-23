@@ -6,10 +6,7 @@ const ADMIN_OPTIONS = [
   { nombre: "MI CUENTA", ruta: "/mi-cuenta" },
   { nombre: "REGISTRAR USUARIO", ruta: "/crear-usuario" },
   { nombre: "ADMINISTRAR TORNEOS", ruta: "/admin-torneos" },
-  { nombre: "INSCRIPCIÓN TORNEOS", ruta: "/inscripcion-torneos" },
-  { nombre: "MIS TORNEOS", ruta: "/mis-torneos" },
   { nombre: "ALUMNOS", ruta: "/alumnos" },
-  { nombre: "PUNTAJES", ruta: "/puntajes" },
   { nombre: "HISTORIAL DE PUNTAJES", ruta: "/historial-puntajes" },
 ];
 
@@ -19,16 +16,16 @@ const GYM_OPTIONS = [
     ruta: "/mi-cuenta",
   },
   {
+    nombre: "ALUMNOS",
+    ruta: "/alumnos",
+  },
+  {
     nombre: "INSCRIPCIÓN TORNEOS",
     ruta: "/inscripcion-torneos",
   },
   {
-    nombre: "MIS TORNEOS",
-    ruta: "/mis-torneos",
-  },
-  {
-    nombre: "ALUMNOS",
-    ruta: "/alumnos",
+    nombre: "HISTORIAL DE PUNTAJES",
+    ruta: "/historial-puntajes",
   },
 ];
 
@@ -44,7 +41,7 @@ const JUEZ_OPTIONS = [
   {
     nombre: "HISTORIAL DE PUNTAJES",
     ruta: "/historial-puntajes",
-  }
+  },
 ];
 
 const Menu = () => {

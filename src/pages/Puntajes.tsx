@@ -1,97 +1,62 @@
-import SelectTournamentComp from "../components/SelectTournamentComp";
 import useUsers from "../hooks/useUsers";
 import CardComp from "../components/CardComp";
 import useTournaments from "../hooks/useTournaments";
-import FilterScoresComp from "../components/FilterScoresComp";
-import { Container, Spinner } from "react-bootstrap";
-import { useState } from "react";
-import { MembersTournamentsTableComp } from "../components/TableComp";
-import type { FilterScores } from "../validation/filterScoresValidatorSchema";
-import PaginationComp from "../components/PaginationComp";
+import { Button, Spinner } from "react-bootstrap";
+import { OneTwoThreeIcon } from "../components/Icons";
+import useScores from "../hooks/useScores";
 
 export default function Puntajes() {
   const { user } = useUsers();
-  const {
-    pastTournaments,
-    selectedTournament,
-    setSelectedTournament,
-    loading,
-    membersTournaments,
-    handleGetMembersTournaments,
-    membersTournamentsPagination,
-  } = useTournaments();
-  const [loadingFilter, setLoadingFilter] = useState(true);
-  const [filters, setFilters] = useState<FilterScores | null>(null);
-  const [actualPage, setActualPage] = useState(1);
+  const { nextTournament, loading } = useTournaments();
+  const { handleRedirect, loading: loadingScores } = useScores();
 
-  const condition = selectedTournament !== 0 && loadingFilter === false;
-
-  const handleFilter = (values: FilterScores) => {
-    setLoadingFilter(false);
-    handleGetMembersTournaments(values, actualPage);
-  };
-
-  const handlePageChange = async (page: number) => {
-    if (filters) {
-      await handleGetMembersTournaments(filters, page);
+  const redirect = async (id: number) => {
+    const res = await handleRedirect(id);
+    if (res?.scriptUrl) {
+      window.open(res.scriptUrl, "_blank");
     }
   };
 
-  return (
-    <>
-      <div className="d-flex flex-column align-items-center mt-5">
-        <CardComp user={user} color="light" textColor="dark">
-          <SelectTournamentComp
-            selectedTournament={selectedTournament}
-            setSelectedTournament={setSelectedTournament}
-            tournaments={pastTournaments}
-            loading={loading}
-          />
+  if (!nextTournament) {
+    return (
+      <div className="d-flex justify-content-center align-items-start min-vh-60 pt-5">
+        <CardComp user={user} color="dark" textColor="white">
+          <Button variant="outline-light" disabled>
+            {loading ? "Cargando..." : "No hay torneos disponibles"}
+          </Button>
         </CardComp>
       </div>
-      <Container>
-        {selectedTournament !== 0 && (
-          <FilterScoresComp
-            submitFilter={handleFilter}
-            setFilters={setFilters}
-          />
-        )}
-        {condition && (
-          <>
-            {loading ? (
-              <div className="d-flex justify-content-center gap-1">
-                <Spinner animation="border" variant="dark" />
-                <h6 className="text-white">Cargando...</h6>
+    );
+  }
+
+  return (
+    <div className="d-flex justify-content-center align-items-start min-vh-60 pt-5">
+      <CardComp user={user} color="dark" textColor="white">
+        <div className="d-flex flex-column gap-2">
+          <Button variant="outline-light" disabled>
+            {nextTournament.name}
+          </Button>
+          <Button
+            variant="light"
+            className="d-flex align-items-center gap-1"
+            onClick={() => redirect(nextTournament.id)}
+          >
+            {loadingScores ? (
+              <div className="d-flex align-items-center gap-1">
+                <>
+                  <Spinner animation="border" variant="light" size="sm" />
+                  <span>Cargando...</span>
+                </>
               </div>
-            ) : membersTournaments && membersTournaments.length > 0 ? (
-              <>
-                <MembersTournamentsTableComp
-                  membersTournaments={membersTournaments}
-                  headers={[
-                    "DNI del alumno",
-                    "Nombre y apellido del alumno",
-                    "Gimnasio",
-                    "Acciones",
-                  ]}
-                  showPaidColumn={false}
-                  location="scores"
-                />
-                {membersTournamentsPagination && (
-                  <PaginationComp
-                    pagination={membersTournamentsPagination}
-                    setActualPage={setActualPage}
-                    handlePageChange={handlePageChange}
-                  />
-                )}
-              </>
             ) : (
-              <h5 className="text-center">
-                No hay alumnos registrados en este torneo
-              </h5>
+              <>
+                <OneTwoThreeIcon />
+                <span>Puntuar alumnos</span>
+              </>
             )}
-          </>
-        )}
-      </Container>
-    </>
+          </Button>
+        </div>
+      </CardComp>
+    </div>
   );
 }

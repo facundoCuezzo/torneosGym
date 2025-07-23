@@ -3,18 +3,18 @@ import LoginPage from "../pages/LoginPage";
 import HomePage from "../pages/HomePage";
 import RegisterPage from "../pages/RegisterPage";
 import InscripcionT from "../pages/InscripcionT";
-import MisTorneos from "../pages/MisTorneos";
 import Alumnos from "../pages/Alumnos";
 import Puntajes from "../pages/Puntajes";
 import MiCuenta from "../pages/MiCuenta";
 import PrivateRoutes from "../components/PrivateRoutes";
-import AdministrarTorneos from '../pages/AdministrarTorneos';
-import HistorialPuntajes from '../pages/HistorialPuntajes';
+import AdministrarTorneos from "../pages/AdministrarTorneos";
+import HistorialPuntajes from "../pages/HistorialPuntajes";
 
 const RoutesView = () => {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} />
+      <Route path="*" element={<h1>404</h1>} />
       <Route
         path="/crear-usuario"
         element={
@@ -31,7 +31,6 @@ const RoutesView = () => {
           </PrivateRoutes>
         }
       />
-      <Route path="*" element={<h1>404</h1>} />
       <Route path="/inicio" element={<HomePage />} />
       <Route
         path="/mi-cuenta"
@@ -46,14 +45,6 @@ const RoutesView = () => {
         element={
           <PrivateRoutes role={["Administrador", "Gimnasio"]}>
             <InscripcionT />
-          </PrivateRoutes>
-        }
-      />
-      <Route
-        path="/mis-torneos"
-        element={
-          <PrivateRoutes role={["Administrador", "Gimnasio"]}>
-            <MisTorneos />
           </PrivateRoutes>
         }
       />
@@ -76,7 +67,7 @@ const RoutesView = () => {
       <Route
         path="/historial-puntajes"
         element={
-          <PrivateRoutes role={["Administrador", "Juez"]}>
+          <PrivateRoutes role={["Administrador", "Gimnasio", "Juez"]}>
             <HistorialPuntajes />
           </PrivateRoutes>
         }
