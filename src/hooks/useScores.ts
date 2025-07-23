@@ -4,18 +4,38 @@ import useUsers from "./useUsers";
 import {
   getScoresByLevelAndCategory,
   getScoresByLevelCategoryAndGym,
+  redirectToGoogleSheets,
 } from "../helpers/scoresQueries";
 import { useState } from "react";
 import { createScore } from "../helpers/scoresQueries";
 import useTournaments from "./useTournaments";
 
 const useScores = () => {
-  const { scores, setScores, scoresPagination, setScoresPagination } = useScoresContext();
+  const { scores, setScores, scoresPagination, setScoresPagination } =
+    useScoresContext();
   const { setMembersTournaments } = useTournaments();
   const { user, handleLogout } = useUsers();
   const [loading, setLoading] = useState(false);
 
-  const handleGetScoresByCategoryAndLevel = async (data: FilterScoresData, page: number) => {
+  const handleRedirect = async (tournamentId: number) => {
+    try {
+      setLoading(true);
+      return await redirectToGoogleSheets(tournamentId);
+    } catch (error) {
+      const err = error as ErrorResponse;
+      toast.error(err.error);
+      if (err.redirect) {
+        await handleLogout();
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGetScoresByCategoryAndLevel = async (
+    data: FilterScoresData,
+    page: number
+  ) => {
     if (!user) {
       toast.error("Debe iniciar sesión para ver los puntajes");
       return;
@@ -43,10 +63,13 @@ const useScores = () => {
     }
     try {
       setLoading(true);
-      const res = await getScoresByLevelCategoryAndGym({
-        ...data,
-        id_gym: user.userId,
-      }, page);
+      const res = await getScoresByLevelCategoryAndGym(
+        {
+          ...data,
+          id_gym: user.userId,
+        },
+        page
+      );
       setScores(res.scores);
       setScoresPagination(res.pagination);
     } catch (error) {
@@ -62,7 +85,7 @@ const useScores = () => {
 
   const handleCreateScore = async (
     puntaje: number,
-    member: MembersTournaments,
+    member: MembersTournaments
   ) => {
     if (!user) {
       toast.error("Debe iniciar sesión para crear un puntaje");
@@ -98,6 +121,7 @@ const useScores = () => {
     loading,
     scoresPagination,
     setScoresPagination,
+    handleRedirect,
   };
 };
 
