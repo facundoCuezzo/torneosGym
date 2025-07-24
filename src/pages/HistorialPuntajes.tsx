@@ -54,7 +54,7 @@ const HistorialPuntajes = () => {
             className="d-flex justify-content-center align-items-center gap-1"
           >
             <OneTwoThreeIcon />
-            <span>Puntuar</span>
+            <span>Ver puntajes</span>
           </Button>
         </div>
       </CardComp>

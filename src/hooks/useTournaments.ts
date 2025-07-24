@@ -16,7 +16,7 @@ import useMembersTournamentsContext from "./useMembersTournamentsContext";
 import type { FilterScores } from "../validation/filterScoresValidatorSchema";
 
 const useTournaments = () => {
-  const { tournaments, setTournaments, pastTournaments, setPastTournaments } =
+  const { tournaments, setTournaments, pastTournaments, setPastTournaments, nextTournament, setNextTournament } =
     useTournamentsContext();
   const {
     membersTournaments,
@@ -33,7 +33,6 @@ const useTournaments = () => {
 
   const { handleLogout, user } = useUsers();
   const [loading, setLoading] = useState(false);
-  const [nextTournament, setNextTournament] = useState<Tournament | null>(null);
 
   const handleGetTournaments = useCallback(async () => {
     try {
@@ -52,7 +51,7 @@ const useTournaments = () => {
     } finally {
       setLoading(false);
     }
-  }, [handleLogout, setTournaments, setPastTournaments]);
+  }, [handleLogout, setTournaments, setPastTournaments, setNextTournament]);
 
   const handleGetMembersTournaments = async (
     dataIds: FilterScores,
