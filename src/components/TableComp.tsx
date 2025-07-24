@@ -1,9 +1,5 @@
 import { Button, Table } from "react-bootstrap";
-import {
-  CashCoin,
-  ClipboardPlusFill,
-  Trash3Fill,
-} from "react-bootstrap-icons";
+import { CashCoin, ClipboardPlusFill, Trash3Fill } from "react-bootstrap-icons";
 import CreateMemberComp from "./CreateMemberComp";
 import CreateScoreModalComp from "./CreateScoreModalComp";
 
@@ -140,6 +136,20 @@ export const TournamentsTableComp: React.FC<TournamentsProps> = ({
   headers,
   onClickDelete,
 }) => {
+  function formatDateRange(range: string): string {
+    const cleaned = range.replace(/[[\]()]/g, "");
+    const [start, end] = cleaned.split(",");
+
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    endDate.setDate(endDate.getDate() - 1);
+
+    const format = (date: Date) => date.toISOString().split("T")[0];
+
+    return `${format(startDate)} | ${format(endDate)}`;
+  }
+
   return (
     <Table striped bordered hover responsive>
       <thead>
@@ -153,7 +163,9 @@ export const TournamentsTableComp: React.FC<TournamentsProps> = ({
         {tournaments?.map((tournament) => (
           <tr key={tournament.id}>
             <td>{tournament.name}</td>
-            <td className="text-center">{tournament.date_range}</td>
+            <td className="text-center">
+              {formatDateRange(tournament.date_range)}
+            </td>
             <td className="text-center">{tournament.inscription_date_end}</td>
             <td>
               <div className="d-flex justify-content-center">
@@ -215,7 +227,7 @@ export const MembersTournamentsTableComp: React.FC<MembersTournamentsProps> = ({
                     </span>
                   </Button>
                 ) : (
-                  <CreateScoreModalComp member={mt}/>
+                  <CreateScoreModalComp member={mt} />
                 )}
               </div>
             </td>
@@ -242,7 +254,7 @@ export const ScoresTableComp: React.FC<ScoresProps> = ({ headers, scores }) => {
             <td>{score.member_dni}</td>
             <td>{score.member_name}</td>
             <td>{score.gym}</td>
-            <td className='text-center'>{score.puntaje}</td>
+            <td className="text-center">{score.puntaje}</td>
           </tr>
         ))}
       </tbody>
