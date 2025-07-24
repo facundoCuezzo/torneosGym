@@ -4,9 +4,10 @@ import { TournamentContext } from "./TournamentsContext";
 const TournamentsProvider = ({ children }: { children: ReactNode }) => {
   const [tournaments, setTournaments] = useState<Tournament[] | null>(null);
   const [pastTournaments, setPastTournaments] = useState<Tournament[] | null>(null);
+  const [nextTournament, setNextTournament] = useState<Tournament | null>(null);
 
   return (
-    <TournamentContext.Provider value={{ tournaments, setTournaments, pastTournaments, setPastTournaments }}>
+    <TournamentContext.Provider value={{ tournaments, setTournaments, pastTournaments, setPastTournaments, nextTournament, setNextTournament }}>
       {children}
     </TournamentContext.Provider>
   );
