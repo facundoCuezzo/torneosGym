@@ -5,6 +5,8 @@ interface Props {
   setSelectedTournament: React.Dispatch<React.SetStateAction<number>>;
   tournaments: Tournament[] | null;
   loading: boolean;
+  paginationInfo: TournamentsPaginationInfo | null;
+  handleLoadMoreTournaments: (page: number) => Promise<void>;
 }
 
 const SelectTournamentComp: React.FC<Props> = ({
@@ -12,7 +14,18 @@ const SelectTournamentComp: React.FC<Props> = ({
   setSelectedTournament,
   tournaments,
   loading,
+  paginationInfo,
+  handleLoadMoreTournaments,
 }) => {
+  const handleChange = async (ev: React.ChangeEvent<HTMLSelectElement>) => {
+    const option = Number(ev.target.value);
+    if (option === -1 && paginationInfo) {
+      await handleLoadMoreTournaments(paginationInfo.page + 1);
+    } else {
+      setSelectedTournament(option);
+    }
+  };
+
   return (
     <>
       {loading ? (
@@ -26,7 +39,7 @@ const SelectTournamentComp: React.FC<Props> = ({
         <Form>
           <Form.Select
             value={selectedTournament}
-            onChange={(ev) => setSelectedTournament(Number(ev.target.value))}
+            onChange={(ev) => handleChange(ev)}
           >
             <option value={0}>Seleccione un torneo</option>
             {tournaments.map((t) => (
@@ -34,6 +47,9 @@ const SelectTournamentComp: React.FC<Props> = ({
                 {t.name}
               </option>
             ))}
+            {paginationInfo && paginationInfo.hasMore && (
+              <option value={-1}>Cargar más torneos</option>
+            )}
           </Form.Select>
         </Form>
       )}

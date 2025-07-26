@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 const HistorialPuntajes = () => {
   const { user } = useUsers();
-  const { pastTournaments, loading } = useTournaments();
+  const { pastTournaments, loading, paginationInfo, handleLoadMoreTournaments } = useTournaments();
   const { handleRedirect } = useScores();
   const [selectedTournament, setSelectedTournament] = useState(0);
 
@@ -42,10 +42,12 @@ const HistorialPuntajes = () => {
       <CardComp user={user} color="dark" textColor="white">
         <div className="d-flex flex-column gap-2">
           <SelectTournamentComp
+            handleLoadMoreTournaments={handleLoadMoreTournaments}
             tournaments={pastTournaments}
             loading={loading}
             selectedTournament={selectedTournament}
             setSelectedTournament={setSelectedTournament}
+            paginationInfo={paginationInfo}
           />
           <Button
             onClick={() => redirect(selectedTournament)}

@@ -81,7 +81,7 @@ const CreateTournamentComp = () => {
               placeholder="YYYY-MM-DD"
               icon={<Calendar2Date />}
               value={values.startDate}
-              onChange={(ev) => {
+              onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
                 let value = ev.target.value.replace(/[^0-9]/g, "");
 
                 if (value.length > 4)
@@ -100,7 +100,7 @@ const CreateTournamentComp = () => {
               placeholder="YYYY-MM-DD"
               icon={<Calendar2Date />}
               value={values.endDate}
-              onChange={(ev) => {
+              onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
                 let value = ev.target.value.replace(/[^0-9]/g, "");
 
                 if (value.length > 4)
