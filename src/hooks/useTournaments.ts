@@ -16,8 +16,16 @@ import useMembersTournamentsContext from "./useMembersTournamentsContext";
 import type { FilterScores } from "../validation/filterScoresValidatorSchema";
 
 const useTournaments = () => {
-  const { tournaments, setTournaments, pastTournaments, setPastTournaments, nextTournament, setNextTournament } =
-    useTournamentsContext();
+  const {
+    tournaments,
+    setTournaments,
+    pastTournaments,
+    setPastTournaments,
+    nextTournament,
+    setNextTournament,
+    paginationInfo,
+    setPaginationInfo,
+  } = useTournamentsContext();
   const {
     membersTournaments,
     setMembersTournaments,
@@ -41,6 +49,7 @@ const useTournaments = () => {
       setTournaments(resTournaments.tournaments);
       const resPastTournaments = await getPastTournaments();
       setPastTournaments(resPastTournaments.tournaments);
+      setPaginationInfo(resPastTournaments.paginationInfo);
       setNextTournament(resPastTournaments.tournaments[0]);
     } catch (err) {
       const error = err as ErrorResponse;
@@ -51,7 +60,34 @@ const useTournaments = () => {
     } finally {
       setLoading(false);
     }
-  }, [handleLogout, setTournaments, setPastTournaments, setNextTournament]);
+  }, [
+    handleLogout,
+    setTournaments,
+    setPastTournaments,
+    setNextTournament,
+    setPaginationInfo,
+  ]);
+
+  const handleLoadMoreTournaments = async (page: number) => {
+    try {
+      setLoading(true);
+      const res = await getPastTournaments(page);
+      setPastTournaments((prevTournaments) => [
+        ...(prevTournaments ?? []),
+        ...res.tournaments,
+      ]);
+      setPaginationInfo(res.paginationInfo);
+      toast.success("Se han cargado más torneos a la lista");
+    } catch (error) {
+      const err = error as ErrorResponse;
+      toast.error(err.error);
+      if (err.redirect) {
+        await handleLogout();
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGetMembersTournaments = async (
     dataIds: FilterScores,
@@ -153,6 +189,9 @@ const useTournaments = () => {
   const handleDeleteTournament = async (id: number) => {
     try {
       const res = await deleteTournament(id);
+      setTournaments((prevState) =>
+        (prevState ?? []).filter((t) => t.id !== id)
+      );
       toast.success(res.message);
     } catch (err) {
       const error = err as ErrorResponse;
@@ -206,6 +245,8 @@ const useTournaments = () => {
     membersNotInTournamentsPagination,
     setMembersNotInTournamentsPagination,
     nextTournament,
+    paginationInfo,
+    handleLoadMoreTournaments
   };
 };
 

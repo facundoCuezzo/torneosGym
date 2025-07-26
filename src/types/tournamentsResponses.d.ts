@@ -12,6 +12,7 @@ interface CreateTournament {
 interface GetTournamentsResponse {
   message: string;
   tournaments: Tournament[];
+  paginationInfo: TournamentsPaginationInfo;
 }
 interface CreateTournamentResponse {
   message: string;
@@ -21,4 +22,9 @@ interface UpdatePayMemberTournamentData {
   id_member: number;
   id_tournament: number;
   paid: boolean;
+}
+interface TournamentsPaginationInfo {
+  hasMore: boolean;
+  totalCount: number;
+  page: number;
 }

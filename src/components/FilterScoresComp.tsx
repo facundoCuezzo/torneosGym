@@ -42,7 +42,7 @@ const FilterScoresComp: React.FC<Props> = ({ submitFilter, setFilters }) => {
           options={CATEGORIES}
           icon={<Bookmark />}
           value={values.id_category}
-          onChange={(ev) => {
+          onChange={(ev: React.ChangeEvent<HTMLSelectElement>) => {
             setFieldValue("id_category", Number(ev.target.value));
           }}
           errors={errors.id_category}
@@ -55,7 +55,7 @@ const FilterScoresComp: React.FC<Props> = ({ submitFilter, setFilters }) => {
           options={LEVELS}
           icon={<TagFill />}
           value={values.id_level}
-          onChange={(ev) => {
+          onChange={(ev: React.ChangeEvent<HTMLSelectElement>) => {
             setFieldValue("id_level", Number(ev.target.value));
           }}
           errors={errors.id_level}

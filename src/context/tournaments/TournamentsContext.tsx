@@ -7,6 +7,10 @@ type TournamentContextType = {
   setPastTournaments: React.Dispatch<React.SetStateAction<Tournament[] | null>>;
   nextTournament: Tournament | null;
   setNextTournament: React.Dispatch<React.SetStateAction<Tournament | null>>;
+  paginationInfo: TournamentsPaginationInfo | null;
+  setPaginationInfo: React.Dispatch<
+    React.SetStateAction<TournamentsPaginationInfo | null>
+  >;
 };
 
 export const TournamentContext = createContext<

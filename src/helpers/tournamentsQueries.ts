@@ -23,8 +23,8 @@ export const getTournaments = async (): Promise<GetTournamentsResponse> => {
   return data;
 };
 
-export const getPastTournaments = async (): Promise<GetTournamentsResponse> => {
-  const response = await fetch(`${URL}/date/past`, {
+export const getPastTournaments = async (page: number = 1): Promise<GetTournamentsResponse> => {
+  const response = await fetch(`${URL}/date/past?page=${page}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

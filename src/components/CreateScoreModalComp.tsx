@@ -48,7 +48,7 @@ const CreateScoreModalComp: React.FC<Props> = ({ member }) => {
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            <h5>Puntuar a {member.member}</h5>
+            <h5>Puntuar a {member.full_name}</h5>
             <h6>DNI: {member.dni}</h6>
           </Modal.Title>
         </Modal.Header>
