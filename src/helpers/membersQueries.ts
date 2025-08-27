@@ -1,7 +1,7 @@
 import env from "../config/env";
 import { refreshAccessToken } from "./authQueries";
 
-const URL_API = `${env.URL_BACK_LOCAL}/members`;
+const URL_API = `${env.URL_BACK_DEPLOY}/members`;
 
 export const getMembersByGym = async (
   paramsPayload: Params,

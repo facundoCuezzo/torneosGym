@@ -1,8 +1,8 @@
 import env from "../config/env";
 import { refreshAccessToken } from "./authQueries";
 
-const URL = `${env.URL_BACK_LOCAL}/puntajes`;
-const T_URL = `${env.URL_BACK_LOCAL}/tournaments`;
+const URL = `${env.URL_BACK_DEPLOY}/puntajes`;
+const T_URL = `${env.URL_BACK_DEPLOY}/tournaments`;
 
 export const redirectToGoogleSheets = async (id: number): Promise<{ scriptUrl: string }> => {
   const response = await fetch(`${T_URL}/${id}/sheets`, {
