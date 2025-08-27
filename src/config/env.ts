@@ -8,6 +8,7 @@ function getEnvVariable(key: string, required = true): string {
 
 const env = {
   URL_BACK_LOCAL: getEnvVariable('VITE_URL_BACK_LOCAL'),
+  URL_BACK_DEPLOY: getEnvVariable('VITE_URL_BACK_DEPLOY'),
 };
 
 export default env;

@@ -73,6 +73,8 @@ export default function InscripcionTorneos() {
             setSelectedTournament={setSelectedTournament}
             tournaments={tournaments}
             loading={loading}
+            paginationInfo={null}
+            handleLoadMoreTournaments={() => Promise.resolve()}
           />
         </CardComp>
       </div>

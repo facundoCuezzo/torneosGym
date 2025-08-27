@@ -1,6 +1,6 @@
 import env from '../config/env';
 
-const URL = `${env.URL_BACK_LOCAL}/users`;
+const URL = `${env.URL_BACK_DEPLOY}/users`;
 
 export const refreshAccessToken = async () => {
   const response = await fetch(`${URL}/refresh-token`, {

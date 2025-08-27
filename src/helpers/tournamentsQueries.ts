@@ -1,7 +1,7 @@
 import env from "../config/env";
 import { refreshAccessToken } from "./authQueries";
 
-const URL = `${env.URL_BACK_LOCAL}/tournaments`;
+const URL = `${env.URL_BACK_DEPLOY}/tournaments`;
 
 export const getTournaments = async (): Promise<GetTournamentsResponse> => {
   const response = await fetch(`${URL}/date`, {

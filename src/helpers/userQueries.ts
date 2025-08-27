@@ -3,7 +3,7 @@ import type { LoginFormData } from "../validation/loginValidatorSchema";
 import type { RegisterFormData } from "../validation/registerValidatorSchema";
 import { refreshAccessToken } from "./authQueries";
 
-const URL = `${env.URL_BACK_LOCAL}/users`;
+const URL = `${env.URL_BACK_DEPLOY}/users`;
 
 export const login = async (data: LoginFormData) => {
   const response = await fetch(`${URL}/login`, {
